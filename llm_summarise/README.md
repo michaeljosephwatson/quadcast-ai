@@ -1,0 +1,1 @@
+This holds the code for the lambda that summarises the podcast using an LLM
