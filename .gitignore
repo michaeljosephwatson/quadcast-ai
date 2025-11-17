@@ -1,0 +1,8 @@
+.venv
+.env
+test_api.py
+test.py
+
+.terraform
+
+*.tfvars
