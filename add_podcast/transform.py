@@ -6,17 +6,16 @@ def validate_podcast_name(podcast_name: str) -> str:
     if not isinstance(podcast_name, str):
         raise ValueError("Podcast name must be a string.")
 
+    podcast_name = podcast_name.strip()
+
     if len(podcast_name) == 0:
         raise ValueError("Podcast name cannot be empty.")
 
-    return podcast_name.strip()
+    return podcast_name
 
 
 def validate_publish_date(publish_date: str) -> datetime:
     """Validates and converts the publish date to a datetime object."""
-
-    if publish_date is None:
-        raise ValueError("Publish date cannot be None.")
 
     if not isinstance(publish_date, str):
         raise ValueError("Publish date must be passed a string.")
@@ -36,10 +35,12 @@ def validate_language(language: str) -> str:
     if not isinstance(language, str):
         raise ValueError("Language must be a string.")
 
+    language = language.strip()
+
     if len(language) == 0:
         raise ValueError("Language code cannot be empty.")
 
-    return language.strip().lower()
+    return language.lower()
 
 
 def validate_feed(feed: dict) -> dict:
