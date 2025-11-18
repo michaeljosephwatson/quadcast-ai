@@ -1,7 +1,5 @@
 import feedparser
-from dotenv import load_dotenv
 from pprint import pprint
-load_dotenv()
 
 
 def get_data_from_rss(rss_url: str) -> dict:
