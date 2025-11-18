@@ -131,8 +131,7 @@ def lambda_handler(event, context):
         upload_transcript(bucket, transcript_key, transcript_text)
         print(f"Transcript saved to: s3://{bucket}/{transcript_key}")
 
-        # TODO: Update RDS when database is ready
-        # update_episode_in_rds(episode_id, transcript_key, secrets)
+        update_episode_in_rds(episode_id, transcript_key, secrets)
 
         return {
             'statusCode': 200,
@@ -172,14 +171,15 @@ def update_episode_in_rds(episode_id, transcript_key, secrets):
         host=secrets['DB_HOST'],
         database=secrets['DB_NAME'],
         user=secrets['DB_USER'],
-        password=secrets['DB_PASSWORD']
+        password=secrets['DB_PASSWORD'],
+        port=secrets.get('DB_PORT', '5432')
     )
 
     try:
         cursor = conn.cursor()
         cursor.execute("""
-            UPDATE Episode
-            SET transcribed = TRUE, transcript_s3_key = %s
+            UPDATE Episode 
+            SET transcribed = TRUE, transcript_s3_key = %s 
             WHERE episode_id = %s
         """, (transcript_key, episode_id))
         conn.commit()
