@@ -58,8 +58,8 @@ class TestValidatePodcastName:
 
     def test_validate_podcast_name_unicode(self):
         """Test podcast name with unicode characters"""
-        result = validate_podcast_name("Podcasté Español")
-        assert result == "Podcasté Español"
+        result = validate_podcast_name("Podcast en EspaÃ±ol")
+        assert result == "Podcast en EspaÃ±ol"
 
 
 class TestValidatePublishDate:
