@@ -1,0 +1,41 @@
+name: Terraform Plan
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/terraform_plan.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'terraform/**'
+
+env:
+  TF_VERSION: '1.6.0'
+
+jobs:
+  terraform-plan:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: ${{ env.TF_VERSION }}
+
+    - name: Terraform Format Check
+      run: terraform fmt -check -recursive terraform/
+      continue-on-error: true
+
+    - name: Terraform Init
+      run: terraform -chdir=terraform init
+
+    - name: Terraform Validate
+      run: terraform -chdir=terraform validate
+
+    - name: Terraform Plan
+      run: terraform -chdir=terraform plan
