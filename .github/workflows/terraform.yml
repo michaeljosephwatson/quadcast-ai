@@ -1,4 +1,4 @@
-name: Terraform Plan
+name: Terraform Plan and Apply
 
 on:
   push:
@@ -15,7 +15,7 @@ env:
   TF_VERSION: '1.6.0'
 
 jobs:
-  terraform-plan:
+  terraform-plan-apply:
     runs-on: ubuntu-latest
 
     steps:
@@ -38,4 +38,9 @@ jobs:
       run: terraform -chdir=terraform validate
 
     - name: Terraform Plan
-      run: terraform -chdir=terraform plan
+      id: plan
+      run: terraform -chdir=terraform plan -out=tfplan
+
+    - name: Terraform Apply
+      if: github.event_name == 'push'
+      run: terraform -chdir=terraform apply -auto-approve tfplan
