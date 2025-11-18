@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 import os
 from psycopg2.extensions import connection as psycopg2_connection
 from psycopg2 import OperationalError
-from load import get_rds_connection, load_podcast_to_db_from_rss
+from load import get_rds_connection, load_data_to_db_from_rss
 
 
 class TestGetRdsConnection:
@@ -132,86 +132,150 @@ class TestGetRdsConnection:
             assert result == mock_conn
 
 
-class TestLoadPodcastToDbFromRss:
-    """Test suite for load_podcast_to_db_from_rss function"""
+class TestLoadDataToDbFromRss:
+    """Test suite for load_data_to_db_from_rss function"""
 
+    @patch('load.validate_feed')
+    @patch('load.get_data_from_rss')
     @patch('load.get_rds_connection')
-    def test_load_podcast_to_db_from_rss_valid_rss(self, mock_get_conn):
+    def test_load_data_to_db_from_rss_valid_rss(self, mock_get_conn, mock_get_data, mock_validate):
         """Test loading podcast from valid RSS feed"""
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
         mock_cursor = MagicMock()
         mock_conn.cursor.return_value = mock_cursor
+        mock_conn.__enter__ = MagicMock(return_value=mock_conn)
+        mock_conn.__exit__ = MagicMock(return_value=False)
+        mock_cursor.__enter__ = MagicMock(return_value=mock_cursor)
+        mock_cursor.__exit__ = MagicMock(return_value=False)
+        mock_cursor.fetchone.return_value = (1,)
         mock_get_conn.return_value = mock_conn
+        mock_get_data.return_value = {'author': 'Test', 'published': 'Mon, 01 Jan 2024 00:00:00 +0000', 'language': 'en', 'link': 'http://example.com'}
+        mock_validate.return_value = {'podcast_name': 'Test', 'publish_date': '2024-01-01', 'language': 'en', 'link': 'http://example.com'}
 
         rss_url = 'https://example.com/feed.xml'
 
         # Act
-        load_podcast_to_db_from_rss(rss_url)
+        load_data_to_db_from_rss(rss_url)
 
         # Assert
         mock_get_conn.assert_called_once()
 
+    @patch('load.validate_feed')
+    @patch('load.get_data_from_rss')
     @patch('load.get_rds_connection')
-    def test_load_podcast_to_db_from_rss_returns_none(self, mock_get_conn):
+    def test_load_data_to_db_from_rss_returns_none(self, mock_get_conn, mock_get_data, mock_validate):
         """Test that function returns None"""
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
+        mock_cursor = MagicMock()
+        mock_conn.cursor.return_value = mock_cursor
+        mock_conn.__enter__ = MagicMock(return_value=mock_conn)
+        mock_conn.__exit__ = MagicMock(return_value=False)
+        mock_cursor.__enter__ = MagicMock(return_value=mock_cursor)
+        mock_cursor.__exit__ = MagicMock(return_value=False)
+        mock_cursor.fetchone.return_value = (1,)
         mock_get_conn.return_value = mock_conn
+        mock_get_data.return_value = {'author': 'Test', 'published': 'Mon, 01 Jan 2024 00:00:00 +0000', 'language': 'en', 'link': 'http://example.com'}
+        mock_validate.return_value = {'podcast_name': 'Test', 'publish_date': '2024-01-01', 'language': 'en', 'link': 'http://example.com'}
         rss_url = 'https://example.com/feed.xml'
 
         # Act
-        result = load_podcast_to_db_from_rss(rss_url)
+        result = load_data_to_db_from_rss(rss_url)
 
         # Assert
         assert result is None
 
+    @patch('load.validate_feed')
+    @patch('load.get_data_from_rss')
     @patch('load.get_rds_connection')
-    def test_load_podcast_to_db_from_rss_connection_cleanup(self, mock_get_conn):
+    def test_load_data_to_db_from_rss_connection_cleanup(self, mock_get_conn, mock_get_data, mock_validate):
         """Test that database connection is properly closed"""
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
+        mock_cursor = MagicMock()
+        mock_conn.cursor.return_value = mock_cursor
+        mock_conn.__enter__ = MagicMock(return_value=mock_conn)
+        mock_conn.__exit__ = MagicMock(return_value=False)
+        mock_cursor.__enter__ = MagicMock(return_value=mock_cursor)
+        mock_cursor.__exit__ = MagicMock(return_value=False)
+        mock_cursor.fetchone.return_value = (1,)
         mock_get_conn.return_value = mock_conn
+        mock_get_data.return_value = {'author': 'Test', 'published': 'Mon, 01 Jan 2024 00:00:00 +0000', 'language': 'en', 'link': 'http://example.com'}
+        mock_validate.return_value = {'podcast_name': 'Test', 'publish_date': '2024-01-01', 'language': 'en', 'link': 'http://example.com'}
         rss_url = 'https://example.com/feed.xml'
 
         # Act
-        load_podcast_to_db_from_rss(rss_url)
+        load_data_to_db_from_rss(rss_url)
 
         # Assert - Connection should eventually be closed (if implemented)
         # This test assumes the function handles connection cleanup
 
+    @patch('load.validate_feed')
+    @patch('load.get_data_from_rss')
     @patch('load.get_rds_connection')
-    def test_load_podcast_to_db_from_rss_with_empty_rss(self, mock_get_conn):
+    def test_load_data_to_db_from_rss_with_empty_rss(self, mock_get_conn, mock_get_data, mock_validate):
         """Test loading from empty RSS feed"""
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
+        mock_cursor = MagicMock()
+        mock_conn.cursor.return_value = mock_cursor
+        mock_conn.__enter__ = MagicMock(return_value=mock_conn)
+        mock_conn.__exit__ = MagicMock(return_value=False)
+        mock_cursor.__enter__ = MagicMock(return_value=mock_cursor)
+        mock_cursor.__exit__ = MagicMock(return_value=False)
+        mock_cursor.fetchone.return_value = (1,)
         mock_get_conn.return_value = mock_conn
+        mock_get_data.return_value = {'author': 'Test', 'published': 'Mon, 01 Jan 2024 00:00:00 +0000', 'language': 'en', 'link': 'http://example.com'}
+        mock_validate.return_value = {'podcast_name': 'Test', 'publish_date': '2024-01-01', 'language': 'en', 'link': 'http://example.com'}
         rss_url = 'https://example.com/empty_feed.xml'
 
         # Act
-        load_podcast_to_db_from_rss(rss_url)
+        load_data_to_db_from_rss(rss_url)
 
         # Assert
         mock_get_conn.assert_called_once()
 
+    @patch('load.validate_feed')
+    @patch('load.get_data_from_rss')
     @patch('load.get_rds_connection')
-    def test_load_podcast_to_db_from_rss_accepts_string(self, mock_get_conn):
+    def test_load_data_to_db_from_rss_accepts_string(self, mock_get_conn, mock_get_data, mock_validate):
         """Test that function accepts string parameter"""
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
+        mock_cursor = MagicMock()
+        mock_conn.cursor.return_value = mock_cursor
+        mock_conn.__enter__ = MagicMock(return_value=mock_conn)
+        mock_conn.__exit__ = MagicMock(return_value=False)
+        mock_cursor.__enter__ = MagicMock(return_value=mock_cursor)
+        mock_cursor.__exit__ = MagicMock(return_value=False)
+        mock_cursor.fetchone.return_value = (1,)
         mock_get_conn.return_value = mock_conn
+        mock_get_data.return_value = {'author': 'Test', 'published': 'Mon, 01 Jan 2024 00:00:00 +0000', 'language': 'en', 'link': 'http://example.com'}
+        mock_validate.return_value = {'podcast_name': 'Test', 'publish_date': '2024-01-01', 'language': 'en', 'link': 'http://example.com'}
         rss_url = 'https://example.com/feed.xml'
 
         # Act & Assert - Should not raise error
-        load_podcast_to_db_from_rss(rss_url)
+        load_data_to_db_from_rss(rss_url)
         assert isinstance(rss_url, str)
 
+    @patch('load.validate_feed')
+    @patch('load.get_data_from_rss')
     @patch('load.get_rds_connection')
-    def test_load_podcast_to_db_from_rss_various_urls(self, mock_get_conn):
+    def test_load_data_to_db_from_rss_various_urls(self, mock_get_conn, mock_get_data, mock_validate):
         """Test with various RSS feed URLs"""
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
+        mock_cursor = MagicMock()
+        mock_conn.cursor.return_value = mock_cursor
+        mock_conn.__enter__ = MagicMock(return_value=mock_conn)
+        mock_conn.__exit__ = MagicMock(return_value=False)
+        mock_cursor.__enter__ = MagicMock(return_value=mock_cursor)
+        mock_cursor.__exit__ = MagicMock(return_value=False)
+        mock_cursor.fetchone.return_value = (1,)
         mock_get_conn.return_value = mock_conn
+        mock_get_data.return_value = {'author': 'Test', 'published': 'Mon, 01 Jan 2024 00:00:00 +0000', 'language': 'en', 'link': 'http://example.com'}
+        mock_validate.return_value = {'podcast_name': 'Test', 'publish_date': '2024-01-01', 'language': 'en', 'link': 'http://example.com'}
 
         test_urls = [
             'https://example.com/feed.xml',
@@ -221,33 +285,46 @@ class TestLoadPodcastToDbFromRss:
 
         # Act & Assert
         for url in test_urls:
-            load_podcast_to_db_from_rss(url)
+            load_data_to_db_from_rss(url)
             assert mock_get_conn.called
 
+    @patch('load.validate_feed')
+    @patch('load.get_data_from_rss')
     @patch('load.get_rds_connection')
-    def test_load_podcast_to_db_from_rss_error_handling(self, mock_get_conn):
+    def test_load_data_to_db_from_rss_error_handling(self, mock_get_conn, mock_get_data, mock_validate):
         """Test error handling when database connection fails"""
         # Arrange
+        mock_get_data.return_value = {'author': 'Test', 'published': 'Mon, 01 Jan 2024 00:00:00 +0000', 'language': 'en', 'link': 'http://example.com'}
+        mock_validate.return_value = {'podcast_name': 'Test', 'publish_date': '2024-01-01', 'language': 'en', 'link': 'http://example.com'}
         mock_get_conn.side_effect = OperationalError(
             "Database connection failed")
         rss_url = 'https://example.com/feed.xml'
 
         # Act & Assert
         with pytest.raises(OperationalError):
-            load_podcast_to_db_from_rss(rss_url)
+            load_data_to_db_from_rss(rss_url)
 
+    @patch('load.validate_feed')
+    @patch('load.get_data_from_rss')
     @patch('load.get_rds_connection')
-    def test_load_podcast_to_db_from_rss_cursor_created(self, mock_get_conn):
+    def test_load_data_to_db_from_rss_cursor_created(self, mock_get_conn, mock_get_data, mock_validate):
         """Test that a cursor is created from the connection"""
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
         mock_cursor = MagicMock()
         mock_conn.cursor.return_value = mock_cursor
+        mock_conn.__enter__ = MagicMock(return_value=mock_conn)
+        mock_conn.__exit__ = MagicMock(return_value=False)
+        mock_cursor.__enter__ = MagicMock(return_value=mock_cursor)
+        mock_cursor.__exit__ = MagicMock(return_value=False)
+        mock_cursor.fetchone.return_value = (1,)
         mock_get_conn.return_value = mock_conn
+        mock_get_data.return_value = {'author': 'Test', 'published': 'Mon, 01 Jan 2024 00:00:00 +0000', 'language': 'en', 'link': 'http://example.com'}
+        mock_validate.return_value = {'podcast_name': 'Test', 'publish_date': '2024-01-01', 'language': 'en', 'link': 'http://example.com'}
         rss_url = 'https://example.com/feed.xml'
 
         # Act
-        load_podcast_to_db_from_rss(rss_url)
+        load_data_to_db_from_rss(rss_url)
 
         # Assert
         # This assumes the function uses cursor (to be confirmed with implementation)
@@ -278,13 +355,24 @@ class TestDatabaseIntegration:
             assert conn is not None
             assert mock_connect.called
 
+    @patch('load.validate_feed')
+    @patch('load.get_data_from_rss')
     @patch('load.get_rds_connection')
     @patch('load.connect')
-    def test_multiple_operations(self, mock_connect_global, mock_get_conn):
+    def test_multiple_operations(self, mock_connect_global, mock_get_conn, mock_get_data, mock_validate):
         """Test multiple database operations in sequence"""
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
+        mock_cursor = MagicMock()
+        mock_conn.cursor.return_value = mock_cursor
+        mock_conn.__enter__ = MagicMock(return_value=mock_conn)
+        mock_conn.__exit__ = MagicMock(return_value=False)
+        mock_cursor.__enter__ = MagicMock(return_value=mock_cursor)
+        mock_cursor.__exit__ = MagicMock(return_value=False)
+        mock_cursor.fetchone.return_value = (1,)
         mock_get_conn.return_value = mock_conn
+        mock_get_data.return_value = {'author': 'Test', 'published': 'Mon, 01 Jan 2024 00:00:00 +0000', 'language': 'en', 'link': 'http://example.com'}
+        mock_validate.return_value = {'podcast_name': 'Test', 'publish_date': '2024-01-01', 'language': 'en', 'link': 'http://example.com'}
 
         rss_urls = [
             'https://example.com/feed1.xml',
@@ -294,7 +382,7 @@ class TestDatabaseIntegration:
 
         # Act
         for url in rss_urls:
-            load_podcast_to_db_from_rss(url)
+            load_data_to_db_from_rss(url)
 
         # Assert
         assert mock_get_conn.call_count == len(rss_urls)
