@@ -26,5 +26,9 @@ resource "aws_secretsmanager_secret_version" "quadcast_secrets" {
     RDS_USERNAME     = "quadcast_admin"
     OPENAI_API_KEY = var.openai_api_key
   })
+
+  lifecycle {
+    ignore_changes = [secret_string]
+  }
 }
 
