@@ -5,7 +5,7 @@ on:
     branches: [main, develop]
     paths:
       - 'terraform/**'
-      - '.github/workflows/terraform_plan.yml'
+      - '.github/workflows/terraform.yml'
   pull_request:
     branches: [main, develop]
     paths:
@@ -29,7 +29,6 @@ jobs:
 
     - name: Terraform Format Check
       run: terraform fmt -check -recursive terraform/
-      continue-on-error: true
 
     - name: Terraform Init
       run: terraform -chdir=terraform init
