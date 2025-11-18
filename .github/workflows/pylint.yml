@@ -2,12 +2,12 @@ name: Pylint
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main]
     paths:
       - '**.py'
       - '**/requirements.txt'
   pull_request:
-    branches: [main, develop]
+    branches: [main]
 
 jobs:
   pylint:

@@ -2,12 +2,12 @@ name: Terraform Plan and Apply
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main]
     paths:
       - 'terraform/**'
       - '.github/workflows/terraform.yml'
   pull_request:
-    branches: [main, develop]
+    branches: [main]
     paths:
       - 'terraform/**'
 
