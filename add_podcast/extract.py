@@ -1,3 +1,5 @@
+"""This file contains functions to extract podcast data from an RSS feed. This is currently for given a link that the user provides."""
+
 import feedparser
 from pprint import pprint
 
