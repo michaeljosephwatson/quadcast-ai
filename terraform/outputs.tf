@@ -22,3 +22,8 @@ output "s3_bucket_arn" {
   description = "ARN of the S3 bucket"
   value       = aws_s3_bucket.quadcast_data.arn
 }
+
+output "tfstate_s3_bucket_arn" {
+  description = "ARN of the S3 bucket used for Terraform state"
+  value       = aws_s3_bucket.terraform_state.arn
+}
