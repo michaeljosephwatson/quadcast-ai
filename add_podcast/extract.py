@@ -7,6 +7,12 @@ load_dotenv()
 def get_data_from_rss(rss_url: str) -> dict:
     """Gets all the data for the podcast from the RSS"""
 
+    if not rss_url.endswith(".rss"):
+        raise ValueError("The provided URL is not a valid RSS feed URL.")
+
+    if len(rss_url) == 0:
+        raise ValueError("The provided RSS feed URL is empty.")
+
     return feedparser.parse(rss_url).feed
 
 
