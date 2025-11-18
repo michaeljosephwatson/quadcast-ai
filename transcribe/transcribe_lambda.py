@@ -1,188 +1,174 @@
+# transcribe_lambda.py
 """
-Lambda function to transcribe podcast audio files using OpenAI Whisper.
+Lambda: Transcribe podcast audio using GPT-4o-transcribe-diarise.
+Trigger: S3 PUT event
+Input key pattern: {podcast}/{episode}/audio.mp3
 
-Expects S3 structure: {podcast_name}/{episode_id}/audio.mp3
-Outputs: {podcast_name}/{episode_id}/transcript.txt
+Outputs:
+  {podcast}/{episode}/transcript.txt
+  {podcast}/{episode}/diarisation.json
 """
 
-import json
 import os
+import json
+from pathlib import Path
 from urllib.parse import unquote_plus
+
 import boto3
-import openai
-import psycopg2
+from openai import OpenAI
+
+# --- Clients ---
+s3 = boto3.client("s3")
+client = OpenAI()
+
+# --- Optional DB config (if you upsert metadata) ---
+DB_HOST = os.getenv("DB_HOST")
+DB_NAME = os.getenv("DB_NAME")
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_PORT = os.getenv("DB_PORT", "5432")
 
 
-# Initialize AWS clients
-s3_client = boto3.client('s3')
-secrets_client = boto3.client('secretsmanager')
-
-# Configuration
-S3_BUCKET = 'c20-quadcast-s3'
-SECRET_NAME = 'c20-quadcast-secrets'
-EXPECTED_FILE_PARTS = 3
-EXPECTED_FILENAME = 'audio.mp3'
-DOWNLOAD_PATH = '/tmp/audio.mp3'
+# --------------------------
+# Parsing helpers
+# --------------------------
+def parse_s3_event(event):
+    record = event["Records"][0]
+    bucket = record["s3"]["bucket"]["name"]
+    key = unquote_plus(record["s3"]["object"]["key"])
+    return bucket, key
 
 
-def get_secrets():
-    """Retrieve secrets from AWS Secrets Manager."""
-    response = secrets_client.get_secret_value(SecretId=SECRET_NAME)
-    return json.loads(response['SecretString'])
-
-
-def parse_s3_key(key):
+def parse_key_structure(key):
     """
-    Parse S3 key to extract podcast name and episode ID.
-
-    Args:
-        key (str): S3 object key
-
+    Expected:
+        podcast_name/episode_id/audio.mp3
     Returns:
-        tuple: (podcast_name, episode_id)
-
-    Raises:
-        ValueError: If key structure is invalid
+        podcast_name, episode_id, filename
     """
-    parts = key.split('/')
-    if len(parts) != EXPECTED_FILE_PARTS or parts[2] != EXPECTED_FILENAME:
-        raise ValueError(f"Unexpected file structure: {key}")
+    parts = key.split("/")
+    if len(parts) < 3:
+        raise ValueError(f"Invalid key structure: {key}")
 
-    return parts[0], parts[1]
-
-
-def transcribe_audio(file_path, api_key):
-    """
-    Transcribe audio file using OpenAI Whisper.
-
-    Args:
-        file_path (str): Path to audio file
-        api_key (str): OpenAI API key
-
-    Returns:
-        str: Transcribed text
-    """
-    openai.api_key = api_key
-
-    with open(file_path, 'rb') as audio_file:
-        transcript_response = openai.audio.transcriptions.create(
-            model="whisper-1",
-            file=audio_file,
-            response_format="verbose_json"
-        )
-
-    return transcript_response.text
+    return parts[0], parts[1], parts[-1]
 
 
-def upload_transcript(bucket, key, content):
-    """
-    Upload transcript to S3.
+# --------------------------
+# S3 Download / Upload
+# --------------------------
+def download_audio(bucket, key):
+    local_path = f"/tmp/{key.replace('/', '_')}"
+    Path(local_path).parent.mkdir(parents=True, exist_ok=True)
 
-    Args:
-        bucket (str): S3 bucket name
-        key (str): S3 object key
-        content (str): Transcript content
-    """
-    s3_client.put_object(
+    print(f"⬇️ Downloading s3://{bucket}/{key}")
+    s3.download_file(bucket, key, local_path)
+    print(f"✅ Downloaded to {local_path}")
+
+    return local_path
+
+
+def upload_text(bucket, key, text):
+    print(f"⬆️ Uploading text → s3://{bucket}/{key}")
+    s3.put_object(
         Bucket=bucket,
         Key=key,
-        Body=content,
-        ContentType='text/plain'
+        Body=text.encode("utf-8"),
+        ContentType="text/plain"
+    )
+    print("✅ Uploaded transcript")
+
+
+def upload_json(bucket, key, obj):
+    print(f"⬆️ Uploading JSON → s3://{bucket}/{key}")
+    s3.put_object(
+        Bucket=bucket,
+        Key=key,
+        Body=json.dumps(obj, indent=2).encode("utf-8"),
+        ContentType="application/json"
+    )
+    print("✅ Uploaded diarisation JSON")
+
+
+# --------------------------
+# GPT-4o Processing
+# --------------------------
+def run_gpt4o_transcription(local_audio_path: str):
+    suffix = local_audio_path.split(".")[-1].lower()
+
+    # Load file bytes
+    with open(local_audio_path, "rb") as f:
+        audio_bytes = f.read()
+
+    print("🎧 Calling gpt-4o-transcribe-diarise...")
+
+    response = client.responses.create(
+        model="gpt-4o-transcribe-diarise",
+        input=[
+            {
+                "role": "user",
+                "input_audio": {
+                    "data": audio_bytes,
+                    "format": suffix
+                }
+            }
+        ]
     )
 
+    transcript = response.output_text
+    diarisation = response.output_audio_diarization
 
+    print("✅ GPT-4o transcription completed")
+
+    return transcript, diarisation
+
+
+# --------------------------
+# Lambda handler
+# --------------------------
 def lambda_handler(event, context):
-    """
-    AWS Lambda handler for audio transcription.
+    print("📥 Event received")
+    print(json.dumps(event))
 
-    Args:
-        event (dict): Lambda event containing S3 trigger information
-        context (object): Lambda context object
-
-    Returns:
-        dict: Response with status code and body
-    """
     try:
-        # Get secrets
-        secrets = get_secrets()
+        # Parse event
+        bucket, key = parse_s3_event(event)
+        podcast, episode, filename = parse_key_structure(key)
 
-        # Extract S3 event information
-        bucket = event['Records'][0]['s3']['bucket']['name']
-        key = unquote_plus(event['Records'][0]['s3']['object']['key'])
+        if not filename.lower().endswith(("mp3", "wav", "m4a", "ogg", "flac")):
+            raise ValueError(f"Unsupported audio type: {filename}")
 
-        print(f"Processing: s3://{bucket}/{key}")
+        # Download audio to /tmp
+        local_audio = download_audio(bucket, key)
 
-        # Parse S3 key
-        podcast_name, episode_id = parse_s3_key(key)
+        # Run GPT-4o diarised transcription
+        transcript_text, diarisation = run_gpt4o_transcription(local_audio)
 
-        # Download audio file
-        s3_client.download_file(bucket, key, DOWNLOAD_PATH)
-        print(f"Downloaded to {DOWNLOAD_PATH}")
+        # Output S3 keys
+        base_prefix = f"{podcast}/{episode}"
+        transcript_key = f"{base_prefix}/transcript.txt"
+        diarisation_key = f"{base_prefix}/diarisation.json"
 
-        # Transcribe audio
-        transcript_text = transcribe_audio(
-            DOWNLOAD_PATH,
-            secrets['openai_api_key']
-        )
-        print(f"Transcription complete: {len(transcript_text)} characters")
-
-        # Upload transcript
-        transcript_key = f"{podcast_name}/{episode_id}/transcript.txt"
-        upload_transcript(bucket, transcript_key, transcript_text)
-        print(f"Transcript saved to: s3://{bucket}/{transcript_key}")
-
-        update_episode_in_rds(episode_id, transcript_key, secrets)
+        # Upload outputs
+        upload_text(bucket, transcript_key, transcript_text)
+        upload_json(bucket, diarisation_key, diarisation)
 
         return {
-            'statusCode': 200,
-            'body': json.dumps({
-                'message': 'Transcription complete',
-                'podcast': podcast_name,
-                'episode': episode_id,
-                'transcript_s3_key': transcript_key
+            "statusCode": 200,
+            "body": json.dumps({
+                "message": "Transcription + diarisation complete",
+                "podcast": podcast,
+                "episode": episode,
+                "transcript_key": transcript_key,
+                "diarisation_key": diarisation_key
             })
         }
 
-    except ValueError as ve:
-        print(f"Validation error: {str(ve)}")
-        return {
-            'statusCode': 400,
-            'body': json.dumps({'error': str(ve)})
-        }
     except Exception as e:
-        print(f"Error: {str(e)}")
+        print(f"❌ ERROR: {e}")
+        import traceback
+        traceback.print_exc()
+
         return {
-            'statusCode': 500,
-            'body': json.dumps({'error': str(e)})
+            "statusCode": 500,
+            "body": json.dumps({"error": str(e)})
         }
-
-
-def update_episode_in_rds(episode_id, transcript_key, secrets):
-    """
-    Update Episode table in RDS with transcription results.
-
-    Args:
-        episode_id (str): Episode identifier
-        transcript_key (str): S3 key for transcript
-        secrets (dict): Database credentials
-    """
-
-    conn = psycopg2.connect(
-        host=secrets['DB_HOST'],
-        database=secrets['DB_NAME'],
-        user=secrets['DB_USER'],
-        password=secrets['DB_PASSWORD'],
-        port=secrets.get('DB_PORT', '5432')
-    )
-
-    try:
-        cursor = conn.cursor()
-        cursor.execute("""
-            UPDATE Episode 
-            SET transcribed = TRUE, transcript_s3_key = %s 
-            WHERE episode_id = %s
-        """, (transcript_key, episode_id))
-        conn.commit()
-    finally:
-        cursor.close()
-        conn.close()
