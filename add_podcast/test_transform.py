@@ -1,4 +1,5 @@
 import pytest
+import warnings
 from datetime import datetime
 from transform import (
     validate_podcast_name,
@@ -6,6 +7,9 @@ from transform import (
     validate_language,
     validate_feed
 )
+
+# Suppress urllib3 OpenSSL warning
+warnings.filterwarnings('ignore', message='urllib3 v2 only supports OpenSSL')
 
 
 class TestValidatePodcastName:
