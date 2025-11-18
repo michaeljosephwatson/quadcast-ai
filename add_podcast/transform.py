@@ -15,6 +15,9 @@ def validate_podcast_name(podcast_name: str) -> str:
 def validate_publish_date(publish_date: str) -> datetime:
     """Validates and converts the publish date to a datetime object."""
 
+    if publish_date is None:
+        raise ValueError("Publish date cannot be None.")
+
     if not isinstance(publish_date, str):
         raise ValueError("Publish date must be passed a string.")
 
