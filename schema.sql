@@ -31,11 +31,11 @@ CREATE TABLE topics (
 -- Podcast table
 CREATE TABLE podcast (
     podcast_id SERIAL PRIMARY KEY,
-    podcast_name VARCHAR(255) NOT NULL,
+    podcast_name TEXT NOT NULL,
     publish_date TIMESTAMP,
     language_id INTEGER REFERENCES language(language_id) ON DELETE SET NULL,
     uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    podcast_url VARCHAR(500) NOT NULL UNIQUE
+    podcast_url TEXT NOT NULL UNIQUE
 );
 
 -- Episode table
