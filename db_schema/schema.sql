@@ -12,20 +12,20 @@ DROP TABLE IF EXISTS language CASCADE;
 -- Language table
 CREATE TABLE language (
     language_id SERIAL PRIMARY KEY,
-    language_name VARCHAR(100) NOT NULL UNIQUE
+    language_name TEXT NOT NULL UNIQUE
 );
 
 -- Speakers table
 CREATE TABLE speakers (
     speaker_id SERIAL PRIMARY KEY,
-    speaker_name VARCHAR(255) NOT NULL UNIQUE,
-    speaker_username VARCHAR(255)
+    speaker_name TEXT NOT NULL UNIQUE,
+    speaker_username TEXT
 );
 
 -- Topics table
 CREATE TABLE topics (
     topic_id SERIAL PRIMARY KEY,
-    topic_name VARCHAR(255) NOT NULL UNIQUE
+    topic_name TEXT NOT NULL UNIQUE
 );
 
 -- Podcast table
@@ -43,10 +43,10 @@ CREATE TABLE episode (
     episode_id SERIAL PRIMARY KEY,
     podcast_id INTEGER NOT NULL REFERENCES Podcast(podcast_id) ON DELETE CASCADE,
     uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    audio_url VARCHAR(500) NOT NULL UNIQUE,
+    audio_url TEXT NOT NULL UNIQUE,
     transcribed BOOLEAN DEFAULT FALSE,
     published_at TIMESTAMP,
-    episode_title VARCHAR(500)
+    episode_title TEXT
 );
 
 -- episode_speakers junction table
