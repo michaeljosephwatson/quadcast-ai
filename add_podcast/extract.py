@@ -7,7 +7,7 @@ from pprint import pprint
 def get_data_from_rss(rss_url: str) -> dict:
     """Gets all the data for the podcast from the RSS"""
 
-    if not rss_url.endswith(".rss"):
+    if not rss_url.endswith(".rss") and not rss_url.endswith(".xml"):
         raise ValueError("The provided URL is not a valid RSS feed URL.")
 
     if len(rss_url) == 0:
