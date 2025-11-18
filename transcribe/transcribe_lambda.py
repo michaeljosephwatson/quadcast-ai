@@ -13,7 +13,6 @@ import os
 import json
 from pathlib import Path
 from urllib.parse import unquote_plus
-
 import boto3
 from openai import OpenAI
 
