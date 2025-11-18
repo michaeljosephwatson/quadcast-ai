@@ -16,41 +16,37 @@ CREATE TABLE language (
 );
 
 -- Speakers table
-CREATE TABLE Speakers (
+CREATE TABLE speakers (
     speaker_id SERIAL PRIMARY KEY,
-    speaker_name VARCHAR(255) NOT NULL,
+    speaker_name VARCHAR(255) NOT NULL UNIQUE,
     speaker_username VARCHAR(255)
 );
 
 -- Topics table
-CREATE TABLE Topics (
+CREATE TABLE topics (
     topic_id SERIAL PRIMARY KEY,
     topic_name VARCHAR(255) NOT NULL UNIQUE
 );
 
 -- Podcast table
-CREATE TABLE Podcast (
+CREATE TABLE podcast (
     podcast_id SERIAL PRIMARY KEY,
     podcast_name VARCHAR(255) NOT NULL,
-    publish_date VARCHAR(100),
+    publish_date TIMESTAMP,
     language_id INTEGER REFERENCES language(language_id) ON DELETE SET NULL,
     uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     podcast_url VARCHAR(500) NOT NULL UNIQUE
 );
 
 -- Episode table
-CREATE TABLE Episode (
+CREATE TABLE episode (
     episode_id SERIAL PRIMARY KEY,
     podcast_id INTEGER NOT NULL REFERENCES Podcast(podcast_id) ON DELETE CASCADE,
     uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    audio_url VARCHAR(500) NOT NULL,
+    audio_url VARCHAR(500) NOT NULL UNIQUE,
     transcribed BOOLEAN DEFAULT FALSE,
     published_at TIMESTAMP,
-    episode_title VARCHAR(500),
-    transcript_s3_key VARCHAR(500),
-    summary TEXT,
-    entities_json TEXT,
-    quotes_json TEXT
+    episode_title VARCHAR(500)
 );
 
 -- episode_speakers junction table
@@ -78,6 +74,7 @@ CREATE INDEX idx_episode_speakers_speaker ON episode_speakers(speaker_id);
 CREATE INDEX idx_episode_topics_episode ON episode_topics(episode_id);
 CREATE INDEX idx_episode_topics_topic ON episode_topics(topic_id);
 CREATE INDEX idx_podcast_url ON Podcast(podcast_url);
+CREATE INDEX idx_podcast_language_id ON Podcast(language_id);
 
 -- Insert some default languages
 INSERT INTO language (language_name) VALUES 
