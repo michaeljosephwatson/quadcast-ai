@@ -19,11 +19,16 @@ resource "aws_secretsmanager_secret" "quadcast_secrets" {
 resource "aws_secretsmanager_secret_version" "quadcast_secrets" {
   secret_id = aws_secretsmanager_secret.quadcast_secrets.id
   secret_string = jsonencode({
-    DB_HOST     = aws_db_instance.postgres.address
-    DB_NAME     = aws_db_instance.postgres.db_name
-    DB_PASSWORD = random_password.rds_password.result
-    DB_PORT     = tostring(aws_db_instance.postgres.port)
-    DB_USER     = "quadcast_admin"
+    RDS_HOST     = aws_db_instance.postgres.address
+    RDS_DB_NAME     = aws_db_instance.postgres.db_name
+    RDS_PASSWORD = random_password.rds_password.result
+    RDS_PORT     = tostring(aws_db_instance.postgres.port)
+    RDS_USERNAME     = "quadcast_admin"
+    OPENAI_API_KEY = var.openai_api_key
   })
+
+  lifecycle {
+    ignore_changes = [secret_string]
+  }
 }
 
