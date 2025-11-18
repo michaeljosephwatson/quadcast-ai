@@ -120,8 +120,8 @@ class TestGetDataFromRss:
         """Test that function handles RSS feeds with special characters"""
         # Arrange
         mock_feed = {
-            'title': 'Podcast & Show: Special "�dition"',
-            'description': 'Test <podcast> with special chars: �, �, �',
+            'title': 'Podcast & Show: Special "Édition"',
+            'description': 'Test <podcast> with special chars: é, ñ, ü',
         }
         mock_parse.return_value.feed = mock_feed
         rss_url = 'https://example.com/feed.xml'
@@ -132,4 +132,4 @@ class TestGetDataFromRss:
         # Assert
         assert result == mock_feed
         assert '&' in result['title']
-        assert '�' in result['description']
+        assert 'é' in result['description']
