@@ -12,6 +12,7 @@ class TestGetRdsConnection:
     @patch('extract_urls.connect')
     def test_get_rds_connection_valid_env_vars(self, mock_connect):
         """Test successful connection with valid environment variables"""
+
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
         mock_connect.return_value = mock_conn
@@ -37,6 +38,7 @@ class TestGetRdsConnection:
     @patch('extract_urls.connect')
     def test_get_rds_connection_correct_parameters(self, mock_connect):
         """Test that connection uses correct parameter names"""
+
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
         mock_connect.return_value = mock_conn
@@ -61,6 +63,7 @@ class TestGetRdsConnection:
     @patch('extract_urls.connect')
     def test_get_rds_connection_connection_error(self, mock_connect):
         """Test that connection errors are propagated"""
+
         # Arrange
         mock_connect.side_effect = OperationalError("Failed to connect")
 
@@ -77,6 +80,7 @@ class TestGetRdsConnection:
     @patch('extract_urls.connect')
     def test_get_rds_connection_returns_connection_object(self, mock_connect):
         """Test that function returns a connection object"""
+
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
         mock_connect.return_value = mock_conn
@@ -99,6 +103,7 @@ class TestGetRdsConnection:
     @patch('extract_urls.connect')
     def test_get_rds_connection_missing_env_var(self, mock_connect):
         """Test that missing environment variables cause error"""
+
         # Arrange - Provide only partial environment variables
         with patch.dict(os.environ, {
             'RDS_HOST': 'localhost',
@@ -115,6 +120,7 @@ class TestGetRdsConnection:
     @patch('extract_urls.connect')
     def test_get_rds_connection_with_special_characters(self, mock_connect):
         """Test connection with special characters in credentials"""
+
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
         mock_connect.return_value = mock_conn
@@ -134,6 +140,7 @@ class TestGetRdsConnection:
     @patch('extract_urls.connect')
     def test_get_rds_connection_with_aws_rds_host(self, mock_connect):
         """Test connection with AWS RDS endpoint"""
+
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
         mock_connect.return_value = mock_conn
@@ -158,6 +165,7 @@ class TestGetUntranscribedPodcasts:
     @patch('extract_urls.connect')
     def test_get_untranscribed_podcasts_returns_list(self, mock_connect):
         """Test that function returns a list of tuples"""
+
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
         mock_cursor = MagicMock()
@@ -183,6 +191,7 @@ class TestGetUntranscribedPodcasts:
     def test_get_untranscribed_podcasts_correct_tuple_structure(
             self, mock_connect):
         """Test that each result tuple has correct structure"""
+
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
         mock_cursor = MagicMock()
@@ -206,6 +215,7 @@ class TestGetUntranscribedPodcasts:
     @patch('extract_urls.connect')
     def test_get_untranscribed_podcasts_empty_result(self, mock_connect):
         """Test that function handles empty result set"""
+
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
         mock_cursor = MagicMock()
@@ -227,6 +237,7 @@ class TestGetUntranscribedPodcasts:
     def test_get_untranscribed_podcasts_sql_query_correct(
             self, mock_connect):
         """Test that correct SQL query is executed"""
+
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
         mock_cursor = MagicMock()
@@ -252,6 +263,7 @@ class TestGetUntranscribedPodcasts:
     def test_get_untranscribed_podcasts_multiple_results(
             self, mock_connect):
         """Test function with multiple results"""
+
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
         mock_cursor = MagicMock()
@@ -279,6 +291,7 @@ class TestGetUntranscribedPodcasts:
     def test_get_untranscribed_podcasts_cursor_context_manager(
             self, mock_connect):
         """Test that cursor is used as context manager"""
+
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
         mock_cursor = MagicMock()
@@ -301,6 +314,7 @@ class TestGetUntranscribedPodcasts:
     def test_get_untranscribed_podcasts_with_special_characters_in_urls(
             self, mock_connect):
         """Test function with special characters in URLs"""
+
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
         mock_cursor = MagicMock()
