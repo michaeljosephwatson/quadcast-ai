@@ -3,8 +3,6 @@ import streamlit as st
 from rds_queries import (get_rds_connection, get_number_of_podcasts,
                          get_number_of_episodes, get_number_of_transcripts)
 
-conn = get_rds_connection()
-
 # Page configuration
 st.set_page_config(
     page_title="QuadCast Homepage",
@@ -12,55 +10,57 @@ st.set_page_config(
     layout="wide"
 )
 
-# Header
-st.title("🎙️ QuadCast Dashboard")
-st.markdown("### AI-Powered Podcast Analytics Platform")
+with get_rds_connection() as conn:
 
-st.divider()
+    # Header
+    st.title("🎙️ QuadCast Dashboard")
+    st.markdown("### AI-Powered Podcast Analytics Platform")
 
-# Description section
-st.markdown("""
-## Welcome to QuadCast
+    st.divider()
 
-QuadCast helps you manage and analyze your favorite podcasts with AI-powered insights.
+    # Description section
+    st.markdown("""
+    ## Welcome to QuadCast
 
-**What you can do:**
-- 🎙️ **Subscribe to Podcasts** - Add your favorite podcasts via RSS feed
-- 📊 **View Episode Data** - Access detailed information about each episode
-- 📝 **Read Transcripts** - Get full AI-generated transcripts of episodes
-- 💡 **Explore Insights** - Discover trends, summaries, and analytics across your podcast library
+    QuadCast helps you manage and analyze your favorite podcasts with AI-powered insights.
 
-Navigate through the pages to explore your podcasts and gain valuable insights!
-""")
+    **What you can do:**
+    - 🎙️ **Subscribe to Podcasts** - Add your favorite podcasts via RSS feed
+    - 📊 **View Episode Data** - Access detailed information about each episode
+    - 📝 **Read Transcripts** - Get full AI-generated transcripts of episodes
+    - 💡 **Explore Insights** - Discover trends, summaries, and analytics across your podcast library
 
-st.divider()
+    Navigate through the pages to explore your podcasts and gain valuable insights!
+    """)
 
-# Metrics section
-st.subheader("📈 Platform Overview")
+    st.divider()
 
-col1, col2, col3 = st.columns(3)
+    # Metrics section
+    st.subheader("📈 Platform Overview")
 
-with col1:
-    st.metric(
-        label="Total Podcasts",
-        value=get_number_of_podcasts(conn),
-        delta="Coming soon"
-    )
+    col1, col2, col3 = st.columns(3)
 
-with col2:
-    st.metric(
-        label="Episodes Analyzed",
-        value=get_number_of_episodes(conn),
-        delta="Coming soon"
-    )
+    with col1:
+        st.metric(
+            label="Total Podcasts",
+            value=get_number_of_podcasts(conn),
+            delta="Coming soon"
+        )
 
-with col3:
-    st.metric(
-        label="Transcripts Generated",
-        value=get_number_of_transcripts(conn),
-        delta="Coming soon"
-    )
+    with col2:
+        st.metric(
+            label="Episodes Analyzed",
+            value=get_number_of_episodes(conn),
+            delta="Coming soon"
+        )
 
-# Footer
-st.divider()
-st.caption("QuadCast Dashboard | Built with Streamlit")
+    with col3:
+        st.metric(
+            label="Transcripts Generated",
+            value=get_number_of_transcripts(conn),
+            delta="Coming soon"
+        )
+
+    # Footer
+    st.divider()
+    st.caption("QuadCast Dashboard | Built with Streamlit")
