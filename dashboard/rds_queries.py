@@ -13,8 +13,7 @@ def get_rds_connection() -> connection:
         host=os.getenv("RDS_HOST"),
         database=os.getenv("RDS_DB_NAME"),
         user=os.getenv("RDS_USERNAME"),
-        password=os.getenv("RDS_PASSWORD"),
-        port=int(os.getenv("RDS_PORT", 5432)),
+        password=os.getenv("RDS_PASSWORD")
     )
     return conn
 
