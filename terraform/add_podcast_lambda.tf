@@ -1,3 +1,8 @@
+# Data source to fetch secrets
+data "aws_secretsmanager_secret_version" "quadcast_secrets" {
+  secret_id = aws_secretsmanager_secret.quadcast_secrets.id
+}
+
 # Security Group for Add Podcast Lambda
 resource "aws_security_group" "add_podcast_lambda" {
   name        = "c20-quadcast-add-podcast-lambda-sg"
@@ -119,14 +124,12 @@ resource "aws_lambda_function" "add_podcast" {
   timeout     = 500
   memory_size = 512
 
-  vpc_config {
-    subnet_ids         = data.aws_subnets.public.ids
-    security_group_ids = [aws_security_group.add_podcast_lambda.id]
-  }
-
   environment {
     variables = {
-      SECRET_ARN = aws_secretsmanager_secret.quadcast_secrets.arn
+      RDS_HOST     = jsondecode(data.aws_secretsmanager_secret_version.quadcast_secrets.secret_string)["RDS_HOST"]
+      RDS_DB_NAME  = jsondecode(data.aws_secretsmanager_secret_version.quadcast_secrets.secret_string)["RDS_DB_NAME"]
+      RDS_USERNAME = jsondecode(data.aws_secretsmanager_secret_version.quadcast_secrets.secret_string)["RDS_USERNAME"]
+      RDS_PASSWORD = jsondecode(data.aws_secretsmanager_secret_version.quadcast_secrets.secret_string)["RDS_PASSWORD"]
     }
   }
 
