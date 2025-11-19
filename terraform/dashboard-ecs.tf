@@ -108,7 +108,7 @@
 #           "athena:GetWorkGroup",
 #           "athena:BatchGetQueryExecution"
 #         ]
-#         Resource = "*" # TO DO: Specify resource after setting up Athena and Glue
+#         Resource = "*" # TODO: Specify resource after setting up Athena and Glue
 #       },
 #       {
 #         Sid    = "GlueAccess"
@@ -121,7 +121,7 @@
 #           "glue:GetPartitions",
 #           "glue:BatchGetPartition"
 #         ]
-#         Resource = "*" # TO DO: Specify resource after setting up Athena and Glue
+#         Resource = "*" # TODO: Specify resource after setting up Athena and Glue
 #       },
 #       {
 #         Sid    = "S3Access"
@@ -221,24 +221,24 @@
 
 #       secrets = [
 #         {
-#           name      = "DB_HOST"
-#           valueFrom = "${aws_secretsmanager_secret.quadcast_secrets.arn}:DB_HOST::"
+#           name      = "RDS_HOST"
+#           valueFrom = "${aws_secretsmanager_secret.quadcast_secrets.arn}:RDS_HOST::"
 #         },
 #         {
-#           name      = "DB_PORT"
-#           valueFrom = "${aws_secretsmanager_secret.quadcast_secrets.arn}:DB_PORT::"
+#           name      = "RDS_PORT"
+#           valueFrom = "${aws_secretsmanager_secret.quadcast_secrets.arn}:RDS_PORT::"
 #         },
 #         {
-#           name      = "DB_NAME"
-#           valueFrom = "${aws_secretsmanager_secret.quadcast_secrets.arn}:DB_NAME::"
+#           name      = "RDS_DB_NAME"
+#           valueFrom = "${aws_secretsmanager_secret.quadcast_secrets.arn}:RDS_DB_NAME::"
 #         },
 #         {
-#           name      = "DB_USER"
-#           valueFrom = "${aws_secretsmanager_secret.quadcast_secrets.arn}:DB_USER::"
+#           name      = "RDS_USERNAME"
+#           valueFrom = "${aws_secretsmanager_secret.quadcast_secrets.arn}:RDS_USERNAME::"
 #         },
 #         {
-#           name      = "DB_PASSWORD"
-#           valueFrom = "${aws_secretsmanager_secret.quadcast_secrets.arn}:DB_PASSWORD::"
+#           name      = "RDS_PASSWORD"
+#           valueFrom = "${aws_secretsmanager_secret.quadcast_secrets.arn}:RDS_PASSWORD::"
 #         },
 #         {
 #           name      = "OPENAI_API_KEY"
