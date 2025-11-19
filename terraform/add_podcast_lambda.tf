@@ -119,7 +119,7 @@ resource "aws_lambda_function" "add_podcast" {
   function_name = "c20-quadcast-add-podcast"
   role          = aws_iam_role.add_podcast_lambda.arn
   package_type  = "Image"
-  image_uri     = "129033205317.dkr.ecr.eu-west-2.amazonaws.com/c20-quadcast-add-podcast-ecr:latest"
+  image_uri     = "${aws_ecr_repository.add_podcast_ecr.repository_url}:latest"
 
   timeout     = 500
   memory_size = 512
