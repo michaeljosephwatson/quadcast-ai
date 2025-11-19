@@ -54,11 +54,12 @@ def get_untranscribed_episode(conn: connection) -> dict:
         cursor.execute("""
             SELECT
                 e.episode_id,
+                p.podcast_id,
                 p.podcast_name,
                 e.episode_title,
                 e.audio_url
             FROM episode as e
-            JOIN podcast as p 
+            JOIN podcast as p
                  ON e.podcast_id = p.podcast_id
             WHERE e.transcribed = FALSE
             ORDER BY e.uploaded_at ASC
@@ -71,9 +72,10 @@ def get_untranscribed_episode(conn: connection) -> dict:
 
         return {
             "episode_id": result[0],
-            "podcast_name": result[1],
-            "episode_title": result[2],
-            "audio_url": result[3]
+            "podcast_id": result[1],
+            "podcast_name": result[2],
+            "episode_title": result[3],
+            "audio_url": result[4]
         }
 
 
