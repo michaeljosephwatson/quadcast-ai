@@ -27,6 +27,15 @@ def get_number_of_podcasts(conn: connection) -> int:
     return result[0]
 
 
+def get_number_of_episodes(conn: connection) -> int:
+    """Returns the total number of episodes in the database"""
+    cur = conn.cursor()
+    cur.execute("SELECT COUNT(*) FROM episode;")
+    result = cur.fetchone()
+    cur.close()
+    return result[0]
+
+
 if __name__ == "__main__":
     conn = get_rds_connection()
     with conn.cursor() as cursor:
