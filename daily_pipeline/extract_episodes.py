@@ -14,6 +14,7 @@ from email.utils import parsedate_to_datetime
 from psycopg2 import connect
 from psycopg2.extensions import connection
 from psycopg2.extras import RealDictCursor
+from dotenv import load_dotenv
 
 
 def get_rds_connection() -> connection:
@@ -237,5 +238,6 @@ def extract_all_new_episodes(conn: connection) -> list[dict]:
 
 
 if __name__ == "__main__":
+    load_dotenv()
     conn = get_rds_connection()
     extract_all_new_episodes(conn)
