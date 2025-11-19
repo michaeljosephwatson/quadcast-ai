@@ -1,48 +1,66 @@
 # Transcribe Lambda
 
-AWS Lambda function for transcribing podcast audio using OpenAI's GPT-4o-transcribe-diarise model.
+AWS Lambda function for transcribing podcast audio using OpenAI's GPT-4o-transcribe-diarize model.
 
 ## Overview
 
 This module provides a serverless transcription pipeline that:
-- Listens for S3 PUT events when podcast audio is uploaded
-- Downloads audio files from S3
-- Processes them with OpenAI's GPT-4o-transcribe-diarise model
-- Uploads generated transcripts and diarization data back to S3
+- Queries RDS database for untranscribed episodes
+- Downloads audio files from episode URLs
+- Processes them with OpenAI's GPT-4o-transcribe-diarize model with automatic chunking and diarization
+- Uploads generated transcripts and diarized segments to S3
+- Updates the database to mark episodes as transcribed
 
 ## Features
 
-- **Audio Transcription**: Converts podcast audio to text using GPT-4o-transcribe-diarise
-- **Speaker Diarization**: Identifies and labels different speakers in the audio
-- **Multiple Format Support**: Handles MP3, WAV, M4A, OGG, and FLAC audio files
-- **S3 Integration**: Automatic triggering and output storage via S3 events
+- **Audio Transcription**: Converts podcast audio to text using GPT-4o-transcribe-diarize model
+- **Speaker Diarization**: Identifies and labels different speakers with timestamps
+- **Automatic Chunking**: Splits audio into 2-minute chunks for optimal processing
+- **Async Concurrency**: Processes chunks concurrently (default: 5) for faster transcription
+- **Retry Logic**: Automatic retry with exponential backoff for failed chunks
+- **S3 Output Storage**: Stores transcripts and segments in S3
+- **Database Integration**: Reads from RDS PostgreSQL and marks episodes as processed
 - **Error Handling**: Comprehensive error handling and logging
 
-## S3 Event Structure
+## Architecture
 
-### Input
-Trigger on S3 PUT events with this key pattern:
+### Input Flow
+1. Lambda handler queries RDS for the oldest untranscribed episode
+2. Episode data includes: `episode_id`, `podcast_name`, `episode_title`, `audio_url`
+
+### Output Flow
+Results are stored in S3 under `transcripts/` folder:
 ```
-{podcast}/{episode}/audio.mp3
+transcripts/episode_{episode_id}_transcript.txt      # Full transcript text
+transcripts/episode_{episode_id}_diarized_segments.txt # Segments with speaker labels
 ```
 
-### Outputs
-```
-{podcast}/{episode}/transcript.txt
-{podcast}/{episode}/diarisation.json
-```
+Episode is marked as `transcribed = TRUE` in RDS database.
 
 ## Setup
 
 ### Environment Variables
 ```
-OPENAI_API_KEY    # Your OpenAI API key
-DB_HOST            # (Optional) Database host for metadata
-DB_NAME            # (Optional) Database name
-DB_USER            # (Optional) Database user
-DB_PASSWORD        # (Optional) Database password
-DB_PORT            # (Optional) Database port (default: 5432)
-AWS_REGION         # AWS region for S3
+OPENAI_API_KEY         # Your OpenAI API key (required)
+USE_SECRETS_MANAGER    # Set to "true" to use AWS Secrets Manager (optional)
+AWS_REGION             # AWS region for S3 and Secrets Manager (default: eu-west-2)
+RDS_HOST               # Database host (required if USE_SECRETS_MANAGER != "true")
+RDS_DB_NAME            # Database name (required if USE_SECRETS_MANAGER != "true")
+RDS_USERNAME           # Database username (required if USE_SECRETS_MANAGER != "true")
+RDS_PASSWORD           # Database password (required if USE_SECRETS_MANAGER != "true")
+RDS_PORT               # Database port (default: 5432)
+```
+
+### AWS Secrets Manager
+If `USE_SECRETS_MANAGER=true`, expects secret `c20-quadcast-secrets` containing:
+```json
+{
+  "RDS_HOST": "...",
+  "RDS_DB_NAME": "...",
+  "RDS_USERNAME": "...",
+  "RDS_PASSWORD": "...",
+  "RDS_PORT": "..."
+}
 ```
 
 ### Installation
@@ -53,9 +71,10 @@ pip install -r requirements.txt
 ## Dependencies
 
 - `openai`: OpenAI Python client for GPT-4o model access
-- `boto3`: AWS SDK for S3 operations
-- `psycopg2-binary`: PostgreSQL database adapter (optional, for metadata storage)
-- `requests`: HTTP library for API calls
+- `boto3`: AWS SDK for S3 operations and Secrets Manager
+- `psycopg2-binary`: PostgreSQL database adapter
+- `requests`: HTTP library for downloading audio files
+- `pydub`: Audio processing library for splitting and format conversion
 
 ## Lambda Handler
 
@@ -70,11 +89,20 @@ Success (HTTP 200):
 {
   "statusCode": 200,
   "body": {
-    "message": "Transcription + diarisation complete",
-    "podcast": "podcast_name",
-    "episode": "episode_id",
-    "transcript_key": "podcast_name/episode_id/transcript.txt",
-    "diarisation_key": "podcast_name/episode_id/diarisation.json"
+    "status": "success",
+    "episode_id": 123,
+    "transcript_s3_key": "transcripts/episode_123_transcript.txt",
+    "segments_s3_key": "transcripts/episode_123_diarized_segments.txt"
+  }
+}
+```
+
+No work (HTTP 200):
+```json
+{
+  "statusCode": 200,
+  "body": {
+    "status": "no_work"
   }
 }
 ```
@@ -84,48 +112,54 @@ Error (HTTP 500):
 {
   "statusCode": 500,
   "body": {
-    "error": "Error message"
+    "status": "error",
+    "message": "Error description"
   }
 }
 ```
 
-## Testing
+## Key Functions
 
-Run local tests with:
-```bash
-python test_transcribe.py
-```
+### `extract_urls.py`
+- `get_secret()`: Retrieves database credentials from AWS Secrets Manager
+- `get_rds_connection()`: Establishes RDS PostgreSQL connection
+- `get_untranscribed_episode()`: Fetches oldest untranscribed episode
+- `update_episode_transcribed()`: Marks episode as transcribed in database
 
-A test audio file (`test.mp3`) is included for local development and testing.
+### `transcribe.py`
+- `split_audio_2min()`: Splits audio into 2-minute FLAC chunks in memory
+- `transcribe_chunk_async()`: Async transcription of single chunk
+- `robust_transcribe_chunk()`: Retry wrapper with exponential backoff
+- `transcribe_full_audio_async()`: Main async pipeline with concurrency control
+- `transcribe_audio()`: Wrapper function for sync execution
 
-## Architecture
+### `lambda_handler.py`
+- `download_audio()`: Downloads audio from URL with streaming
+- `upload_to_s3()`: Uploads file to S3 bucket
+- `save_transcript_files()`: Saves and uploads both transcript and segments
+- `lambda_handler()`: Main Lambda entry point
 
-### Key Functions
+## Processing Pipeline
 
-- `parse_s3_event()`: Extracts bucket and key from S3 event
-- `parse_key_structure()`: Validates and parses S3 key structure
-- `download_audio()`: Downloads audio from S3 to Lambda's `/tmp` directory
-- `run_gpt4o_transcription()`: Processes audio with GPT-4o model
-- `upload_text()`: Uploads transcript to S3
-- `upload_json()`: Uploads diarization data to S3
-
-### Workflow
-1. Receive S3 PUT event
-2. Parse bucket and key from event
-3. Validate key structure and audio format
-4. Download audio to `/tmp`
-5. Call OpenAI GPT-4o-transcribe-diarise API
-6. Extract transcript text and speaker diarization
-7. Upload both outputs to S3
-8. Return success response
+1. Query RDS for untranscribed episode
+2. Download audio file from episode URL
+3. Split audio into 2-minute chunks
+4. Concurrently transcribe all chunks with diarization
+5. Merge results and maintain speaker/timestamp alignment
+6. Save transcript text and formatted segments
+7. Upload both files to S3
+8. Mark episode as transcribed in RDS
+9. Cleanup temporary files from `/tmp`
 
 ## Error Handling
 
 The function handles:
-- Invalid S3 key structures
-- Unsupported audio formats
-- S3 access errors
-- OpenAI API errors
-- File I/O errors
+- No untranscribed episodes available
+- Database connection failures
+- Invalid or unreachable audio URLs
+- Audio format/processing errors
+- OpenAI API errors with retry logic
+- S3 upload failures
+- Database update failures
 
-All errors are logged and returned with appropriate HTTP status codes and error messages.
+All errors are logged and return appropriate HTTP status codes.
