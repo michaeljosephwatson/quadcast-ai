@@ -59,33 +59,33 @@ def download_audio(bucket, key):
     local_path = f"/tmp/{key.replace('/', '_')}"
     Path(local_path).parent.mkdir(parents=True, exist_ok=True)
 
-    print(f"⬇️ Downloading s3://{bucket}/{key}")
+    print(f"â¬‡ï¸ Downloading s3://{bucket}/{key}")
     s3.download_file(bucket, key, local_path)
-    print(f"✅ Downloaded to {local_path}")
+    print(f"âœ… Downloaded to {local_path}")
 
     return local_path
 
 
 def upload_text(bucket, key, text):
-    print(f"⬆️ Uploading text → s3://{bucket}/{key}")
+    print(f"â¬†ï¸ Uploading text â†’ s3://{bucket}/{key}")
     s3.put_object(
         Bucket=bucket,
         Key=key,
         Body=text.encode("utf-8"),
         ContentType="text/plain"
     )
-    print("✅ Uploaded transcript")
+    print("âœ… Uploaded transcript")
 
 
 def upload_json(bucket, key, obj):
-    print(f"⬆️ Uploading JSON → s3://{bucket}/{key}")
+    print(f"â¬†ï¸ Uploading JSON â†’ s3://{bucket}/{key}")
     s3.put_object(
         Bucket=bucket,
         Key=key,
         Body=json.dumps(obj, indent=2).encode("utf-8"),
         ContentType="application/json"
     )
-    print("✅ Uploaded diarisation JSON")
+    print("âœ… Uploaded diarisation JSON")
 
 
 # --------------------------
@@ -98,7 +98,7 @@ def run_gpt4o_transcription(local_audio_path: str):
     with open(local_audio_path, "rb") as f:
         audio_bytes = f.read()
 
-    print("🎧 Calling gpt-4o-transcribe-diarise...")
+    print("ðŸŽ§ Calling gpt-4o-transcribe-diarise...")
 
     response = client.responses.create(
         model="gpt-4o-transcribe-diarise",
@@ -116,7 +116,7 @@ def run_gpt4o_transcription(local_audio_path: str):
     transcript = response.output_text
     diarisation = response.output_audio_diarization
 
-    print("✅ GPT-4o transcription completed")
+    print("âœ… GPT-4o transcription completed")
 
     return transcript, diarisation
 
@@ -125,7 +125,7 @@ def run_gpt4o_transcription(local_audio_path: str):
 # Lambda handler
 # --------------------------
 def lambda_handler(event, context):
-    print("📥 Event received")
+    print("ðŸ“¥ Event received")
     print(json.dumps(event))
 
     try:
@@ -163,7 +163,7 @@ def lambda_handler(event, context):
         }
 
     except Exception as e:
-        print(f"❌ ERROR: {e}")
+        print(f"âŒ ERROR: {e}")
         import traceback
         traceback.print_exc()
 
