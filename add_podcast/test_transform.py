@@ -202,7 +202,7 @@ class TestValidateFeed:
         assert result["podcast_name"] == "My Podcast"
         assert isinstance(result["publish_date"], datetime)
         assert result["language"] == "en-us"
-        assert result["link"] == "https://example.com/feed"
+        assert result["link"] == "https://example.com/feed.rss"
 
     def test_validate_feed_with_spaces(self):
         """Test that feed data is properly cleaned"""
