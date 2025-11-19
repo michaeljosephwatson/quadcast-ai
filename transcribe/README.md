@@ -26,14 +26,16 @@ This module provides a serverless transcription pipeline that:
 
 ### Input Flow
 1. Lambda handler queries RDS for the oldest untranscribed episode
-2. Episode data includes: `episode_id`, `podcast_name`, `episode_title`, `audio_url`
+2. Episode data includes: `episode_id`, `podcast_id`, `podcast_name`, `episode_title`, `audio_url`
 
 ### Output Flow
-Results are stored in S3 under `transcripts/` folder:
+Results are stored in S3 with partitioned structure: `{podcast_name}{podcast_id}/{episode_title}{episode_id}/`
 ```
-transcripts/episode_{episode_id}_transcript.txt      # Full transcript text
-transcripts/episode_{episode_id}_diarized_segments.txt # Segments with speaker labels
+{podcast_name}{podcast_id}/{episode_title}{episode_id}/transcript.txt           # Full transcript text
+{podcast_name}{podcast_id}/{episode_title}{episode_id}/diarized_segments.txt    # Segments with speaker labels
 ```
+
+Example: `MyPodcast42/Episode1Intro101/transcript.txt`
 
 Episode is marked as `transcribed = TRUE` in RDS database.
 
@@ -91,8 +93,8 @@ Success (HTTP 200):
   "body": {
     "status": "success",
     "episode_id": 123,
-    "transcript_s3_key": "transcripts/episode_123_transcript.txt",
-    "segments_s3_key": "transcripts/episode_123_diarized_segments.txt"
+    "transcript_s3_key": "{podcast_name}{podcast_id}/{episode_title}{episode_id}/transcript.txt",
+    "segments_s3_key": "{podcast_name}{podcast_id}/{episode_title}{episode_id}/diarized_segments.txt"
   }
 }
 ```
@@ -136,7 +138,7 @@ Error (HTTP 500):
 ### `lambda_handler.py`
 - `download_audio()`: Downloads audio from URL with streaming
 - `upload_to_s3()`: Uploads file to S3 bucket
-- `save_transcript_files()`: Saves and uploads both transcript and segments
+- `save_transcript_files()`: Saves and uploads both transcript and segments to partitioned S3 structure
 - `lambda_handler()`: Main Lambda entry point
 
 ## Processing Pipeline
