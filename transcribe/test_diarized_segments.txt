@@ -1,0 +1,1729 @@
+[0.31-1.16] Speaker A:  Stop the podcast.
+[1.16-2.11] Speaker B:  Stop the podcast!
+[2.11-2.81] Speaker A:  Hi, everyone.
+[2.86-5.51] Speaker A:  I just wanted to let you know that this week we are sponsored by EE.
+[5.76-6.11] Speaker A:  Dan,
+[6.36-8.01] Speaker A:  do you know that Christmas is on its way?
+[8.06-9.31] Speaker B:  Um, yes. Yeah,
+[9.36-9.91] Speaker B:  I do actually,
+[9.96-10.11] Speaker B:  James.
+[10.21-10.36] Speaker B:  Yeah.
+[10.36-19.51] Speaker A:  It comes at the same time every year and it's kind of the same every year. What it means for me is I go and see my parents and basically I always need my phone.
+[19.71-21.31] Speaker A:  Not that they're not great company,
+[21.41-26.66] Speaker A:  my parents, but, you know, I might need to find my way to someone's house or I might want to.
+[26.64-36.59] Speaker A:  to download some christmas movies onto my phone so that my daughter can watch them as we drive and what i need is the best mobile network and that is ee so what has christmas been to you
+[36.59-37.99] Speaker B:  Oh, it's the exact opposite.
+[38.14-44.04] Speaker B:  The family descends. They arrive at the house. It's completely crowded. It's amazing.
+[44.14-46.34] Speaker B:  Don't get me wrong, but it's full on.
+[46.34-50.79] Speaker A:  but you're also going to need lots of connectivity right because everyone's going to come to your house and jump on your broadband
+[50.79-51.59] Speaker B:  Oh, yeah, man.
+[51.69-53.79] Speaker B:  I genuinely, I think, ruined last Christmas.
+[53.91-57.76] Speaker B:  because we basically didn't have Wi-Fi for the whole period it went down and
+[57.76-58.31] Speaker A:  Oh, no.
+[58.31-75.31] Speaker B:  some of us are still repairing those relationships so whether you are hosting Christmas yourself or you're guesting at someone else's house this season you absolutely need EE broadband and mobile so get the best connectivity for your home and your phone with EE just search EE does more
+[75.31-75.41] Speaker A:  Hey,
+[75.41-75.86] Speaker B:  on
+[75.86-76.61] Speaker A:  I'm with the podcast.
+[76.61-77.61] Speaker B:  with the show
+[78.36-79.21] Speaker C:  This holiday,
+[79.46-84.86] Speaker C:  deck their countertops with peppermint white chocolate mochas, gingerbread lattes, and pumpkin cream cold brews.
+[85.11-87.11] Speaker C:  Ninja Lux Cafe is the ultimate gift.
+[87.21-93.86] Speaker C:  It's the number one best-selling espresso machine in the U.S., perfect for the coffee lovers in your life. If they can dream it, they can brew it.
+[93.91-95.01] Speaker C:  No skills needed.
+[95.21-96.41] Speaker C:  Espresso balanced.
+[96.66-97.81] Speaker C:  Drip coffee rich.
+[98.06-99.51] Speaker C:  Cold brew in a flash.
+[99.61-102.91] Speaker C:  Hands-free silky microfoam. Dairy or plant-based milks.
+[103.01-105.66] Speaker C:  Bring joy into their holiday and every day after.
+[105.49-107.29] Speaker C:  Actor with Ninja Lux Cafe.
+[107.59-108.29] Speaker C:  Shop now!
+[110.48-111.03] Speaker A:  Hi everyone,
+[111.13-115.33] Speaker A:  welcome to this week's episode of No Such Thing As A Fish, where we were joined by the legend,
+[115.58-116.68] Speaker A:  Dan Schreiber.
+[117.38-118.33] Speaker A:  Another legend,
+[118.43-119.33] Speaker A:  Andrew Hunter Murray,
+[119.38-119.43] Speaker B:  thank
+[119.43-119.63] Speaker A:  but
+[119.63-119.88] Speaker B:  you yeah
+[119.88-121.03] Speaker A:  the biggest legend of all,
+[121.13-121.88] Speaker A:  Ben Elton.
+[122.38-136.33] Speaker B:  long-time listeners of the show will understand what a big deal this was for me in particular he's my big big hero and he didn't disappoint you guys are going to absolutely love him the reason he was on the show is because he's just written his autobiography it's out now it's a sunday times
+[136.21-139.81] Speaker B:  Times bestseller this week. It's called What Have I Done? And it's the full story,
+[139.86-141.71] Speaker B:  you know, as you're doing an autobiography,
+[141.76-143.46] Speaker B:  childhood through to current day.
+[143.46-145.61] Speaker A:  that's a typo isn't it should be called what i have done is
+[145.61-145.66] Speaker B:  Okay.
+[145.66-151.16] Speaker A:  it too is it too late to change i'll leave out There is a phrase, what have I done?
+[151.76-154.26] Speaker A:  That's what he's going for. i understand now
+[154.26-155.01] Speaker B:  I said now.
+[155.86-163.61] Speaker A:  One interesting thing about Ben when he was on the show is he went on so many amazing big rambles, especially one a bit about...
+[163.48-178.93] Speaker A:  about his journey to having a new child which was extremely explicit unbelievably funny but you will not hear it if you listen to this episode because it goes in the xl version it was a little bit rude for this episode if you want to hear that you're gonna have to go to club fish
+[179.18-179.33] Speaker B:  that's
+[179.33-179.63] Speaker D:  Yeah.
+[179.63-189.63] Speaker B:  right you may have heard on last week's show we have just gussied up club fish and if you want ad-free episodes and bonus content and all kinds of extra stuff you can go to patreon.com slash no such thing as a fish
+[189.75-193.20] Speaker B:  and see what kind of extra stuff you can get and also see how you can support the show.
+[193.20-194.00] Speaker E:  That's right.
+[194.05-199.20] Speaker E:  But for now, enjoy fish and one of the greatest sitcom writers in British comedy history,
+[199.35-200.65] Speaker E:  the guy behind The Young Ones,
+[200.70-201.45] Speaker E:  Blackadder,
+[201.65-202.55] Speaker E:  Upstart Crow,
+[202.80-204.70] Speaker E:  books like Popcorn, maybe Baby,
+[204.85-205.40] Speaker E:  and again,
+[205.45-206.65] Speaker E:  his latest book, What Have I Done?
+[206.70-207.45] Speaker E:  On with the show.
+[213.35-215.05] Speaker F: 自動でお風呂を沸かします
+[218.26-218.71] Speaker F:  ありがとうございました
+[223.03-226.93] Speaker E:  Hello and welcome to another episode of No Such Thing as a Fish,
+[227.03-230.58] Speaker E:  a weekly podcast coming to you from the QI offices in Hoburn.
+[230.68-233.93] Speaker E:  My name is Dan Schreiber. I am sitting here with Andrew Hunter Murray,
+[234.08-236.18] Speaker E:  James Harkin and Ben Elton.
+[236.23-242.63] Speaker E:  And once again, we have gathered around the microphones with our four favorite facts from the last seven days and in no particular order,
+[242.68-243.73] Speaker E:  here we go.
+[243.98-246.68] Speaker E:  Starting with fact number one, and that is Ben.
+[246.98-250.23] Speaker B:  My fact for this week is the act.
+[250.10-257.65] Speaker G:  The actor who played Tinky Winky was removed from his role because his interpretation of the role was not acceptable.
+[259.90-263.55] Speaker G:  Which, I mean, how would they tell? I don't know.
+[263.55-264.35] Speaker E:  Well, yeah,
+[264.50-265.55] Speaker E:  this was Dave Thompson.
+[265.55-266.05] Speaker G:  Yes,
+[266.25-272.90] Speaker G:  I mean, I'm bringing it out of my fact, it concerns a very dear friend of mine. In fact, I think, you know, my second oldest friend,
+[272.95-276.55] Speaker G:  I mean, not to go into abstract detail, but my oldest friend.
+[276.82-280.47] Speaker G:  is Gabby Glaster who played Bob in Blackadder
+[280.47-280.82] Speaker A:  Wow.
+[280.82-281.37] Speaker E:  Yeah.
+[281.37-283.27] Speaker G:  in Blackadder and my second oldest
+[283.27-283.42] Speaker B:  Oh,
+[283.42-283.82] Speaker G:  friend played
+[283.82-284.07] Speaker B:  wow.
+[284.07-289.02] Speaker G:  Tinky Winky I really only befriended people who would later play
+[289.02-289.07] Speaker E:  Seminal.
+[289.07-289.72] Speaker G:  pretty famous
+[289.72-289.87] Speaker E:  Seminal
+[289.87-290.17] Speaker A:  Yeah,
+[290.17-290.42] Speaker G:  characters
+[290.42-290.52] Speaker E:  yeah.
+[290.52-290.87] Speaker A:  A-listers.
+[290.87-299.87] Speaker G:  Dave Thompson is a very very very great stand-up comic a very interesting comic muse in general and he got a great
+[300.00-326.50] Speaker A:  break at one point in his career in that he auditioned for and was cast as Tinky Winky because he did an enormous amount of physical theatre in his day he did a he was a rich did a lot of teaching and working with kids with special needs using theatre etc so very good with his tall wonderful body he got the job as Tinky Winky and gave a lot of thought to it I mean it isn't actually as simple as you think well surely they just all kind of go around in these enormous costumes
+[326.42-326.42] Speaker B:  Hmm.
+[326.42-332.62] Speaker A:  Scottish news I think the reason it was a success was because there was character but for some reason they sacked him
+[332.62-332.67] Speaker B:  Yeah.
+[332.67-338.52] Speaker A:  and and I don't I think some people said because I think it was Dave's idea to give Tinky Winky a handbag and
+[338.52-338.87] Speaker B:  Oh.
+[338.87-345.42] Speaker A:  I I think in those days I don't know if that's a fact or not but I I think it might be I think that's about as far as you get with facts these days anyway
+[345.42-345.52] Speaker B:  Yeah.
+[345.52-352.72] Speaker A:  that might be uh and um I think there was some sort of weird idea that that might suggest he was gay and a weird idea that that was a bad
+[352.63-352.68] Speaker C:  Bad thing.
+[352.68-354.03] Speaker D:  There was numerous things.
+[354.03-354.28] Speaker A:  Yeah,
+[354.28-355.18] Speaker D:  The handbag was one,
+[355.28-356.93] Speaker D:  which I read in one interview,
+[357.03-358.38] Speaker D:  Dave says it wasn't a handbag,
+[358.43-360.58] Speaker D:  it was like a magic bag. It could do magical things.
+[360.68-361.48] Speaker D:  So that's why Tinky Winky
+[361.48-361.63] Speaker E:  That
+[361.63-361.83] Speaker D:  had it.
+[361.83-362.38] Speaker E:  was a hard bug.
+[362.38-362.68] Speaker A:  It
+[362.68-362.73] Speaker D:  Yeah,
+[362.73-362.78] Speaker A:  was
+[362.78-362.83] Speaker D:  I
+[362.83-362.98] Speaker A:  a handbag.
+[362.98-363.43] Speaker D:  was a handbag.
+[363.48-363.63] Speaker A:  Dave,
+[363.63-364.03] Speaker D:  And I
+[364.03-364.78] Speaker A:  come on.
+[364.78-365.43] Speaker D:  think Dave's
+[365.43-366.08] Speaker A:  We have the
+[366.08-366.13] Speaker D:  had
+[366.13-366.53] Speaker A:  evidence of
+[366.53-366.63] Speaker D:  decades
+[366.63-367.03] Speaker A:  our eyes.
+[367.03-370.63] Speaker D:  to talk about this now, right? So he's probably adding little bits.
+[370.63-371.03] Speaker C:  Oh,
+[371.03-373.08] Speaker D:  Purple supposedly was a colour
+[373.08-373.28] Speaker C:  yeah.
+[373.28-373.73] Speaker D:  to suggest.
+[373.73-375.23] Speaker A:  This is all mad.
+[375.23-376.13] Speaker D:  Yeah, it's all mad.
+[376.13-376.88] Speaker A:  Fake controversy.
+[376.93-377.08] Speaker D:  Yeah.
+[377.08-378.78] Speaker A:  It sounds really ice cold.
+[378.77-383.62] Speaker F:  old the way he got his like tubby bye-byes he was on his way to a rap party and
+[383.62-383.87] Speaker A:  Mm-hmm.
+[383.87-386.62] Speaker F:  he was just drawn to one side and handed a letter from the company
+[386.62-386.97] Speaker A:  And by
+[386.97-387.12] Speaker F:  accountants
+[387.12-390.47] Speaker A:  rap you mean end of series rather than they were all going to get down and something.
+[390.47-395.07] Speaker F:  but one of them was a ja a jamaican um threw in a lot of jamaican dance moves. I
+[395.07-395.17] Speaker A:  Right.
+[395.17-396.72] Speaker F:  believe it's the guy who played Dipsy
+[396.72-396.92] Speaker A:  Right.
+[396.92-398.02] Speaker F:  threw in a lot of dancehall
+[398.02-398.42] Speaker G:  Oh yeah,
+[398.42-398.62] Speaker F:  stuff
+[398.62-398.77] Speaker G:  yeah.
+[398.77-398.87] Speaker D:  Yeah.
+[398.87-403.62] Speaker F:  interpretation. Anyway no, but the the rap end of series party and he just got told that's it.
+[403.62-403.77] Speaker G:  Yeah.
+[403.77-404.92] Speaker F:  But he has said since then
+[404.88-406.28] Speaker F:  Then I'm proud of my work for them.
+[406.48-411.78] Speaker F:  I was always the one to test out the limitations of the costume I was the first to fall off my chair.
+[411.93-413.28] Speaker F:  I took all the risks
+[413.33-413.68] Speaker H:  Wow
+[413.68-415.28] Speaker A:  Good old Dave D.
+[415.28-419.73] Speaker D:  He's a big physical comedian fan as well, right? Laurel and Hardy were his big influences.
+[419.78-422.28] Speaker D:  And so that's what he thought he was doing inside the suit.
+[422.28-428.18] Speaker A:  I don't, I have no idea what I said. I know he would, as I say, he's a friend of mine and I know he was deeply upset.
+[428.28-428.98] Speaker A:  He was devastated.
+[429.13-431.03] Speaker A:  I think since then the notoriety.
+[430.93-431.63] Speaker A:  variety you know he's
+[431.63-431.83] Speaker F:  yeah
+[431.83-454.78] Speaker A:  it's it's in interest um i don't know whether you do better in a comedy career playing tinky winky or having been sacked from playing tinky winky i kind of think maybe the latter i don't know but at the time because he actually did invest as he does in all his work um a great deal of his you know artistry and you know he took it very seriously uh i think he felt you know very undermined
+[454.78-459.73] Speaker F:  why is his voice like because i read he said that one of the reasons that he left might have
+[459.64-461.74] Speaker I:  It might have been because they didn't use his voice,
+[461.94-464.29] Speaker I:  they dubbed him over with another actor.
+[464.54-464.94] Speaker A:  I didn't
+[464.94-466.59] Speaker I:  He doesn't have a very strong accent
+[466.59-466.64] Speaker D:  Well,
+[466.64-467.04] Speaker I:  or...
+[467.04-468.19] Speaker D:  don't they all kind of go,
+[468.24-468.54] Speaker D:  oh.
+[468.54-468.84] Speaker I:  Yes.
+[468.84-469.24] Speaker D:  I mean.
+[469.24-470.84] Speaker F:  But he was re-voiced,
+[470.89-472.54] Speaker F:  and he's Darth Vader.
+[472.59-473.79] Speaker D:  That's David Prowse all over.
+[473.79-474.89] Speaker F:  It's one guy in the suit,
+[474.89-475.04] Speaker D:  Yeah.
+[475.04-475.44] Speaker F:  another guy.
+[475.44-477.19] Speaker A:  Some of them did their own voices,
+[477.24-477.84] Speaker A:  but That the
+[477.84-479.39] Speaker F:  other three did their own voices.
+[479.39-480.34] Speaker A:  I didn't know.
+[480.34-481.64] Speaker F:  And he was the only one re And-dubbed.
+[481.64-483.34] Speaker A:  I didn't really care until now.
+[483.44-484.54] Speaker A:  But I mean, with...
+[484.54-486.39] Speaker I:  And then his voice was...
+[486.13-488.03] Speaker I:  This was done by a guy called Mark Heenahan,
+[488.18-491.73] Speaker I:  who his other big role was playing Lyndon B. Johnson in a TV series
+[491.73-492.08] Speaker A:  LBJ,
+[492.08-492.53] Speaker I:  called First.
+[492.58-492.63] Speaker D:  Really?
+[492.63-493.33] Speaker A:  so literally
+[493.33-494.18] Speaker I:  I don't see that.
+[494.18-507.68] Speaker A:  the man who's known really now finally for hey hey LBJ how many kids to kill today with the Vietnam war is was actually the voice of one of a children's favorite it's a there's a kind of irony stretching across the decades there
+[507.68-514.43] Speaker D:  there's quite another one on Dipsy John Simmet he was a comedian as well so it's great knowing that there were comedians inside he's also a Charmander
+[514.32-515.82] Speaker D:  on a pikachu and friends cartoon
+[515.82-516.02] Speaker I:  Exactly.
+[516.02-516.52] Speaker A:  Right.
+[516.52-517.97] Speaker D:  yeah they've all got amazing credits
+[517.97-519.47] Speaker F:  This is all after our time.
+[519.47-519.97] Speaker A:  Yeah,
+[520.12-522.07] Speaker A:  I mean, the Teletubbies, are they still going?
+[522.12-522.17] Speaker I:  Yeah,
+[522.17-522.77] Speaker A:  Is that, oh God,
+[522.77-522.97] Speaker I:  I watched
+[522.97-523.22] Speaker A:  I'm out
+[523.22-523.32] Speaker I:  of them
+[523.32-523.37] Speaker A:  it.
+[523.37-523.77] Speaker I:  this morning.
+[523.77-525.32] Speaker A:  Did you? Have you got kids or
+[525.32-525.37] Speaker I:  I
+[525.37-525.82] Speaker A:  are you just a
+[525.82-526.02] Speaker I:  have a three
+[526.02-526.07] Speaker A:  bit
+[526.07-526.27] Speaker I: -year-old,
+[526.27-526.57] Speaker A:  weird?
+[526.57-529.62] Speaker I:  but it was after she'd gone to nursery that I put it on.
+[529.62-536.77] Speaker A:  Yeah, you skinned up a doobie. Because apparently that's what was originally the big thing was students sort of like getting stoned.
+[536.77-537.87] Speaker I:  When it started,
+[537.92-540.07] Speaker I:  I was a student and we used to get up.
+[540.05-545.65] Speaker I:  up at like 11 o'clock in the morning like students do and just put Teletubbies on and watch that yeah every morning we used
+[545.65-545.75] Speaker D:  to Really?
+[545.75-545.95] Speaker I:  do that
+[545.95-547.65] Speaker A:  Well, you know what they say, don't you?
+[547.80-548.40] Speaker A:  Eh-oh.
+[549.70-551.25] Speaker A:  It was a number one single.
+[551.25-551.30] Speaker I:  yeah
+[551.30-556.10] Speaker A:  We actually pastiched that in We Will Rock You, my Queen musical,
+[556.15-563.95] Speaker A:  because it's about the future of the world in which rock and roll has been forgotten and all music is kind of electro,
+[564.05-564.40] Speaker A:  pop,
+[564.60-566.25] Speaker A:  you know, computerised pop created.
+[566.68-585.38] Speaker A:  and stream directly from the sort of conglomerate whatever anyway one of the things was that people are trying to remember back to the age of rock and but they really don't get it so they discover that you know this song was a number one telly tubbies say oh and they treat it with the same reverence as sort of satisfaction and and I want to hold your hand anyway anyway
+[585.83-594.03] Speaker D:  that's amazing you know it was created by a guy called andrew davenport and the whole i didn't actually know that trippiness and spoken splits was associated with telly tubbies
+[593.94-596.79] Speaker D:  Because the one I associate that with, which is actually more LSD,
+[596.94-597.89] Speaker D:  is in the night garden,
+[597.89-598.04] Speaker F:  Oh
+[598.04-598.34] Speaker D:  Oh, which
+[598.34-598.59] Speaker F:  yeah.
+[598.59-599.94] Speaker D:  is the trippiest of sh-
+[600.00-600.05] Speaker A:  shows
+[600.05-600.30] Speaker B:  I
+[600.30-602.70] Speaker A:  and it's got eagle piggle and same same creators
+[602.70-603.55] Speaker B:  creators yeah
+[603.55-603.75] Speaker A:  as
+[603.75-604.15] Speaker C:  um and
+[604.15-604.20] Speaker A:  well
+[604.20-604.30] Speaker C:  also
+[604.30-605.00] Speaker A:  as moon and me right
+[605.00-612.80] Speaker C:  um la la in the reboot of telly tubbies the same actor plays upsy daisy you know when they had and so there is like
+[612.80-615.05] Speaker A:  there's a kid that's the same universe it's a it's
+[615.05-618.40] Speaker B:  the sort of universe that was telly tub is rebooted I mean what was
+[618.40-618.50] Speaker C:  yeah
+[618.50-618.70] Speaker B:  the what
+[618.70-622.60] Speaker C:  the one that i watched this morning was very different than the one i watched when as a student yeah
+[622.60-623.40] Speaker B:  oh okay and
+[623.40-623.95] Speaker C:  it's different
+[623.95-624.15] Speaker B:  I
+[624.15-624.25] Speaker C:  voiceover
+[624.25-625.90] Speaker B:  mean I don't want to bore your listeners
+[625.91-629.16] Speaker B:  business but i mean i'm quite interested what different i mean was the hair a different color
+[629.16-629.41] Speaker C:  no
+[629.41-629.61] Speaker B:  or something
+[629.61-634.11] Speaker C:  the hill was the same i think they just get into a few more scrapes and also
+[634.11-634.16] Speaker B:  more
+[634.16-634.51] Speaker C:  they'd be
+[634.51-634.71] Speaker B:  plot
+[634.71-634.86] Speaker C:  yeah
+[634.86-635.36] Speaker B:  how
+[635.36-635.96] Speaker C:  there's more could plot
+[635.96-638.31] Speaker B:  there i mean so it's literally tension packed
+[638.31-644.26] Speaker C:  the vo is different as well the voiceover is different like in media layers like this isn't what i grew up on
+[644.26-647.26] Speaker D:  Do the screens in their tummies, are they now
+[647.26-647.66] Speaker C:  vertical yeah
+[647.66-649.21] Speaker D:  for the age of vertical videos?
+[649.21-650.81] Speaker C:  they're all tick tocks yeah
+[650.81-651.06] Speaker D:  yeah nice
+[651.06-653.21] Speaker B:  um it's funny how you don't like
+[653.24-654.64] Speaker B:  like chain one doesn't like
+[654.64-654.89] Speaker A:  Yeah,
+[654.89-667.74] Speaker B:  change i remember having you know watched an awful lot of dumb as the dang engine goes round and round and round when my kids were very small i happened to see one with i don't know a nephew or something and they've gone all cgi so they're
+[667.74-667.79] Speaker A:  yeah
+[667.79-673.54] Speaker B:  not real they're not real models anymore and i just i wanted to write to someone i did i was at times
+[673.54-673.69] Speaker C:  they're
+[673.69-674.09] Speaker B:  or something so
+[674.09-677.99] Speaker C:  also run by italian and french companies these days aren't they there you go
+[677.99-680.24] Speaker B:  do you see what he did there a little bit of
+[680.02-680.67] Speaker B:  A bit of politics,
+[680.77-681.52] Speaker B:  goodness gracious.
+[681.82-687.72] Speaker D:  hs2 across sodor is very very slow um can i tell you guys about lala so
+[687.72-688.17] Speaker B:  Yeah.
+[688.17-706.07] Speaker D:  so lala was nikki smedley she has since done a one-woman show confessions of a teletubby um and she found you couldn't say you were a teletubby at the time i think in the early days when she'd just been cast and the first things were going out they all signed ndas so you couldn't confess it but she had originally her previous job as far as i can tell you
+[706.07-708.97] Speaker D:  was fronting the Garage Rock girl group Psycho Pussy.
+[709.37-710.62] Speaker A:  And that
+[710.62-711.12] Speaker E:  Okay.
+[711.12-718.22] Speaker B:  doesn't get your sack from the set and all Dave did was fall off his chair oh my goodness that
+[718.22-719.27] Speaker C:  That's amazing.
+[719.27-720.72] Speaker B:  is a brilliant fact
+[720.72-732.92] Speaker A:  that's amazing but that that doesn't seem to matter in children's entertainment there's the biggest children's entertainer it's called Blippi and it's a huge character in America it's sold I think for like a billion dollars in the states as a
+[732.79-737.54] Speaker A:  it's as a brand Hmm. the guy who plays Blippi that's not his first career similar sort of alternative
+[737.54-737.94] Speaker C:  Oh, really?
+[737.94-744.39] Speaker A:  career to begin with yeah he was a prankster there's a video online that you can see of Blippi taking a poo on his friend's chest just
+[744.39-744.84] Speaker B:  I beg
+[744.84-744.89] Speaker A:  the
+[744.89-744.94] Speaker C:  Oh,
+[744.94-745.04] Speaker B:  your
+[745.04-745.14] Speaker A:  people
+[745.14-745.34] Speaker B:  pardon.
+[745.34-745.44] Speaker A:  that
+[745.44-747.19] Speaker B:  that would make any child laugh.
+[747.19-747.29] Speaker A: 
+[747.29-747.79] Speaker B:  I mean, I
+[747.79-748.29] Speaker C:  True.
+[748.29-751.19] Speaker B:  think that's probably the best kids gaggy ever did.
+[751.29-756.44] Speaker A:  the Barney character he's now he does tantric sex massage yeah yeah
+[756.44-757.74] Speaker D:  He's so interesting.
+[757.74-758.39] Speaker C:  They've joined up.
+[758.39-759.34] Speaker D:  I read about him.
+[759.41-759.91] Speaker D:  Yeah, Dave Joyner.
+[759.91-762.61] Speaker A:  so he wasn't the original Barney he took over as Barney and
+[762.61-762.76] Speaker D:  Yeah.
+[762.76-767.76] Speaker A:  then and and he supposedly to get into the suit itself he said he used tantric
+[767.76-768.76] Speaker B:  He used lube.
+[769.51-770.46] Speaker A:  lube I
+[770.96-773.16] Speaker B:  What is a tantric sex massage?
+[773.56-773.66] Speaker B:  I
+[773.66-773.81] Speaker C:  Yeah,
+[773.81-774.16] Speaker B:  think it's
+[774.16-774.21] Speaker C:  dad.
+[774.21-774.36] Speaker B:  Yeah.
+[774.36-775.36] Speaker A:  think well
+[775.36-775.46] Speaker C:  Is
+[775.46-775.86] Speaker A:  didn't
+[775.86-778.36] Speaker C:  this where you thought today was going when you came into the office?
+[778.36-786.16] Speaker A:  know I have to bring out my personal stories but I'll tell you what it is it's um they effectively put you in a headspace where you can start feeling your your
+[786.10-792.15] Speaker A:  your energy growing to the point of culminating in an orgasm so you don't necessarily have to have someone touching you
+[792.15-793.80] Speaker B:  So it might be a verbal massage,
+[794.00-794.60] Speaker B:  somebody saying,
+[794.70-813.25] Speaker B:  you know, I mean, we all got the entire world learnt the phrase tantric sex at exactly the same moment when Sting and Trudy announced that they spent a year shagging or something without pause and everybody kind of heard this and everybody had a giggle about Sting and Trudy and I don't think anybody ever really asked.
+[813.14-817.99] Speaker B:  well i certainly what me what is tantric sex i mean is it is it a different position is it
+[817.99-819.29] Speaker A:  No, it's a slow process.
+[819.34-825.24] Speaker A:  I think with Sting and Trudy, it was them sitting across from each other staring at each other's eyes for about four hours and slowly getting it.
+[825.24-825.29] Speaker B:  so
+[825.29-825.59] Speaker A:  Tantric
+[825.59-825.64] Speaker B:  it's
+[825.64-825.84] Speaker A:  is meaning
+[825.84-825.99] Speaker B:  really
+[825.99-826.14] Speaker A:  patience.
+[826.14-837.74] Speaker B:  terrible boring sex i mean i think it's so much better when you shag personally and in five minutes it's fine i mean anyway i as a tantric sex is something mysterious i must look it up
+[837.74-839.59] Speaker C:  So you were saying about people sort of...
+[839.48-849.63] Speaker C:  sort of all learning things at the same time do you know toy story there's this bit in toy story where andy the child walks in and all the toys flop down okay
+[849.63-850.03] Speaker A:  Yeah.
+[850.03-851.48] Speaker C:  so in
+[851.48-851.53] Speaker B:  Which
+[851.53-851.88] Speaker C:  disney
+[851.88-852.08] Speaker B:  toy
+[852.08-852.13] Speaker C:  i
+[852.13-853.33] Speaker B:  store? Is this the first one or
+[853.33-853.53] Speaker C:  believe it's
+[853.53-853.73] Speaker B:  the second
+[853.73-853.93] Speaker C:  in all
+[853.93-854.08] Speaker B:  one?
+[854.08-854.88] Speaker C:  of them that this happens
+[854.88-854.98] Speaker B:  Oh,
+[854.98-855.28] Speaker C:  i
+[855.28-855.43] Speaker B:  right.
+[855.43-862.18] Speaker C:  must admit i haven't seen any of them but i have read the transcripts of all of them that is true so
+[862.18-865.58] Speaker B:  Sounds like tantric watching a toy story to me.
+[865.91-865.91] Speaker A:  they
+[865.91-869.06] Speaker B:  it's just not as good they
+[869.06-870.51] Speaker D:  they yeah they do whenever
+[870.51-870.66] Speaker A:  do
+[870.66-870.71] Speaker B:  they
+[870.71-870.81] Speaker D:  whenever
+[870.81-870.86] Speaker A:  that
+[870.86-872.06] Speaker D:  a trouble or another walkie
+[872.06-872.11] Speaker C:  so
+[872.11-872.21] Speaker D:  talkie
+[872.21-872.36] Speaker B:  i
+[872.36-872.41] Speaker C:  in
+[872.41-872.46] Speaker A:  yeah
+[872.46-873.06] Speaker B:  get it yeah
+[873.06-883.86] Speaker C:  disney theme parks they had all these toy story characters so it's people in costumes and then whenever anyone shouted andy's coming all the actors would just fall to the floor it's
+[883.86-884.11] Speaker A:  so
+[884.11-884.51] Speaker C:  like a call
+[884.51-884.66] Speaker A:  funny
+[884.66-885.36] Speaker C:  little self
+[885.36-885.61] Speaker B:  safe
+[885.61-885.66] Speaker C:  day
+[885.66-888.11] Speaker B:  t thompson would be great in one of those characters because
+[888.11-888.26] Speaker C:  amazing
+[888.26-889.06] Speaker B:  falling to the floor
+[889.06-894.26] Speaker C:  it was like a little sort of hidden thing but then it went viral on the internet
+[894.26-896.66] Speaker C:  to them and suddenly everyone learned it at the same time
+[896.66-896.86] Speaker A:  Hmm.
+[896.86-899.81] Speaker C:  and so there was one day when every single person
+[900.00-907.85] Speaker A:  who walked into the theme park just shouted Andy's coming and all the actors had to fall to the floor and it was it lasted one more day and they just stopped doing the whole thing
+[907.85-908.65] Speaker B:  Yeah, yeah, yeah, absolutely.
+[908.70-908.95] Speaker C:  that's
+[908.95-909.30] Speaker B:  That's so
+[909.30-909.45] Speaker C:  amazing
+[909.45-909.70] Speaker B:  funny.
+[909.70-910.00] Speaker D:  See,
+[910.00-910.15] Speaker B:  That's
+[910.15-910.50] Speaker D:  people can't
+[910.50-910.90] Speaker B:  so funny.
+[910.90-912.80] Speaker D:  be trusted with a global fact.
+[912.95-916.35] Speaker D:  You know, they're just going to spoil it for everyone by overdoing it.
+[916.75-922.50] Speaker C:  I read this amazing story. I was reading about people trapped inside big costumes trying to see if there was anything else.
+[922.55-925.40] Speaker C:  And I came across a kind of different story about a kid,
+[925.45-927.50] Speaker C:  a 12-year-old called Martin's Pistorius.
+[928.05-932.45] Speaker C:  he had a mystery illness where he fell into a coma For years and years, but he was conscious inside the coma
+[932.45-932.60] Speaker D:  No,
+[932.60-933.60] Speaker C:  so he was completely
+[933.60-933.70] Speaker D:  it's
+[933.70-934.20] Speaker C:  aware of
+[934.20-934.55] Speaker D:  just a what nightmare.
+[934.55-953.90] Speaker C:  was going on Yeah and he kept trying as hard as he could to break out of it Nothing could happen and he is now out of it. In fact, he's like a wheelchair racer He's got kids He's got family and the thing that broke him out is that when he was 12 They put him into a hospital and they played non-stop reruns of Barney to him and he got so annoyed with the song I love you
+[953.91-969.91] Speaker C:  you that he went i can't i can't be in this coma anymore and he decided to train himself and it took him years but through anger of barney he trained himself to know when it was daytime to know how to move the muscles of his lips when he was trying to smile at someone and they slowly recognized it and they helped and coached him out of it yes
+[969.91-978.86] Speaker D:  That I have to say one of you know, I'm sure everyone shares it I mean at the terror of I think it's called locked-in syndrome, isn't it? I remember reading about one person.
+[978.91-980.51] Speaker D:  Is it something with butterflies or something?
+[980.63-1003.43] Speaker D:  in the story a french bloke and he you know he'd been he was they had a sports game on and the nurse just sort of just turned the telly off at night and you know he'd been watching it and the anger it didn't i'm afraid it didn't pop him out but he also somehow managed because he's obviously told that story since but goodness gracious i mean the idea and you can't even ask them to kill you you know you literally can't do anything
+[1003.43-1003.63] Speaker C:  Yeah.
+[1003.63-1009.23] Speaker D:  barney took a lot of flack barney took a lot of like people hated barney i think because of that repetitive
+[1009.33-1016.03] Speaker E:  alternative song and all of this but the guy who played parney as we say david joiner he's a very interesting guy do you know what his previous job was he
+[1016.03-1016.53] Speaker A:  Go on.
+[1016.53-1018.48] Speaker E:  was a mannequin in shop windows a
+[1018.48-1020.18] Speaker C:  Oh, what an alive mannequin.
+[1020.18-1028.63] Speaker E:  live mannequin he did it for a few dollars an hour and he claimed that after a year he was so good at it that he was charging a hundred dollars an hour i know
+[1028.63-1032.48] Speaker D:  Surely for $100 you can buy a mannequin, I would have thought.
+[1032.48-1033.08] Speaker E:  i know
+[1033.08-1034.28] Speaker D:  Why would anybody...
+[1035.06-1035.06] Speaker E:  i
+[1035.06-1036.51] Speaker D:  I just don't believe this
+[1036.51-1044.96] Speaker E:  story i know he he said he changed his clothes every hour you know so you got a little fashion show so as you walk to work the mannequin is wearing something and then as you walk back he's
+[1044.96-1045.06] Speaker C:  Is
+[1045.06-1045.41] Speaker E:  wearing something
+[1045.41-1045.56] Speaker C:  he just
+[1045.56-1045.71] Speaker E:  else
+[1045.71-1047.61] Speaker C:  holding still the whole time?
+[1047.61-1048.66] Speaker E:  i believe so
+[1048.66-1053.01] Speaker D:  I mean, there's Covent Garden is literally full of people with this skill.
+[1053.11-1056.11] Speaker D:  They paint themselves silver and stand there.
+[1056.26-1061.06] Speaker D:  I'm afraid you obviously do factor QI, but I don't think that's a fact.
+[1061.08-1061.13] Speaker D:  fact
+[1061.13-1062.08] Speaker A:  No, he claims
+[1062.08-1062.28] Speaker D:  yeah
+[1062.28-1062.73] Speaker A:  it. I think
+[1062.73-1062.88] Speaker D:  he
+[1062.88-1062.98] Speaker A:  it's strange.
+[1062.98-1063.73] Speaker D:  claims it right
+[1063.73-1063.88] Speaker A:  That's
+[1063.88-1063.93] Speaker D:  okay
+[1063.93-1064.33] Speaker A:  from him.
+[1064.33-1064.53] Speaker D:  okay
+[1064.53-1064.73] Speaker A:  Yeah.
+[1064.73-1076.13] Speaker D:  I think there was some political controversy I mean I don't know it's an American thing I've no I wouldn't even know what Barney looked like but or certainly not this irritating song but I think there was some is it did it go woke or something did it did
+[1076.13-1076.28] Speaker E:  I
+[1076.28-1076.48] Speaker D:  it annoy
+[1076.48-1077.33] Speaker E:  was always just always
+[1077.33-1077.88] Speaker D:  did it
+[1077.88-1078.03] Speaker E:  I just think
+[1078.03-1081.43] Speaker D:  annoy the the people who like don't like things going woke I don't
+[1081.43-1081.48] Speaker E:  it's
+[1081.48-1081.58] Speaker C:  not
+[1081.58-1081.63] Speaker D:  know
+[1081.63-1084.78] Speaker E:  been cancelled too long to have gone woke Barney's not been around for a long time
+[1084.78-1084.93] Speaker C:  cancelled
+[1084.93-1085.33] Speaker D:  so it in was
+[1085.33-1085.43] Speaker C:  that sense.
+[1085.43-1086.43] Speaker D:  cancelled in the old sense
+[1086.43-1086.53] Speaker A:  Yeah.
+[1086.53-1086.83] Speaker D:  in the
+[1087.03-1087.03] Speaker A:  Yeah.
+[1087.03-1087.33] Speaker C:  In the
+[1087.33-1087.43] Speaker D:  Yes,
+[1087.43-1087.88] Speaker C:  original sense,
+[1087.88-1088.18] Speaker D:  imagine
+[1088.18-1088.28] Speaker C:  yeah.
+[1088.28-1089.93] Speaker D:  that like we look back now we say,
+[1089.98-1093.73] Speaker D:  oh, you know, what a shame, you know, they cancelled play for the day. Oh, what did they do?
+[1093.73-1095.48] Speaker A:  Ha, ha, ha, ha, ha, ha, ha, ha.
+[1095.48-1098.03] Speaker D:  Did they say something mean about them?
+[1098.33-1098.73] Speaker E:  Oh. Yeah.
+[1101.91-1102.81] Speaker A:  Stop the podcast.
+[1102.81-1103.76] Speaker E:  Stop the podcast.
+[1103.76-1104.36] Speaker A:  Hi, everyone.
+[1104.41-1107.01] Speaker A:  I just wanted to let you know that this week we are sponsored by EE.
+[1107.26-1107.66] Speaker A:  Dan,
+[1107.91-1109.56] Speaker A:  do you know that Christmas is on its way?
+[1109.66-1110.86] Speaker C:  Um, yes. Yeah,
+[1110.96-1111.46] Speaker C:  I do actually,
+[1111.51-1111.86] Speaker C:  James. Yeah.
+[1111.86-1121.11] Speaker A:  I like because of the same time every year. And it's kind of the same every year. What it means for me is I go and see my parents and basically I always need my phone.
+[1121.11-1121.36] Speaker C:  Hmm.
+[1121.36-1122.86] Speaker A:  Not that they're not great company,
+[1122.91-1123.46] Speaker A:  my parents,
+[1123.56-1128.11] Speaker A:  but, you know, I might need to find my way to someone's house or I might want to.
+[1127.83-1133.08] Speaker A:  I want to download some Christmas movies onto my phone so that my daughter can watch them as we drive.
+[1133.23-1136.58] Speaker A:  And what I need is the best mobile network and that is EE.
+[1136.88-1138.23] Speaker A:  So what has Christmas been to you?
+[1138.23-1139.63] Speaker C:  Oh, it's the exact opposite.
+[1139.93-1144.83] Speaker C:  The family descends. They arrive at the house. It's completely crowded.
+[1144.93-1145.58] Speaker C:  It's amazing.
+[1145.73-1146.58] Speaker C:  Don't get me wrong,
+[1146.73-1147.93] Speaker C:  but it's full on.
+[1147.93-1149.93] Speaker A:  But you're also going to need lots of connectivity,
+[1150.23-1150.33] Speaker A:  right?
+[1150.43-1152.38] Speaker A:  Because everyone's going to come to your house and jump on your broadband.
+[1152.38-1153.23] Speaker C:  Oh yeah, man.
+[1153.28-1155.43] Speaker C:  I genuinely, I think, ruined last Christmas.
+[1155.48-1159.28] Speaker C:  because we basically didn't have Wi-Fi for the whole period it went down and
+[1159.28-1159.88] Speaker E:  Oh, no.
+[1159.88-1176.68] Speaker C:  some of us are still repairing those relationships so whether you are hosting Christmas yourself or you're guesting at someone else's house this season you absolutely need EE broadband and mobile so get the best connectivity for your home and your phone with EE just search EE does more
+[1176.68-1176.83] Speaker E:  Okay.
+[1176.83-1179.13] Speaker C:  hey I'm with the podcast on with the show
+[1181.94-1184.84] Speaker C:  This episode of Fish is brought to you by Airbnb.
+[1185.44-1185.94] Speaker E:  Ah,
+[1186.04-1186.74] Speaker E:  you've been away,
+[1186.79-1186.89] Speaker E:  Dan?
+[1187.09-1189.29] Speaker C:  Yeah. Where'd you go? Went to a caravan park.
+[1189.29-1189.44] Speaker E:  Nice.
+[1189.44-1190.29] Speaker C:  You ever been to one of those?
+[1190.29-1191.74] Speaker E:  I have actually,
+[1191.84-1191.99] Speaker E:  yeah.
+[1192.19-1193.34] Speaker C:  It's pretty interesting.
+[1193.39-1194.29] Speaker C:  You get air con.
+[1194.34-1197.09] Speaker C:  It's like one of the only places in the UK I've ever had air con in.
+[1197.14-1198.39] Speaker C:  So that was pretty magic.
+[1198.79-1199.84] Speaker C:  Here's a weird...
+[1200.00-1213.10] Speaker A:  siding comeback of their own back in world war ii because churchill yeah churchill wrote a thing saying every man must have a weapon of some sort be it only a mace or a pike they took him at his word they produced 250 000 of them to give out to all the He's soldiers
+[1213.10-1213.25] Speaker B:  shot
+[1213.25-1219.40] Speaker A:  yeah and someone said we can't give them pikes what are you doing they've got machine guns out there are you serious okay
+[1219.40-1225.70] Speaker C:  i want to know the provenance of this fact i've read an awful lot of books on world war ii and i've never come across that one
+[1225.75-1225.75] Speaker C:  fun
+[1225.75-1225.85] Speaker A:  Well,
+[1225.85-1226.20] Speaker C:  and
+[1226.20-1228.85] Speaker A:  it was discussed by Godfrey Nicholson, the MP,
+[1229.05-1230.00] Speaker A:  known as
+[1230.00-1230.15] Speaker C:  we
+[1230.15-1230.25] Speaker A:  Crosspike.
+[1230.25-1233.05] Speaker C:  all know how much sense and how much truth yeah
+[1233.05-1235.95] Speaker D:  Godfrey Nicholson, though, he was a man of honor, wasn't he?
+[1235.95-1238.20] Speaker A:  It was known as Crosspike because he
+[1238.20-1238.45] Speaker C:  You're
+[1238.45-1238.95] Speaker A:  was someone
+[1238.95-1239.25] Speaker C:  sure you're
+[1239.25-1239.30] Speaker A:  who...
+[1239.30-1241.65] Speaker C:  not thinking of Lance Corporal Pike or Pogue
+[1241.95-1245.65] Speaker A:  I get all my facts from British sitcoms, yes.
+[1245.65-1251.00] Speaker C:  Sounds to me like Nicholson was a very stupid boy that's all I can say
+[1252.65-1254.80] Speaker E:  Can I tell you about Mrs. Hertha Ayrton?
+[1254.80-1255.35] Speaker D:  Go on then.
+[1255.35-1256.15] Speaker E:  I love her.
+[1256.20-1257.70] Speaker E:  She was a citizen scientist,
+[1257.80-1260.95] Speaker E:  and she was aware that there was a problem with gas.
+[1261.15-1261.45] Speaker E:  You know,
+[1261.50-1263.50] Speaker E:  First World War, first big use of poison gas on
+[1263.50-1263.55] Speaker D:  Oh yeah.
+[1263.55-1264.55] Speaker E:  the Western front.
+[1264.60-1266.90] Speaker E:  So she invented the anti-gas fan.
+[1267.60-1269.80] Speaker E:  And it's just a large fan.
+[1270.25-1277.45] Speaker E:  It's a handheld fan. It's one of those where you can't snap it out and flirt with it. It's just like an open fan.
+[1277.45-1277.95] Speaker A:  It's like a paddle.
+[1277.95-1278.60] Speaker C:  Oh, so it
+[1278.60-1278.65] Speaker E:  It's
+[1278.65-1278.85] Speaker C:  wasn't
+[1278.85-1279.00] Speaker E:  like an a paddle.
+[1279.00-1279.35] Speaker C:  lexical.
+[1279.12-1279.72] Speaker C:  an electric fan.
+[1279.77-1280.32] Speaker C:  It was a patent
+[1280.32-1280.57] Speaker E:  No, no.
+[1280.57-1280.72] Speaker C:  fan.
+[1280.72-1282.52] Speaker E:  This was the First World War. This was just a
+[1282.52-1282.67] Speaker C:  Right,
+[1282.67-1283.27] Speaker E:  handheld,
+[1283.52-1286.92] Speaker E:  and they made 100,000 of these and distributed them along the Western front.
+[1286.92-1287.57] Speaker F:  Isn't Let's that get a weird up.
+[1287.57-1288.02] Speaker E:  idea,
+[1288.07-1288.32] Speaker E:  though?
+[1288.32-1288.42] Speaker C:  It
+[1288.42-1288.62] Speaker E:  Like,
+[1288.62-1288.72] Speaker C:  is,
+[1288.72-1288.87] Speaker E:  soldiers
+[1288.87-1289.02] Speaker C:  but
+[1289.02-1289.07] Speaker E:  with
+[1289.07-1289.27] Speaker C:  do
+[1289.27-1289.47] Speaker E:  their fans?
+[1289.47-1296.52] Speaker C:  we call it an invention? I mean surely she just, she came up with a good use for something which already existed.
+[1296.72-1298.82] Speaker C:  I mean she said why don't we fan gas
+[1298.82-1298.87] Speaker E:  Well,
+[1298.87-1300.12] Speaker C:  away? Nobody said my goodness,
+[1300.22-1300.92] Speaker C:  what shall we use
+[1300.92-1300.97] Speaker E:  you
+[1300.97-1301.07] Speaker C:  the
+[1301.07-1301.12] Speaker E:  know
+[1301.12-1301.17] Speaker C:  fan
+[1301.17-1301.27] Speaker E:  what,
+[1301.27-1301.32] Speaker C:  to
+[1301.32-1301.42] Speaker E:  Ben?
+[1301.42-1301.82] Speaker C:  gas away?
+[1301.82-1302.22] Speaker E:  Ben,
+[1302.27-1304.57] Speaker E:  I like to acknowledge female inventors, personally,
+[1304.62-1305.32] Speaker E:  and so...
+[1305.33-1305.88] Speaker E:  Oh, queen.
+[1305.88-1313.03] Speaker C:  Well, I'm with you on that, you know, as we all know, Mrs Orwell wrote 1984 apparently according to a new biography.
+[1313.03-1313.13] Speaker E:  Oh,
+[1313.13-1313.38] Speaker C:  So yes,
+[1313.38-1313.43] Speaker E:  really?
+[1313.43-1313.68] Speaker A:  Yeah.
+[1313.68-1313.93] Speaker C:  let's, yeah,
+[1313.93-1316.03] Speaker D:  she wrote another thing called 1984 didn't
+[1316.03-1316.43] Speaker C:  alright,
+[1316.43-1318.48] Speaker D:  she which he might have based his slightly
+[1318.48-1318.58] Speaker C:  well,
+[1318.58-1318.93] Speaker D:  on.
+[1318.93-1319.03] Speaker E:  Ow!
+[1319.03-1320.08] Speaker C:  It's just the title,
+[1320.08-1320.28] Speaker D:  Just
+[1320.28-1320.53] Speaker C:  I think
+[1320.53-1320.68] Speaker D:  the
+[1320.68-1320.73] Speaker C:  it's
+[1320.73-1320.93] Speaker D:  title right.
+[1320.93-1321.28] Speaker C:  the number.
+[1321.28-1322.08] Speaker D:  It was a poem wasn't
+[1322.08-1331.58] Speaker C:  Anyway, let's not start debunking history debunkers. It's a very good thing to find the influences of women in history, so we certainly don't want to be...
+[1331.35-1335.25] Speaker C:  maybe poo-pooing that like a children's entertainer on it on it
+[1335.25-1335.35] Speaker D:  what On
+[1335.35-1335.85] Speaker C:  was on a a
+[1335.85-1335.90] Speaker D:  tricycle.
+[1335.90-1339.65] Speaker C:  chair on a chair silently just looping back
+[1344.44-1348.29] Speaker A:  Okay, it is time for fact number three, and that is my fact.
+[1348.34-1350.34] Speaker A:  My fact this week is that in 1962,
+[1350.79-1358.14] Speaker A:  a baby was successfully conceived thanks to a new fertility drug that contained pope-approved nun's urine.
+[1359.64-1360.74] Speaker D:  The pope approved.
+[1360.74-1363.54] Speaker A:  Yeah, this is the story of Perganol.
+[1363.59-1368.79] Speaker A:  Perganol is a drug that has been used for decades and decades to help people who have got fertility problems.
+[1369.09-1372.34] Speaker A:  And back in the 1940s, there was a guy called Piero Donini.
+[1372.28-1377.73] Speaker A:  He was a scientist who was working on extracting and purifying FSH and LH.
+[1377.78-1383.88] Speaker A:  So these are hormones that we produce in our body to stimulate production of sperm and produce testosterone in men.
+[1384.18-1389.08] Speaker A:  They're used for women to grow and function their ovaries, to produce a trigger ovulation. They're really important.
+[1389.33-1392.53] Speaker A:  He's the person who isolated them and tried to work out what to do with them.
+[1392.63-1398.88] Speaker A:  So another guy comes along who is studying the exact same thing and finds out about Donini's discovery.
+[1399.32-1402.37] Speaker A:  and says we could change the whole system of people trying to get pregnant
+[1402.37-1402.62] Speaker D:  And
+[1402.62-1402.72] Speaker A:  so
+[1402.72-1404.12] Speaker D:  this was Bruno Lunenfeld,
+[1404.12-1404.27] Speaker A:  yeah
+[1404.27-1404.42] Speaker D:  wasn't
+[1404.42-1404.52] Speaker A:  exactly
+[1404.52-1404.62] Speaker D:  it?
+[1404.62-1425.07] Speaker A:  Bruno Lunenfeld and so they approached this company Serrano where Donini worked and they said could we try this out in order to try this out we need gallons and gallons of urine and we need to find out where to get that from and they said it's a great idea but we don't want to put our stuff into this we can't do this there was a guy on the board who happened to be the nephew
+[1425.17-1433.17] Speaker A:  of the current Pope okay and he said the Pope has approved that the nuns that the Pope has access to will be the providers
+[1433.17-1435.17] Speaker E:  not that he has access to any of
+[1435.17-1436.07] Speaker C:  don't direct access
+[1437.67-1444.17] Speaker A:  it's not a tantric massage sort of situation no um he has access to um
+[1444.17-1444.77] Speaker C:  well influence
+[1444.77-1450.42] Speaker A:  his influence and he's approved the fact that if you ask them they they the Pope says he's okay with it
+[1450.90-1454.00] Speaker C:  menopausal large groups of older women yeah well
+[1454.00-1454.10] Speaker D:  Yeah.
+[1454.10-1455.90] Speaker C:  a nunnery would would certainly be able to
+[1455.90-1456.00] Speaker E:  And
+[1456.00-1456.30] Speaker C:  you
+[1456.30-1456.50] Speaker E:  they
+[1456.50-1457.10] Speaker C:  know ah
+[1457.10-1458.15] Speaker E:  can't be pregnant either.
+[1458.15-1458.95] Speaker D:  And they can't be pregnant.
+[1459.00-1460.00] Speaker D:  That would spoil it.
+[1460.00-1460.15] Speaker C:  and
+[1460.15-1460.70] Speaker D:  And that, yeah.
+[1460.70-1461.40] Speaker E:  one what like one
+[1461.40-1463.45] Speaker C:  medieval nuns wouldn't have done but but
+[1463.45-1464.35] Speaker D:  No naughty nuns.
+[1464.35-1476.90] Speaker C:  no naughty in the modern well that is very interesting you say pope approved as if that's kind of the big fact it's like you know um a pope pope approved nun's urine where it's actually i think nun's urine
+[1477.01-1482.56] Speaker C:  in is probably the more interesting part of that sentence but which because it really is for that
+[1482.56-1482.81] Speaker E:  Yeah,
+[1482.81-1483.11] Speaker C:  what a
+[1483.11-1483.16] Speaker E:  yeah.
+[1483.16-1497.71] Speaker C:  sort of interesting way they arrived at finding the stuff they needed but I mean did he did he have to approve it like we by we or was it just a general is it a Popal bull that he said you can and anyone can use nuns wi it's fine by me
+[1497.71-1499.41] Speaker A:  I don't think he was project manager,
+[1499.51-1499.61] Speaker A:  no.
+[1500.00-1503.75] Speaker A:  Right the deadlock in the Western front. Look, I'm auditioning for the rest is history.
+[1503.75-1504.10] Speaker B:  They want
+[1504.10-1509.55] Speaker A:  I want everybody to know that this podcast is just a leap for me to an even bigger podcast.
+[1509.55-1509.80] Speaker B:  Ouch.
+[1509.80-1510.20] Speaker A:  Uh,
+[1510.20-1510.35] Speaker B:  Ouch.
+[1510.35-1512.40] Speaker A:  and that's, that's really the only reason I'm here.
+[1512.45-1514.95] Speaker A:  So please back to Lance's.
+[1514.95-1519.20] Speaker B:  Now, now I'm afraid we've run out of time,
+[1519.20-1519.35] Speaker A:  Stop
+[1519.35-1519.80] Speaker B:  I think, for that.
+[1519.80-1519.90] Speaker A:  it.
+[1520.55-1521.95] Speaker B:  The Cavalry Lance.
+[1521.95-1522.25] Speaker A:  Yes.
+[1522.25-1522.70] Speaker B:  OK,
+[1522.80-1526.40] Speaker B:  I'll tell you where I got this first of all. I went recently to the Royal Armouries in Leeds.
+[1526.29-1526.39] Speaker B:  Leeds
+[1526.39-1526.59] Speaker A:  Hmm.
+[1526.59-1534.09] Speaker B:  which is a ginormous museum of arms and armour and armour it's absolutely unbelievable all the way from I think they're having a sort of Roman exhibition at the moment all the way to
+[1534.09-1534.24] Speaker A:  I
+[1534.24-1534.39] Speaker B:  today
+[1534.39-1535.39] Speaker A:  would like to live there.
+[1535.39-1536.29] Speaker B:  it's so good
+[1536.29-1536.84] Speaker A:  Oh my God,
+[1536.84-1537.09] Speaker B:  it's
+[1537.09-1537.44] Speaker A:  I'm going.
+[1537.44-1547.34] Speaker B:  incredible and basically I met some of the curators there I just want to give a shout out to Henry Yallop he is the keeper of edged weapons what a title it's so cool
+[1547.34-1549.94] Speaker A:  Oh, I wish we'd had that when we were doing Blackadder.
+[1550.14-1551.89] Speaker C:  Every weapon has an edge.
+[1552.02-1552.47] Speaker B:  Well,
+[1552.52-1553.07] Speaker B:  that's true.
+[1553.07-1553.72] Speaker A:  Do they?
+[1553.72-1554.07] Speaker C:  Yeah.
+[1554.07-1554.12] Speaker A:  Does
+[1554.12-1554.62] Speaker B:  I
+[1554.62-1554.72] Speaker A:  it
+[1554.72-1554.77] Speaker D:  would
+[1554.77-1554.87] Speaker A:  cannon
+[1554.87-1555.12] Speaker D:  not.
+[1555.12-1555.82] Speaker A:  have a...
+[1555.82-1556.92] Speaker B:  They've got some blunt. Look,
+[1556.92-1556.97] Speaker C:  I'm
+[1556.97-1557.07] Speaker B:  look.
+[1557.07-1558.02] Speaker C:  talking as a mathematician,
+[1558.07-1558.52] Speaker C:  sorry.
+[1558.52-1559.07] Speaker B:  Lances.
+[1559.27-1559.97] Speaker B:  Lances.
+[1559.97-1561.12] Speaker A:  Can you have a round edge?
+[1561.17-1562.62] Speaker A:  I mean, has a club got an edge?
+[1562.62-1564.07] Speaker C:  Has a circle got an edge?
+[1564.12-1565.17] Speaker A:  Back to lances.
+[1565.17-1565.77] Speaker B:  Thank you.
+[1567.38-1575.08] Speaker B:  And basically the point so he told me this amazing thing that the British army kept them in service until 1927 and it was common among European armies as
+[1575.08-1575.28] Speaker A:  Which
+[1575.28-1575.53] Speaker B:  someone
+[1575.53-1575.68] Speaker A:  is why
+[1575.68-1576.03] Speaker B:  just it's said
+[1576.03-1576.98] Speaker A:  not actually very amazing.
+[1577.03-1578.03] Speaker A:  But anyway, carry on.
+[1578.03-1594.03] Speaker B:  all right I don't remember having a go at your fact then but basically most European armies had it in service because this is the this is the thing I love about it is I think it might be the ancient world weapon that lasted the longest into modern militaries as
+[1594.03-1594.18] Speaker A:  Right.
+[1594.18-1594.33] Speaker B:  in
+[1594.26-1596.41] Speaker B:  Then bows and arrows were not used in any mass way
+[1597.26-1600.06] Speaker B:  What are the other ones swords were not used in a mass way this late?
+[1600.51-1607.46] Speaker B:  Lances stayed in service and it's basically because one of the most effective things you can do is have a very long stick and poke it Into someone else like
+[1607.46-1607.61] Speaker C:  Yeah?
+[1607.61-1608.01] Speaker B:  it
+[1608.01-1608.06] Speaker A:  Hmm.
+[1608.06-1615.51] Speaker B:  was from that I mean the Romans had a version of the lance called the contos or the Iranian cavalry Sorry 20th century at latitude that was the first century to the 20th
+[1615.51-1618.46] Speaker C:  I read another couple of theories as to why they lasted.
+[1618.51-1620.46] Speaker C:  Number one, that people in the army sort of
+[1620.34-1622.04] Speaker C:  sort of fantasized of these cavalry charges
+[1622.04-1622.49] Speaker A:  Absolutely.
+[1622.49-1623.34] Speaker C:  you know and
+[1623.34-1623.74] Speaker E:  Yeah.
+[1623.74-1626.69] Speaker C:  then another thing is that they like pig sticking so just it's
+[1626.69-1626.84] Speaker B:  What's
+[1626.84-1627.14] Speaker C:  like a sport
+[1627.14-1627.24] Speaker B:  that?
+[1627.24-1627.44] Speaker A:  That was
+[1627.44-1628.49] Speaker C:  where there's like a boar
+[1628.49-1628.59] Speaker A:  Spearing
+[1628.59-1628.84] Speaker C:  running around
+[1628.84-1629.09] Speaker A:  pig from
+[1629.09-1629.94] Speaker C:  spearing pigs yeah
+[1629.94-1630.09] Speaker A:  a horse.
+[1630.09-1630.24] Speaker B:  Okay.
+[1630.24-1630.29] Speaker C:  yeah
+[1630.29-1630.34] Speaker A:  Yeah,
+[1630.34-1630.39] Speaker B:  Right.
+[1630.39-1630.59] Speaker C:  and
+[1630.59-1630.64] Speaker A:  yeah,
+[1630.64-1630.69] Speaker C:  that
+[1630.69-1630.74] Speaker A:  yeah.
+[1630.74-1633.89] Speaker C:  was really popular in the army so people kept them for that reason
+[1633.89-1637.04] Speaker A:  But it was basically just a really successful thing as well.
+[1637.04-1637.14] Speaker C:  oh
+[1637.14-1637.29] Speaker A:  And
+[1637.29-1637.39] Speaker C:  yeah
+[1637.39-1646.19] Speaker A:  it was and it it kind of we should say a lance is a just for anyone who's not familiar with it a lance is a spear that you don't throw you know it's held mostly by heavy cavalry.
+[1646.84-1652.34] Speaker B:  if you're trying to break up an enemy formation or charge or sort of it's a really disruptive weapon you know you
+[1652.34-1652.49] Speaker C:  I
+[1652.49-1652.89] Speaker B:  have imagine you
+[1652.89-1654.34] Speaker C:  it in like a jousting competition,
+[1654.49-1654.99] Speaker C:  you hold it under
+[1654.99-1655.19] Speaker B:  have some
+[1655.19-1655.29] Speaker C:  your
+[1655.29-1655.94] Speaker B:  of armpit those it's
+[1655.94-1656.19] Speaker C:  and...
+[1656.19-1656.54] Speaker A:  But
+[1656.54-1656.79] Speaker B:  exactly like
+[1656.79-1656.94] Speaker A:  the,
+[1656.94-1657.09] Speaker B:  that yeah
+[1657.09-1658.59] Speaker A:  I mean, yeah,
+[1658.64-1659.74] Speaker A:  it was a successful weapon,
+[1659.79-1673.84] Speaker A:  but with the emergence of the machine gun, it became instantly a not successful weapon and it took them very much too long a time to notice. I mean, the fact that the military hierarchies worldwide were unable.
+[1674.00-1678.70] Speaker A:  people to sort of think beyond the horse because it's been so you know
+[1678.70-1678.75] Speaker F:  Mm
+[1678.75-1678.90] Speaker A:  two
+[1678.90-1679.10] Speaker F: -hmm.
+[1679.10-1680.35] Speaker A:  thousand three thousand years
+[1680.35-1680.60] Speaker C:  Yeah, yeah.
+[1680.60-1690.85] Speaker A:  of I mean I think it's more the horse that they couldn't bear to get rid of because the idea of a cavalry charge remained such an exciting thing if you're of a military turn of mind
+[1690.85-1694.45] Speaker B:  And militaries were still hugely reliant on horses for transport in general,
+[1694.50-1696.15] Speaker B:  you know, millions of horses in both world wars.
+[1696.15-1696.50] Speaker A:  absolutely
+[1696.50-1696.80] Speaker F:  Absolutely.
+[1696.80-1699.70] Speaker B:  But they did answer this really weird thing where it went out of fashion.
+[1699.86-1703.06] Speaker B:  in about the 17th and 18th century when pistols came in
+[1703.06-1703.11] Speaker A:  Mm.
+[1703.11-1704.51] Speaker B:  and then it came back.
+[1704.51-1708.81] Speaker A:  Yeah, what what was the I saw that that it went gone around that time. What brought it back?
+[1708.81-1727.96] Speaker B:  Basically Poland and Hungary had amazingly effective cavalry and and guns were not very good at the time you know they weren't you know they were slow to reload and they were they were not very accurate over very long distances and and it went so well for the Polish and Hungarian cavalry that Napoleon adopted it and then the British army so the whole of the 19th century was this huge renaissance.
+[1728.05-1728.95] Speaker B:  for the lance.
+[1728.95-1729.15] Speaker A:  I
+[1729.15-1729.50] Speaker B:  It's so weird.
+[1729.50-1731.30] Speaker A:  think it's more to do with colonialism.
+[1731.40-1733.80] Speaker A:  I think battles between western armies,
+[1733.95-1739.40] Speaker A:  the lance may have, they may have used it, but I don't, I mean if you've only got to read the charge of the light brigade,
+[1739.55-1746.05] Speaker A:  I mean lance is against cannon even before the invention of the gatling gun, what's at the end of the 19th century.
+[1746.25-1751.20] Speaker A:  For me the cavalry charges, you know, they were useful against an army that didn't have guns.
+[1751.20-1751.75] Speaker B:  It's against infantry.
+[1751.75-1752.25] Speaker A:  And there
+[1752.25-1752.30] Speaker B:  Waterloo,
+[1752.30-1752.55] Speaker A:  was a
+[1752.55-1752.75] Speaker B: 
+[1752.85-1754.80] Speaker B:  Waterloo was hugely used as in the
+[1754.61-1754.96] Speaker G:  Because in Napoleon's
+[1754.96-1755.21] Speaker A:  again
+[1755.21-1755.51] Speaker G:  newspaper it
+[1755.51-1755.71] Speaker A:  yeah
+[1755.71-1755.76] Speaker G:  was
+[1755.76-1755.81] Speaker A:  no
+[1755.81-1756.11] Speaker G:  sort you're of
+[1756.11-1756.16] Speaker A:  right
+[1756.16-1756.36] Speaker G:  like, yeah.
+[1756.36-1765.81] Speaker A:  i mean as long as you couldn't reload very quickly although as we famously know the british square with three ranks each reloading and firing in in order anyway back Hey, to the lunch
+[1765.81-1768.11] Speaker C:  Andy, I'm wondering like drones.
+[1769.11-1769.31] Speaker H:  Yeah.
+[1769.31-1772.21] Speaker C:  like knocking a drone out with a big stick. Maybe they're going to come back.
+[1772.21-1772.31] Speaker A:  Oh
+[1772.31-1772.66] Speaker C:  I just don't,
+[1772.66-1772.96] Speaker A:  yeah?
+[1772.96-1774.01] Speaker C:  don't tease me.
+[1774.01-1782.41] Speaker A:  Those, in the, in, sort of in the, did they, sort of around the Cromwellian times, did they have very, very long lances? I got this idea there was a time when they got longer,
+[1782.41-1782.51] Speaker H:  They
+[1782.51-1782.76] Speaker A:  and
+[1782.76-1782.96] Speaker H:  did get
+[1782.96-1783.06] Speaker A:  there
+[1783.06-1783.11] Speaker H:  longer.
+[1783.11-1786.21] Speaker A:  must have been a point when they became impractically long,
+[1786.21-1786.31] Speaker H:  Yeah.
+[1786.31-1787.06] Speaker A:  you know.
+[1787.21-1791.41] Speaker B:  Pikes, which are basically spears you stick in the ground to prevent enemy cavalry,
+[1791.51-1793.01] Speaker B:  those are about five metres long.
+[1793.01-1793.21] Speaker H:  Yeah.
+[1793.21-1794.41] Speaker B:  I mean, they're really, really long.
+[1794.41-1795.81] Speaker A:  They almost wield to that.
+[1795.70-1795.85] Speaker B:  that.
+[1795.85-1795.95] Speaker C:  No,
+[1795.95-1796.25] Speaker A:  No,
+[1796.25-1796.35] Speaker C:  no,
+[1796.35-1796.60] Speaker A:  no, no.
+[1796.60-1797.50] Speaker C:  that's to stick in the ground
+[1797.50-1797.60] Speaker B:  Right.
+[1797.60-1798.90] Speaker C:  and prevent a cavalry charge from
+[1798.90-1799.15] Speaker A:  They almost
+[1799.15-1799.50] Speaker C:  doing that.
+[1799.50-1799.95] Speaker A:  had an ex-
+[1800.00-1807.35] Speaker A:  thing about staying in a caravan park you would think would be part of like a big package system uh i actually stayed in it via airbnb yeah
+[1807.35-1807.70] Speaker B:  Did you?
+[1807.70-1810.80] Speaker A:  and uh it was a pretty phenomenal service no
+[1810.80-1811.20] Speaker B:  Wow.
+[1811.20-1811.50] Speaker A: 
+[1811.50-1813.55] Speaker B:  Did you put your own place on Airbnb while you were away?
+[1813.85-1815.90] Speaker A:  such a huge mistake yeah
+[1815.90-1816.55] Speaker B:  Could have done it.
+[1816.55-1826.30] Speaker A:  and it could have made it so easy because they have a co-host network on airbnb so you can actually have someone else come in and take care of all the practical stuff for your house
+[1826.36-1826.86] Speaker B:  That's right.
+[1826.96-1827.96] Speaker B:  They can create your listing,
+[1828.11-1829.06] Speaker B:  they can manage reservations,
+[1829.21-1829.86] Speaker B:  message guests,
+[1830.01-1831.11] Speaker B:  give you on-site support,
+[1831.36-1832.31] Speaker B:  do all of it.
+[1832.41-1838.11] Speaker B:  It's very easy. While you're gone, you can hire a co-host from Airbnb's co-host network to do the work for you.
+[1838.11-1838.51] Speaker A:  That's right,
+[1838.56-1843.71] Speaker A:  so why don't you find yourself a co-host at airbnb.co.uk slash host.
+[1844.01-1845.36] Speaker B:  All right, on with the show.
+[1845.46-1846.26] Speaker A:  On with the podcast.
+[1850.93-1853.18] Speaker A:  Okay, it is time for fact number two,
+[1853.23-1854.68] Speaker A:  and that is Andy.
+[1854.68-1858.33] Speaker B:  My fact is that the British army used lances until 1927.
+[1858.83-1859.63] Speaker C:  Wow,
+[1859.73-1860.18] Speaker C:  that's...
+[1861.56-1867.06] Speaker C:  i'm surprised it was that that that early that they got rid of it i mean yeah
+[1867.06-1873.06] Speaker D:  I mean, if you think about it, we got, what, the nuclear bomb 20 years later and 20 years before that we were just using big sticks.
+[1873.06-1887.31] Speaker C:  it's but insane if you if you yeah i don't think they were using but you think about it and after that i mean the poor polish cavalry were slaughtered in 1939 because they also used lances That's i right, mean it yeah took a long time for
+[1887.35-1897.00] Speaker C:  for armies to get over you know the the old ways who knew that soldiers might be reactionary old dickheads or or some or some of them at least
+[1897.00-1901.15] Speaker D:  Can I just say then that Andy is very, very excited to talk about lances.
+[1901.15-1902.10] Speaker B:  I'm so excited.
+[1902.10-1903.65] Speaker D:  I could just see as you were talking,
+[1903.65-1903.90] Speaker B:  He's quivering.
+[1903.90-1904.20] Speaker D:  he was like,
+[1904.20-1904.25] Speaker B: 
+[1904.25-1904.55] Speaker D:  oh, oh.
+[1904.55-1904.85] Speaker A:  Yeah.
+[1904.85-1914.50] Speaker C:  yeah yeah right well i mean let's but i as i say i i i don't think the british army was certainly wasn't the last because the poles you know were using which a lance is a
+[1914.45-1915.45] Speaker C:  This is a very sharp pole.
+[1915.50-1917.55] Speaker C:  But they weren't
+[1917.55-1917.80] Speaker B:  That's
+[1917.80-1918.00] Speaker C:  very sharp
+[1918.00-1918.35] Speaker B:  why they call
+[1918.35-1918.55] Speaker C:  to use
+[1918.55-1918.75] Speaker B:  them ostriches.
+[1918.75-1919.55] Speaker C:  them. I'm listening.
+[1919.70-1924.60] Speaker C:  I mean, we are actually talking about a military disaster and a human disaster, of course.
+[1924.95-1926.50] Speaker C:  But it is true to say,
+[1926.55-1930.00] Speaker C:  I mean, I think the last British charge, since you've got me on it, I like history,
+[1930.00-1930.30] Speaker D:  Yeah.
+[1930.30-1933.35] Speaker C:  was Churchill was involved in.
+[1933.45-1935.35] Speaker C:  So we've got lots of interesting links here.
+[1935.40-1937.50] Speaker C:  Was it 89 Omderman or was it?
+[1937.50-1937.90] Speaker D:  That's
+[1937.90-1938.10] Speaker C:  Yes,
+[1938.10-1938.55] Speaker D:  like cartoon.
+[1938.55-1940.20] Speaker C:  I think that was the last.
+[1940.18-1968.48] Speaker C:  last well it was one of the last this is the thing i can't believe the man who wrote blackadder is saying well this was actually a military human disaster hang on we've got to get some comedy out of this well exactly i mean uh my my grandfather got annoyed with me because he thought we were laughing at the expense of the british army and my my grandpa my uncle who's a historian but also had served in the british army in the second world war uh but was also saved by the british army because my uncle and my father's family were jewish refugees from the now
+[1968.40-1979.55] Speaker C:  Nazis, so they were very conscious of what we owed to Britain and also what we owed to the armed forces who in 1940, despite what the Americans might like to tell you, that they won the Second World War on their own,
+[1979.60-1989.10] Speaker C:  there was a year during which Britain stood alone, after which most of the Wehrmacht was involved with the Russians. But anyway, let's not get on to the Let's get on to the
+[1989.10-1989.20] Speaker B:  stick for
+[1989.20-1990.40] Speaker C:  whole of the Second World
+[1990.40-1990.55] Speaker B:  We're
+[1990.55-1990.70] Speaker C:  War.
+[1990.70-1991.20] Speaker B:  going to stick on the
+[1991.20-1991.25] Speaker C:  Francis,
+[1991.25-1991.35] Speaker B:  first
+[1991.35-1991.55] Speaker C:  quick,
+[1991.55-1991.65] Speaker B:  we're
+[1991.65-1991.85] Speaker C:  go Andy,
+[1991.85-1992.15] Speaker B:  going to
+[1992.15-1992.20] Speaker C:  go.
+[1992.20-1993.15] Speaker B:  stick on the first. All right.
+[1993.15-1993.45] Speaker C:  Sorry,
+[1993.70-1994.60] Speaker C:  I didn't even...
+[1994.42-1997.32] Speaker C:  He didn't even finish about what my uncle thought and now you've moved on it.
+[1997.37-2002.47] Speaker C:  So it's like you're like mountain goats leaping from crag to crag. I can't possibly follow
+[2002.47-2002.67] Speaker D:  I
+[2002.67-2002.82] Speaker C:  this.
+[2002.82-2004.22] Speaker D:  want to hear what your uncle thought,
+[2004.32-2004.72] Speaker D:  first of all.
+[2004.72-2005.07] Speaker C:  Well,
+[2005.17-2005.72] Speaker C:  very briefly,
+[2005.82-2008.82] Speaker C:  he wrote to me when Blackadder Goes Forth came out.
+[2009.02-2012.27] Speaker C:  He was a bit of a sort of like he had a slightly German accent and he wrote.
+[2012.32-2020.47] Speaker C:  Obviously, it wasn't it wasn't a voicemail, but I could hear his voice in the letter. He said, I'm very disappointed to hear that you're making easy swipe.
+[2020.37-2026.22] Speaker C:  swipes at the army uh your father who sired you that's the phrase he used
+[2026.22-2026.32] Speaker B:  Wow.
+[2026.32-2046.47] Speaker C:  which which is you know that's that's that's come to my study boy uh it's a tautology really isn't it because your father obviously sired you uh but anyway he said owed his freedom as do i to the british army etc you did very well with blackadder too but uh this is the i don't approve and i wrote back and i said you this is just not the case i think you know it's
+[2046.47-2047.17] Speaker @:  a
+[2046.48-2070.13] Speaker C:  very respectful but obviously the humor that the Tommies themselves had you know anyway watched a bit more of it and said I he said what an old bastard he said he said I've watched it since and I've decided perhaps I was too hasty with my criticism but you shouldn't be so sensitive to it I thought bloody hell he's having it both ways isn't he anyway anyway back to Lance's
+[2071.48-2072.18] Speaker B:  Thank you, Ben.
+[2072.18-2074.13] Speaker D:  He must be the only person in history who...
+[2073.94-2076.54] Speaker D:  who thinks that the fourth Blackadder was the worst one.
+[2076.59-2079.39] Speaker C:  Oh no, as I say, he didn't. He leapt a bit quick.
+[2079.54-2081.99] Speaker C:  He said jokes about idiotic officers and things,
+[2082.09-2084.74] Speaker C:  you know, it wasn't that, it's not that cut and dried, etc.
+[2084.99-2085.59] Speaker C:  Although actually,
+[2085.69-2091.89] Speaker C:  you know, the bloody mindedness that, you know, I mean, Haig's inability to think outside the box.
+[2092.04-2092.79] Speaker C:  Churchill again,
+[2092.94-2099.84] Speaker C:  you know, in trying to develop the tank, thinking outside the box, Gallipoli for all that it was a disaster, the idea to...
+[2100.00-2101.45] Speaker A:  i think i think he allowed them
+[2101.45-2101.60] Speaker B:  he didn't
+[2101.60-2101.85] Speaker A:  to just
+[2101.85-2102.00] Speaker B:  bless
+[2102.00-2102.80] Speaker A:  get bless on with it yeah
+[2102.80-2104.55] Speaker B:  each trickle okay right
+[2105.20-2109.35] Speaker A:  it took 10 nuns 10 days to produce enough urine for one treatment
+[2109.45-2116.30] Speaker C:  if 10 nuns spend 10 days to get a gallon of urine how long does it take five nuns that was something
+[2116.30-2116.75] Speaker A:  gcse
+[2116.75-2116.95] Speaker B:  so
+[2116.95-2117.20] Speaker A:  italian
+[2117.20-2126.45] Speaker B:  you say it took nuns 10 days to produce it i mean they weren't obviously spending all day they basically when they had a wee they kept it and it you know they needed that much of it i guess
+[2126.64-2126.64] Speaker A:  Oh,
+[2126.64-2130.04] Speaker B:  I think it's less dramatic when you unpack that sentence.
+[2130.04-2131.64] Speaker A:  it's coming for yours too?
+[2131.74-2132.24] Speaker A:  He's coming for yours?
+[2132.24-2133.64] Speaker B:  I saw it covered,
+[2133.69-2134.09] Speaker B:  so don't worry,
+[2134.09-2134.19] Speaker C:  it's
+[2134.19-2134.44] Speaker B:  I'm ready.
+[2134.44-2135.99] Speaker C:  100 nun days of
+[2135.99-2136.19] Speaker B:  It's
+[2136.19-2136.29] Speaker C:  urine
+[2136.29-2136.49] Speaker B:  100
+[2136.49-2136.54] Speaker C:  yeah
+[2136.54-2137.04] Speaker B:  nun wees.
+[2137.04-2137.44] Speaker C:  yeah you've
+[2137.44-2139.24] Speaker B:  It's not a day, it's got nothing to do with the day.
+[2139.29-2140.79] Speaker C:  You don't really have one wheel a day though
+[2140.79-2142.44] Speaker B:  Well, you're right. No, you're right. You're probably five.
+[2142.54-2143.44] Speaker B:  Actually, you're absolutely right.
+[2143.54-2144.14] Speaker B:  Well done.
+[2144.34-2145.19] Speaker B:  I probably have.
+[2145.34-2151.49] Speaker B:  These days I'm 66. I have one wheel a minute. So you're right. I have to knot it just to get through lunch,
+[2151.59-2152.34] Speaker B:  you know.
+[2152.89-2160.59] Speaker C:  see but one part of this that you're missing out Dan is that the Vatican owned 25% of Serrano this
+[2160.59-2160.99] Speaker A:  yes
+[2160.99-2166.79] Speaker C:  company so that was the reason they were so interested in going for this the Pope had a dog in the game
+[2166.79-2179.29] Speaker B:  it's a stunning so the the collection is insane i mean just because that was one treatment was 10 nuns 10 days worth of urine for 10 nuns so but that's one treatment and then the drug took off
+[2179.51-2187.66] Speaker A:  and it became successful and they started off with a hundred nuns all donating their urine and that gave them thirty thousand litres a year
+[2188.18-2195.53] Speaker B:  and so that was enough for 450 treatments right and and then that took off but they had to fit special loos in the convents obviously
+[2195.53-2196.18] Speaker A:  well because to keep
+[2196.18-2196.33] Speaker B:  you need
+[2196.33-2196.43] Speaker A:  it
+[2196.43-2196.63] Speaker B:  away to yeah
+[2196.63-2197.03] Speaker A:  you flush
+[2197.03-2197.23] Speaker B:  and
+[2197.23-2198.23] Speaker A:  it away it's no use at all
+[2198.23-2209.28] Speaker B:  so so the first baby girl was born in 1962 thanks to this treatment right this was specifically this one and it took off and by the 1980s they needed 30 000 litres of urine a day
+[2209.28-2209.38] Speaker C:  That's
+[2209.38-2209.53] Speaker B:  so
+[2209.53-2209.83] Speaker C:  mad.
+[2209.83-2211.58] Speaker B:  they had to expand beyond nuns yeah
+[2211.58-2212.73] Speaker A:  Yeah, they had to synthesize it basically
+[2212.73-2214.03] Speaker B:  they had to well no not that
+[2214.04-2215.54] Speaker D:  That took them a while to synthesize
+[2215.54-2215.89] Speaker B:  oh
+[2215.89-2215.99] Speaker C:  So
+[2215.99-2216.39] Speaker D:  it, wow but they
+[2216.39-2221.79] Speaker B:  they looked for other groups of older non-pregnant menopausal women where did they find them prisons
+[2221.79-2222.29] Speaker D:  did door...
+[2222.29-2222.94] Speaker B:  i
+[2222.94-2223.09] Speaker D:  They
+[2223.09-2223.19] Speaker B:  don't
+[2223.19-2229.49] Speaker D:  didn't do prisons, I don't think. There were urine collectors working for this company who did door-to-door door knocking campaigns saying...
+[2229.49-2229.89] Speaker C:  Wow
+[2229.89-2229.99] Speaker B:  wow
+[2229.99-2230.19] Speaker D:  Hello,
+[2230.19-2230.64] Speaker B:  you
+[2230.64-2233.74] Speaker D:  can we bring out your piss, basically.
+[2233.74-2233.94] Speaker B:  would
+[2233.94-2237.99] Speaker D:  And they had hundreds of thousands... They had 100,000 donors by the mid-90s.
+[2237.99-2241.04] Speaker B:  certainly because of course religion is kind of shrinking as i mean i think
+[2241.08-2241.08] Speaker C:  Yeah.
+[2241.08-2244.58] Speaker B:  I think I'll bet there's a lot less nuns around now than there were 50
+[2244.58-2244.68] Speaker C:  Oh,
+[2244.68-2244.98] Speaker B:  years ago.
+[2244.98-2245.03] Speaker D:  Yeah,
+[2245.03-2245.08] Speaker C:  yeah.
+[2245.08-2245.28] Speaker B:  I mean,
+[2245.28-2245.58] Speaker D:  that's true.
+[2245.58-2249.68] Speaker B:  peaked with the sound of music and I think it's down, it's down ever since.
+[2250.63-2251.78] Speaker B:  So gosh,
+[2251.83-2257.38] Speaker B:  but they did eventually learn how to like man-made nun piss or person made, human synthetic,
+[2257.38-2258.28] Speaker D:  They worked out.
+[2258.33-2258.43] Speaker C:  Yeah,
+[2258.43-2258.48] Speaker B:  synthetic.
+[2258.48-2258.68] Speaker D:  Yeah,
+[2258.68-2261.48] Speaker C:  but it was 1995 when they came up with that. It
+[2261.48-2262.13] Speaker D:  that's done it
+[2262.13-2263.43] Speaker C:  was called Gonell F.
+[2263.73-2263.88] Speaker D:  I
+[2263.88-2264.13] Speaker B:  Gonell
+[2264.13-2264.53] Speaker D:  just think that's
+[2264.53-2264.63] Speaker B:  F.
+[2264.63-2264.78] Speaker D:  crazily
+[2264.78-2265.48] Speaker C:  Yeah, and
+[2265.48-2265.63] Speaker D:  late.
+[2265.63-2266.83] Speaker C:  actually per Gonell.
+[2266.87-2270.52] Speaker C:  hell is similar word that may have both come from the word for gonad
+[2270.52-2271.37] Speaker D:  Did you never have gonads?
+[2271.37-2271.87] Speaker B:  because he's Well,
+[2271.87-2272.12] Speaker E:  better.
+[2272.12-2272.57] Speaker B:  I did two,
+[2272.72-2272.92] Speaker B:  yes,
+[2272.97-2284.62] Speaker B:  well I did two with my wife and I, we had our infertility journey and we did three cycles before we wonderfully got our beautiful twins and no one ever mentioned nun's piss,
+[2284.77-2286.37] Speaker B:  synthetic or real.
+[2286.37-2286.52] Speaker E:  Yeah.
+[2286.52-2287.57] Speaker B:  There was literally,
+[2287.62-2293.27] Speaker B:  I don't know whether they were trying to slip it past us, maybe they thought I'm relatively publicly known as an atheist,
+[2293.37-2294.87] Speaker B:  maybe they would have thought I wouldn't have wanted.
+[2294.87-2295.07] Speaker B:  did none
+[2295.07-2295.62] Speaker D:  Yeah.
+[2295.62-2296.92] Speaker B:  has pissed involved um you
+[2296.92-2297.32] Speaker C:  Would
+[2297.32-2297.47] Speaker B:  know mixed
+[2297.47-2297.77] Speaker C:  you? Would
+[2297.77-2298.02] Speaker B:  with my
+[2298.02-2299.12] Speaker C:  you have minded?
+[2299.12-2321.67] Speaker B:  oh no i wouldn't have minded actually uh of course i wouldn't i'd have we were what's called non-specifically infertile which is is medical jargon for we do not have a clue uh and i think a lot of people are and you know everything seemed fine they couldn't find a reason um and but and yet they they say in terms of fact they do say if if you're a couple trying to conceive
+[2322.07-2323.27] Speaker B:  In the first year,
+[2323.37-2325.42] Speaker B:  nine out of ten will conceive,
+[2325.57-2327.07] Speaker B:  and by the second year,
+[2327.12-2330.97] Speaker B:  nine out of ten of the ten percent who didn't will have conceived.
+[2331.07-2332.32] Speaker B:  So by the time you get to the third year,
+[2332.37-2335.32] Speaker B:  you really are either infertile or fantastically unlucky,
+[2335.47-2345.37] Speaker B:  and we never found out, and it turned out we were fertile because our third and last child came as a very big surprise, not born off the wrist, but in the conventional sense.
+[2345.37-2346.47] Speaker D:  Not off the wrist.
+[2346.97-2347.52] Speaker C:  Sired.
+[2347.52-2350.37] Speaker B:  Sire, sire, as you write.
+[2350.23-2351.08] Speaker A:  You're absolutely right.
+[2351.08-2351.43] Speaker C:  So,
+[2351.43-2375.98] Speaker D:  um there's a really cool fact which is so you you wrote this into a book inconceivable which i absolutely love and then made that into a movie called maybe baby in maybe baby hugh laurie who's the lead role is a tv maker and he's in charge of this children's program and it's at the bbc and there's a there's a lead character who's a children's entertainer who wears a costume who's called mr fur blob in it
+[2376.31-2376.31] Speaker D:  Okay.
+[2376.31-2377.61] Speaker A:  Guess who was inside that?
+[2377.76-2378.06] Speaker D:  Did
+[2378.06-2378.16] Speaker B:  Dave
+[2378.16-2378.51] Speaker D:  they come up
+[2378.51-2378.71] Speaker B:  Come on,
+[2378.71-2378.86] Speaker D:  and say,
+[2378.86-2378.96] Speaker A:  Dave
+[2378.96-2379.11] Speaker B:  Dave Thompson.
+[2379.11-2379.41] Speaker D:  Dave Thompson.
+[2379.41-2379.66] Speaker A:  Thompson!
+[2379.66-2379.86] Speaker C:  No.
+[2379.86-2380.01] Speaker D:  No!
+[2380.01-2386.01] Speaker B:  Dave Thompson is in my movie, maybe maybe he's a very funny physical comedian and a very good comic Yeah,
+[2386.11-2399.86] Speaker B:  I got a lot of good material out of out of that because that's what you know, that's what I do I I like to create comedy from what I know and what I feel and what I think and and obviously that was a massive part of our lives and we over the years
+[2400.00-2401.70] Speaker A:  There's been many lovely letters saying,
+[2401.80-2407.85] Speaker A:  you know, it was all very grim in our house and your book or your movie was helpful because it is funny.
+[2407.90-2412.70] Speaker A:  People are funny and the nuns wee story is enough to prove that a thousandfold.
+[2412.70-2414.10] Speaker B:  Yeah, I always thought because,
+[2414.20-2426.35] Speaker B:  you know, in the movie, the two people are constantly I'm ovulating come home now there's always like a rush and I always thought that's a that's just a good comic conceit cut to us on tour in Europe where I'm finding myself on my day off flying back.
+[2426.32-2427.07] Speaker B:  Back to the UK because
+[2427.07-2427.37] Speaker A:  to
+[2427.37-2427.42] Speaker B:  my
+[2427.42-2428.32] Speaker A:  shed your wife. missus yeah
+[2428.32-2428.77] Speaker B:  Yeah, because my wife
+[2428.77-2428.92] Speaker A:  exactly
+[2428.92-2429.32] Speaker B:  is ovulating.
+[2429.32-2450.87] Speaker A:  it is a part of it um you know there are certain times when you're more fertile and you and honestly it's not easy you need a bit of tantric get you going because you know like on to order i mean i'm sure there are some but you know it you suddenly oh no you know anyway this we did it long before any viagra so you know anyway look we're going into tfi territory
+[2450.87-2451.32] Speaker C:  Can I
+[2451.32-2451.92] Speaker A:  aren't we
+[2451.92-2452.17] Speaker C:  the vaccine?
+[2452.05-2452.05] Speaker B:  Right.
+[2452.05-2452.40] Speaker D:  the Vatican for
+[2452.40-2452.65] Speaker A:  Yes,
+[2452.65-2453.05] Speaker D:  a second.
+[2453.05-2453.10] Speaker B:  Yeah.
+[2453.10-2453.75] Speaker A:  yes, of course.
+[2453.75-2456.05] Speaker D:  So the Vatican own 25% of this company
+[2456.05-2456.25] Speaker B:  Yeah.
+[2456.25-2460.60] Speaker D:  and I was looking into the Vatican's finances because I'm a former accountant.
+[2461.30-2465.25] Speaker D:  And in World War II,
+[2465.40-2469.60] Speaker D:  they had a bank called the... I can't
+[2469.60-2469.95] Speaker A:  Nazi helping
+[2469.95-2470.10] Speaker D:  remember.
+[2470.10-2470.75] Speaker A:  bank.
+[2470.80-2472.10] Speaker D:  Effectively, yes.
+[2472.35-2479.85] Speaker D:  It was the Institute for Religious Works and they brought it in as like a national bank which wouldn't have to be overseen by any authority.
+[2479.83-2498.78] Speaker D:  authority and they were known as the world's best offshore bank and indeed they are alleged to have hidden billions of pounds from nazi sources they were investigated by the bank of italy in 2010 and found that they were non-compliant in seven of the 16 core standards of the italian banking industry
+[2498.78-2500.58] Speaker A:  But is that related to the Second World War?
+[2500.58-2502.73] Speaker D:  that's how it began it began actually
+[2502.73-2502.98] Speaker A:  Oh, okay.
+[2502.98-2504.43] Speaker D:  began pre-second world war so
+[2504.43-2505.48] Speaker A:  But the investigation,
+[2505.68-2506.08] Speaker A:  it wasn't
+[2506.08-2506.23] Speaker D:  no
+[2506.23-2506.33] Speaker A:  like
+[2506.33-2506.38] Speaker D:  the
+[2506.38-2506.53] Speaker A:  a very
+[2506.53-2506.63] Speaker D:  investigation
+[2506.63-2506.98] Speaker A:  cold case.
+[2506.98-2507.88] Speaker D:  is is current
+[2507.86-2508.36] Speaker D:  Current living.
+[2508.36-2508.61] Speaker B:  Oh, wow.
+[2508.61-2508.86] Speaker A:  Oh,
+[2508.86-2509.06] Speaker D:  I say
+[2509.06-2509.36] Speaker A:  okay.
+[2509.36-2510.21] Speaker D:  current it's 2010.
+[2510.36-2510.56] Speaker D:  So it's
+[2510.56-2510.71] Speaker A:  Okay,
+[2510.71-2511.21] Speaker D:  50 years
+[2511.21-2511.36] Speaker A:  okay,
+[2511.36-2511.41] Speaker D:  ago
+[2511.41-2513.61] Speaker A:  okay. Are they going to have to give some of the way back?
+[2517.56-2517.61] Speaker D:  No
+[2517.61-2521.41] Speaker B:  We've all not made a taking the piss joke there and I think that's very good of us
+[2521.46-2525.86] Speaker D:  And the other thing they have in Rome is they have a tax break for any chapel
+[2526.26-2533.71] Speaker D:  So if they own a chapel in Rome They don't have to pay tax on it and a chapel counts as any building that has a 3 meter square
+[2533.91-2545.31] Speaker D:  a place where you can pray and so they own all these buildings in Rome and they just put a tiny little corner and put a little statue of the Virgin Mary or something call it a chapel they don't have space tax on it it's
+[2545.31-2546.11] Speaker A:  That is very...
+[2546.11-2549.71] Speaker D:  all according to a book called God's Bankers by Gerald Posner that
+[2549.71-2549.81] Speaker A:  It's
+[2549.81-2550.06] Speaker D:  I read
+[2550.06-2550.21] Speaker A:  very,
+[2550.21-2550.61] Speaker B:  but
+[2550.61-2550.66] Speaker A:  well,
+[2550.66-2551.21] Speaker D:  oh
+[2551.21-2557.56] Speaker A:  you know, it doesn't surprise us that, you know, money and religion can produce corruption.
+[2557.71-2559.06] Speaker A:  There's no doubt about that.
+[2559.31-2560.76] Speaker B:  the Pope in question on this one was
+[2560.98-2561.48] Speaker D:  Of Pius.
+[2561.48-2564.18] Speaker E:  pious the 12th so he's a friend of the podcast uh
+[2564.18-2564.63] Speaker D:  Yeah.
+[2564.63-2564.68] Speaker A:  Yeah.
+[2564.68-2566.08] Speaker E:  we mentioned him
+[2566.08-2567.13] Speaker D:  A couple of weeks ago.
+[2567.13-2587.13] Speaker E:  a couple of weeks ago so he had this doctor this really strange doctor called paul nihans who was a swiss surgeon and he'd offered this rejuvenation treatment so we're kind of in the realm of that already with the you know the fertility and the the essence and all this stuff but uh nihans injected the buttocks of his famous patients like supposedly king george the sixth
+[2587.09-2587.49] Speaker E:  sixth uh
+[2587.49-2587.79] Speaker A:  Really?
+[2587.79-2594.34] Speaker E:  with the cells of fetal lambs and calves and it was a kind of judge up buck you upo treatment and
+[2594.34-2594.44] Speaker B:  Yeah.
+[2594.44-2608.54] Speaker E:  this is the pope whose embalming went disastrously wrong and who ended up being you know his other he was very unlucky with his doctors the other doctor embalmed him supposedly in the traditional aramaic style and it went awfully awfully wrong
+[2608.54-2614.74] Speaker D:  And the other reason he's a friend of the podcast is he was the one who ruled in 1954 that anyone mentioning Jesus is...
+[2614.64-2616.74] Speaker D:  This is foreskin will be automatically excommunicated,
+[2616.74-2617.34] Speaker B:  no Wow
+[2617.34-2620.34] Speaker D:  which is why I've been technically excommunicated.
+[2620.34-2626.04] Speaker A:  yeah jesus was was jewish so is this some reason i mean has he thought to have had one or not
+[2626.04-2626.14] Speaker D:  Well,
+[2626.14-2626.54] Speaker A:  had one
+[2626.54-2629.14] Speaker D:  he was thought to have had it removed as a child and
+[2629.14-2629.49] Speaker A:  well as as
+[2629.49-2629.74] Speaker D:  there
+[2629.74-2630.34] Speaker A:  jews often do
+[2630.34-2634.84] Speaker D:  absolutely and there are relics around the world of this supposed holy
+[2634.84-2641.39] Speaker A:  supposedly foreskin. there is just get back there's embalming i didn't know about pope embalming do they keep all the popes
+[2641.78-2642.23] Speaker E:  Yeah, yeah.
+[2642.23-2642.28] Speaker A:  because
+[2642.28-2642.73] Speaker D:  all right
+[2642.73-2645.73] Speaker A:  there's been thousand i mean well i don't know about thousand but an awful lot of
+[2645.73-2645.78] Speaker B:  where
+[2645.78-2646.33] Speaker A:  popes are i mean
+[2646.33-2646.48] Speaker B:  they then
+[2646.48-2646.63] Speaker A:  and are they
+[2646.63-2646.83] Speaker B:  is they
+[2646.83-2646.88] Speaker A:  in
+[2646.88-2646.93] Speaker B:  backed
+[2646.93-2647.13] Speaker A:  a yeah
+[2647.13-2650.18] Speaker E:  up they're on a hard drive somewhere there's a big old cabinet
+[2650.18-2652.28] Speaker A:  mean is there a big pile full of
+[2652.28-2652.33] Speaker D:  if
+[2652.33-2652.38] Speaker A:  dead
+[2652.38-2652.48] Speaker D:  you go
+[2652.48-2652.53] Speaker A:  popes
+[2652.53-2662.13] Speaker D:  to if you go to the vatican there's like the catacombs underneath and they have loads of they're not all on display i have to say so i don't know if they're all still there but definitely you can walk past loads of how popes
+[2662.13-2662.43] Speaker A:  many popes
+[2662.43-2662.88] Speaker D:  really what's
+[2662.88-2663.68] Speaker A:  do you think they've been
+[2664.03-2664.33] Speaker E:  Oh,
+[2664.48-2664.88] Speaker E:  um,
+[2664.88-2665.93] Speaker D:  a good question what
+[2665.93-2666.93] Speaker E:  can't be triple figures.
+[2667.51-2667.51] Speaker D:  What
+[2667.51-2667.56] Speaker A:  Yeah.
+[2667.56-2668.06] Speaker D:  I reckon
+[2668.06-2668.36] Speaker E:  What?
+[2668.36-2668.66] Speaker D:  that it's
+[2668.66-2669.96] Speaker A:  What, you mean more than a hundred?
+[2669.96-2670.36] Speaker E:  Yeah.
+[2670.36-2671.26] Speaker A:  I think so.
+[2671.36-2672.41] Speaker A:  I mean, they've been Popes for
+[2672.41-2672.56] Speaker D:  Since
+[2672.56-2672.81] Speaker A:  two thousand
+[2672.81-2673.16] Speaker D:  30
+[2673.16-2673.36] Speaker A:  years.
+[2673.36-2673.81] Speaker D:  AD
+[2674.16-2676.51] Speaker A:  Yeah, and I think they've, yeah, let's have a,
+[2676.51-2676.56] Speaker E:  Oh,
+[2676.56-2676.96] Speaker A:  let's
+[2676.96-2677.11] Speaker E:  have a
+[2677.11-2677.21] Speaker A:  somebody
+[2677.21-2677.31] Speaker E:  look.
+[2677.31-2677.51] Speaker A:  have a
+[2677.51-2677.61] Speaker D:  Okay,
+[2677.61-2677.66] Speaker A:  go.
+[2677.66-2677.96] Speaker B:  It'll last
+[2677.96-2678.06] Speaker D:  I'll
+[2678.06-2678.26] Speaker B:  a long
+[2678.26-2678.51] Speaker D:  start
+[2678.51-2678.71] Speaker B:  time.
+[2678.71-2680.26] Speaker D:  say Peter right who's next
+[2680.41-2680.81] Speaker A:  Yeah.
+[2681.11-2683.06] Speaker A:  I mean, I think it's pious.
+[2683.11-2684.81] Speaker A:  There's about a hundred piouses.
+[2684.81-2684.86] Speaker D:  Okay
+[2684.86-2686.76] Speaker A:  I mean, there's certainly a lot of X's and ones
+[2686.76-2686.91] Speaker D:  He
+[2686.91-2687.11] Speaker A:  after
+[2687.11-2687.36] Speaker D:  was pious
+[2687.36-2687.56] Speaker A:  him.
+[2687.56-2688.31] Speaker D:  the 12th.
+[2688.31-2688.56] Speaker A:  Yeah.
+[2688.56-2689.81] Speaker B:  So I'm saying double figures.
+[2689.91-2690.06] Speaker B:  I'm
+[2690.06-2690.16] Speaker A:  I'm
+[2690.16-2690.36] Speaker B:  saying
+[2690.36-2690.41] Speaker E:  I'm
+[2690.41-2690.51] Speaker A:  just
+[2690.51-2690.56] Speaker B:  just
+[2690.56-2690.66] Speaker E:  just saying
+[2690.66-2690.76] Speaker A:  saying trebles.
+[2690.76-2691.31] Speaker E:  it.
+[2691.31-2691.51] Speaker B:  it.
+[2691.56-2692.06] Speaker E:  I'm saying I've it.
+[2692.06-2692.41] Speaker A:  got the answer.
+[2692.41-2693.31] Speaker D:  I got one two three
+[2693.33-2697.28] Speaker B:  three this is according to the um pontifical yearbook so that's a cool yearbook
+[2697.28-2697.43] Speaker A:  Yeah.
+[2697.43-2697.88] Speaker E:  Oh, wow.
+[2697.88-2699.73] Speaker D:  Three hundred and sixty five.
+[2700.00-2700.00] Speaker A:  oh
+[2700.00-2702.90] Speaker B:  there's 266 according
+[2702.90-2703.20] Speaker C:  Right,
+[2703.20-2703.50] Speaker A:  wow
+[2703.50-2704.10] Speaker C:  see where we are.
+[2704.10-2704.40] Speaker A:  thank you
+[2704.40-2704.85] Speaker B:  to this
+[2704.85-2705.05] Speaker A:  do
+[2705.05-2705.35] Speaker B:  this might
+[2705.35-2710.30] Speaker A:  you think they've got them all I mean they obviously haven't got the really early ones I mean when how many pope
+[2710.30-2710.40] Speaker B:  how
+[2710.40-2714.50] Speaker A:  embalmed popes are there how many popes are still
+[2714.50-2714.65] Speaker B:  many
+[2714.65-2714.70] Speaker A:  in
+[2714.70-2714.80] Speaker B:  popes
+[2714.80-2715.80] Speaker A:  physical we form
+[2715.80-2719.60] Speaker B:  don't we don't fully know apparently there's lots of bits of popes that we have we got lots
+[2719.60-2719.70] Speaker A:  horse
+[2719.70-2720.70] Speaker B:  of hard skins yeah
+[2720.70-2720.85] Speaker A:  and bits
+[2720.85-2720.95] Speaker B:  lots
+[2720.95-2721.20] Speaker A:  out about
+[2721.20-2721.50] Speaker B:  of foreskins
+[2721.50-2725.80] Speaker A:  the place but don't mention them don't bring up the foreskins
+[2728.43-2729.63] Speaker D:  stop the podcast hi
+[2729.63-2730.48] Speaker B:  Stop the podcast.
+[2730.48-2736.78] Speaker D:  everyone i just wanted to let you know that this week we are sponsored by ee dan do you know that christmas is on its way all
+[2736.78-2738.18] Speaker B:  Yes, I do actually,
+[2738.28-2738.63] Speaker B:  James, yeah.
+[2738.88-2754.68] Speaker D:  right because of the same time every year and it's kind of the same every year what it means to me is i go and see my parents and basically i always need my phone not that they're not great company my parents but um you know i might need to find my way to someone's house or i might want
+[2754.55-2763.25] Speaker D:  I want to download some Christmas movies onto my phone so that my daughter can watch them as we drive. And what I need is the best mobile network and that is EE.
+[2763.55-2764.95] Speaker D:  So what does Christmas mean to you?
+[2764.95-2766.35] Speaker B:  Oh, it's the exact opposite.
+[2766.55-2768.75] Speaker B:  The family descends.
+[2768.80-2771.40] Speaker B:  They arrive at the house. It's completely crowded.
+[2771.60-2772.25] Speaker B:  It's amazing.
+[2772.50-2773.35] Speaker B:  Don't get me wrong,
+[2773.45-2774.60] Speaker B:  but it's full on.
+[2774.60-2776.65] Speaker D:  But you're also going to need lots of connectivity,
+[2776.90-2777.10] Speaker D:  right?
+[2777.15-2779.10] Speaker D:  Because everyone's going to come to your house and jump on your broadband.
+[2779.10-2782.15] Speaker B:  Oh yeah, man. I genuinely, I think ruined last Christmas.
+[2782.20-2803.60] Speaker B:  because we basically didn't have Wi-Fi for the whole period it went down and when some of us are still repairing those relationships so whether you are hosting Christmas yourself or you're guesting at someone else's house this season you absolutely need EE broadband and mobile so get the best connectivity for your home and your phone with EE just search EE does more
+[2803.60-2803.65] Speaker D:  Okay,
+[2803.65-2804.10] Speaker B:  on
+[2804.10-2804.95] Speaker D:  I'm with the podcast.
+[2804.95-2805.90] Speaker B:  with the show
+[2808.31-2811.66] Speaker B:  Okay, it's time for a final fact of the show, and that is James.
+[2811.91-2812.01] Speaker A:  Hmm.
+[2812.01-2813.26] Speaker D:  Okay, Ben,
+[2813.36-2816.41] Speaker D:  you've had a go at the other facts so far, but I think you'll be fine with this one.
+[2816.56-2821.91] Speaker D:  My fact this week is that Shakespeare's parents and his children were probably illiterate.
+[2822.11-2823.56] Speaker A:  Well, that's not a fact, is it?
+[2824.56-2826.26] Speaker B:  He strikes again.
+[2827.01-2827.36] Speaker B:  Three
+[2827.36-2827.51] Speaker A:  we
+[2827.51-2827.76] Speaker B:  out of
+[2827.76-2829.71] Speaker A:  can three. sort you out right out the gates
+[2830.11-2832.51] Speaker D:  the word probably does a lot of work there doesn't
+[2832.51-2832.71] Speaker A:  well
+[2832.71-2833.21] Speaker D:  it so
+[2833.21-2836.16] Speaker A:  there's a lot of damage I mean the
+[2836.16-2836.26] Speaker D:  parent
+[2836.26-2840.86] Speaker A:  fact that someone was probably something is about as far from being a fact as you can get
+[2840.86-2841.11] Speaker D:  okay
+[2841.11-2841.41] Speaker A:  really so
+[2841.41-2841.86] Speaker D:  let me give
+[2841.86-2842.96] Speaker A:  a Trump level fact
+[2844.76-2851.66] Speaker D:  so let me give you a little bit of evidence but it is scant because what we know about them is very little but Shakespeare's father and mother
+[2852.02-2856.52] Speaker D:  couldn't sign their names like when they signed they signed with images so his father
+[2856.52-2856.77] Speaker A:  Well,
+[2856.77-2856.97] Speaker D:  john
+[2856.97-2859.22] Speaker A:  that means that's how they sign their names.
+[2859.22-2859.32] Speaker D:  absolutely
+[2859.32-2861.37] Speaker A:  That may have been how they chose to sign
+[2861.37-2861.47] Speaker D:  that's
+[2861.47-2861.72] Speaker A:  their names.
+[2861.72-2877.82] Speaker D:  absolutely and actually now if you want to sign something now with an image rather than your name you are allowed to do that by law so you are allowed and actually in those days it was relatively common so crafts people trades people guild members would often like draw things so john his father drew a picture of a pair of lovers compasses
+[2877.78-2882.68] Speaker D:  is instead of his name and so some people point to this as evidence that he couldn't write
+[2882.68-2882.78] Speaker B:  Oh.
+[2882.78-2890.83] Speaker D:  and William Shakespeare had three kids I think but one of them Hamlet his son died
+[2890.83-2890.98] Speaker E:  Died
+[2890.98-2891.43] Speaker D:  very young
+[2891.43-2891.53] Speaker E:  at 11,
+[2891.53-2891.83] Speaker D:  but
+[2891.83-2891.98] Speaker E:  yeah.
+[2891.98-2904.43] Speaker D:  then he had two daughters and in those days girls would typically not be taught how to read and write or not how to write anyway and we have one sort of very quite scruffy signature of one of his
+[2904.44-2909.59] Speaker D:  his daughter so it seems like she could write her name but this implication is maybe not much else but
+[2909.59-2910.29] Speaker A:  Well, it's
+[2910.29-2912.34] Speaker D:  again like the evidence is really really scarce
+[2912.34-2930.24] Speaker A:  it's really so there's a actually we know more about Shakespeare than we do about any of the other great English poets of the English Reformation considerably more there are a lot of known facts which is why it's particularly galling that idiot conspiracy theorist you to say well maybe it wasn't him because they think
+[2930.23-2930.58] Speaker A:  Like a grammar
+[2930.58-2931.63] Speaker D:  Oh, Dan looks
+[2931.63-2931.93] Speaker A:  schoolboy.
+[2931.93-2932.93] Speaker D:  at his notes now.
+[2933.13-2937.63] Speaker A:  But let's just look at the issue rather than go to the Shakespeare conspiracies.
+[2937.98-2938.48] Speaker A:  Firstly,
+[2938.73-2944.18] Speaker A:  Shakespeare's own signatures are generally varied. He spelled his name differently.
+[2944.23-2951.68] Speaker A:  The whole idea of what a signature was and what it meant and indeed what correct spelling was, was viewed very differently in those days.
+[2951.83-2952.88] Speaker A:  Think about the evidence.
+[2953.03-2955.48] Speaker A:  Mary was the daughter of the aristocracy.
+[2955.48-2956.28] Speaker D:  This is his mother.
+[2956.28-2956.98] Speaker A:  Absolutely.
+[2957.14-2962.49] Speaker A:  Absolutely. Now, her husband, there's no doubt about it, John Shakespeare came up. He was lower class to her.
+[2962.59-2970.69] Speaker A:  But he eventually was in court for cooking books for various bits of dodgy accounting and things.
+[2970.74-2974.74] Speaker A:  So clearly, he certainly was mathematically literate. There's no doubt about that.
+[2974.84-2982.99] Speaker A:  He became mayor of Stratford-on-Avon. It seems unlikely that he wasn't able to read. Don't forget reading and writing was separate
+[2982.99-2983.14] Speaker D:  I
+[2983.14-2983.39] Speaker A:  in those
+[2983.39-2983.59] Speaker D:  think that's
+[2983.59-2983.74] Speaker A:  days.
+[2983.74-2984.14] Speaker D:  another thing.
+[2984.05-2987.55] Speaker D:  Another thing, isn't it? It's like in those days, a lot of people could read but couldn't
+[2987.55-2987.65] Speaker A:  Yeah.
+[2987.65-2987.80] Speaker D:  write.
+[2987.80-2988.20] Speaker B:  Hmm.
+[2988.20-2989.65] Speaker A:  Susanna Shakespeare,
+[2989.90-2990.90] Speaker A:  the elder daughter,
+[2990.95-2996.65] Speaker A:  was married to a very learned apothecary. She unquestionably worked within his business.
+[2996.70-2999.95] Speaker A:  She was a very considerable herbalist and a gardener.
+[3000.00-3000.35] Speaker A:  That's brilliant.
+[3000.40-3001.30] Speaker A:  I've read it. I've read the whole thing.
+[3001.30-3001.55] Speaker B:  that
+[3001.55-3002.20] Speaker A:  And it's out now,
+[3002.20-3002.30] Speaker B: 
+[3002.30-3002.40] Speaker A:  right?
+[3002.40-3005.10] Speaker B:  book is uh i don't know when this podcast's going
+[3005.10-3005.15] Speaker A:  Yeah,
+[3005.15-3005.30] Speaker B:  out
+[3005.30-3005.55] Speaker A:  it will be.
+[3005.55-3007.35] Speaker B:  yeah then in that case it is
+[3008.30-3008.70] Speaker A:  Otherwise,
+[3008.80-3011.25] Speaker A:  just come back next week. We'll be back with another episode.
+[3011.40-3012.20] Speaker A:  We'll see you then.
+[3012.40-3012.80] Speaker A:  Goodbye.
+[3024.44-3027.84] Speaker A:  It just seems unlikely that human curiosity,
+[3027.89-3034.04] Speaker A:  particularly if your father is the greatest dramatist of the age, they didn't realise he would become the greatest dramatist in English letters,
+[3034.19-3045.44] Speaker A:  seems unlikely to me that they wouldn't have taught themselves to read, been taught to read. I know women were treated entirely differently. I personally think it more likely that they could read
+[3045.44-3045.59] Speaker B:  Yeah.
+[3045.59-3051.34] Speaker A:  and probably write to a certain extent. It seems unlikely that little Hamlet, 11 years old, running home from school.
+[3051.08-3056.18] Speaker A:  from school his his twin sister didn't take some interest in what he'd learnt I think they could read
+[3056.18-3056.48] Speaker C:  but Okay, but
+[3056.48-3057.38] Speaker A:  neither is a Is fact
+[3057.38-3058.33] Speaker C:  this kid called Hamlet?
+[3058.33-3059.08] Speaker A:  Hamnut.
+[3059.08-3059.28] Speaker D:  Hamnuts.
+[3059.28-3059.78] Speaker A:  Not Yeah,
+[3059.78-3060.03] Speaker C:  Hamlets.
+[3060.03-3060.63] Speaker A:  yeah, I know.
+[3060.63-3064.13] Speaker C:  We But this is all I mean irrelevant anyway because it was all Francis Bacon so it doesn't
+[3064.13-3065.68] Speaker A:  exactly exactly
+[3065.68-3065.88] Speaker D:  Oh,
+[3065.88-3066.23] Speaker A:  or some
+[3066.23-3066.48] Speaker D:  shucks.
+[3066.48-3067.38] Speaker A:  other Portugezer.
+[3067.38-3067.63] Speaker C:  So
+[3067.63-3067.73] Speaker D:  Yeah.
+[3067.73-3070.78] Speaker A:  To me Shakespeare denied you want to know what is a fact
+[3070.78-3070.98] Speaker D:  Go on.
+[3070.98-3076.93] Speaker A:  because of course it's a it's a popular conspiracy particularly amongst lubbies and and posh boys that that that
+[3076.87-3078.77] Speaker A:  that Shakespeare didn't write Shakespeare.
+[3078.87-3082.37] Speaker A:  My father had a good joke on that. He said, of course Shakespeare didn't write his plays.
+[3082.47-3084.12] Speaker A:  It was another fellow with the same name.
+[3084.22-3085.17] Speaker A:  Because obviously,
+[3085.27-3087.47] Speaker A:  in a way, does it really matter?
+[3087.57-3091.62] Speaker A:  But of course, it is evidence of a corrosive snobbery in British culture.
+[3091.72-3096.52] Speaker A:  Because of course, Shakespeare was famously the only poet of the English Renaissance who didn't go to either Oxford or Cambridge.
+[3096.67-3103.02] Speaker A:  I mean, the grip those institutions had on British arts, as indeed politics and sciences, was as strong then.
+[3103.01-3124.76] Speaker A:  then as as it is now so i think it's a very unfortunate thing to say well he was educated he was chucked out of school when he was 13 would he really well you know mccartney was a working class lad as were george harrison you know lennon slightly lesser the idea that you if you come from rough and ready roots mean you can't have the finest brain in the country is i think
+[3124.76-3124.96] Speaker E:  I've
+[3124.96-3125.01] Speaker A:  madness
+[3125.01-3127.21] Speaker E:  got to say, Ben, coming from Bolton myself,
+[3127.31-3127.91] Speaker E:  I do agree.
+[3127.91-3131.86] Speaker A:  yeah but anyway just to get to my facts because i'm waffling on and i can see you lot all want to get in your
+[3131.72-3132.17] Speaker A:  And he all that.
+[3132.47-3137.47] Speaker A:  No one questioned Shakespeare's provenance, his reality,
+[3137.87-3138.82] Speaker A:  the reality of Shakespeare,
+[3138.92-3152.12] Speaker A:  starting with Ben Johnson, who wrote his obituary as his friend, Stan Hemmings, who put together the first folio. Nobody mentioned, there is no recorded mention of doubt about Shakespeare until the middle of the 19th century.
+[3152.22-3155.72] Speaker A:  So 300 years passed before anybody decided,
+[3155.82-3157.87] Speaker A:  wouldn't it be interesting if I could start this?
+[3157.73-3167.23] Speaker A:  But there's to me they're just like moon landing denialist which is one step from QAnon I think conspiracy theories are anti-science anti-facts and Shakespeare definitely wrote Shakespeare
+[3167.23-3171.88] Speaker C:  I find it so interesting how this arose more than 200 years later.
+[3171.88-3172.08] Speaker A:  300
+[3172.48-3174.13] Speaker C:  So Delia Bacon?
+[3174.92-3175.07] Speaker C:  was
+[3175.07-3175.32] Speaker A:  I
+[3175.32-3175.57] Speaker C:  one of
+[3175.57-3175.67] Speaker A:  had
+[3175.67-3175.97] Speaker C:  the i
+[3175.97-3176.27] Speaker A:  a name,
+[3176.27-3176.32] Speaker E:  Yeah.
+[3176.32-3176.77] Speaker A:  the clues.
+[3176.77-3177.02] Speaker C: 
+[3177.07-3178.52] Speaker C:  I think no
+[3178.52-3178.72] Speaker A:  There's
+[3178.72-3179.17] Speaker C:  relation if
+[3179.17-3180.27] Speaker A:  an American woman was
+[3180.27-3180.52] Speaker C:  she was american
+[3180.52-3183.27] Speaker A:  the first person to raise the possibility.
+[3183.57-3203.07] Speaker C:  she was clearly very intelligent in a lot of ways but i think she was also quite unstable in other ways and she she traveled to england to do research on you know the fact that francis bacon who was a scientist and and you know very learned guy and you know very gifted in lots of ways probably quite busy though probably like too busy to write 37 plays as well anyway
+[3203.33-3203.33] Speaker C:  um
+[3203.33-3215.53] Speaker A:  and so lacking in any ego as all you know posh boys from cambridge are that he didn't want any credit for them how strange it was or indeed any of the cash and he allowed this bloke from stratford to buy a lot of houses on the on the proceeds her
+[3215.53-3222.93] Speaker C:  but i i think um she traveled to england and she didn't really she she mostly stayed in her room when she was here though just sort of reading
+[3222.93-3223.18] Speaker A:  padded
+[3223.18-3223.43] Speaker C:  was
+[3223.43-3223.68] Speaker A:  room
+[3223.68-3229.33] Speaker C:  she absorbed the atmospheres of of of the of the country and then she wrote this
+[3229.38-3235.13] Speaker C:  700 page book arguing the case um anyway I think it was Bill Bryson who found he wrote a lovely short biography Bill Bryson
+[3235.13-3235.33] Speaker E:  Yeah.
+[3235.33-3244.98] Speaker C:  uh finding various anti-Strafordians who've included J Thomas Looney, Sherwood E Silly Man and George Batty and foe of the podcast Mark Twain.
+[3245.13-3245.73] Speaker E:  Oh, was it?
+[3245.73-3245.83] Speaker F:  Really?
+[3245.83-3245.88] Speaker A:  Yeah
+[3245.88-3245.93] Speaker F:  Really?
+[3245.93-3246.53] Speaker C:  Mark Twain
+[3246.53-3248.53] Speaker A:  That makes me said sad. That makes me sad.
+[3248.53-3256.03] Speaker C:  so far as anybody actually knows and can prove Shakespeare never wrote a play in his life all the rest of his history is built up course upon course of
+[3255.84-3256.39] Speaker C:  of guesses,
+[3256.59-3257.44] Speaker C:  inferences, theories,
+[3257.64-3260.29] Speaker C:  conjectures. Classic Twain. Classic Twain, What I'm afraid.
+[3260.29-3260.79] Speaker E:  an asshole.
+[3260.79-3268.74] Speaker A:  I find it genuinely mad that otherwise intelligent people continue to love, and of course it's because people love a conspiracy theory.
+[3268.74-3268.84] Speaker C:  Yeah.
+[3268.84-3268.89] Speaker G:  Yeah.
+[3268.89-3269.94] Speaker A:  But sadly,
+[3269.99-3272.69] Speaker A:  conspiracy theories are the enemy of the enlightenment.
+[3272.94-3281.99] Speaker A:  You know, we're already moving into a post-truth age where we're going back to an age of faith and superstition.
+[3282.34-3284.19] Speaker A:  and anti-empirical evidence.
+[3284.44-3305.99] Speaker A:  And I think it's really dangerous. And I it might seem harmless for a bunch of old lovies to assemble every now and then and go say well I think it was the Duke of Buckingham, you know. Um but I actually think it's the thin end of an anti-science anti-evidence wedge which leads to you know vaccination conspiracy theories uh and a whole world of where the the president can say we like to choose alternative facts.
+[3305.99-3307.19] Speaker H:  Well, you might like this then,
+[3307.24-3308.69] Speaker H:  Ben. Um have you read
+[3308.68-3312.68] Speaker H:  He read the Shakespeare play that he wrote in the year 1853.
+[3312.68-3314.28] Speaker A:  Ha ha ha ha ha!
+[3315.38-3318.88] Speaker H:  That he collaborated with another famous writer, which is Victor Hugo.
+[3319.08-3322.78] Speaker H:  Once he was exiled from France to Jersey, he lived in Jersey for a while,
+[3322.83-3324.18] Speaker H:  someone came around to the house.
+[3324.34-3333.84] Speaker A:  and showed him table tapping about the spirit world he became obsessed with it he spent a couple of years talking to amongst others lord byron jesus christ joan of arc mozart plato
+[3333.84-3334.19] Speaker B:  Victor
+[3334.19-3334.34] Speaker A:  go
+[3334.34-3334.79] Speaker B:  Hugo!
+[3334.79-3334.84] Speaker A: 
+[3334.84-3335.64] Speaker B:  Oh my god!
+[3335.64-3350.64] Speaker A:  two years and mozart was using the table to make original compositions that they wrote down and one of the things that happened in those two years is that victor uga and his son sat and channeled through shakespeare a brand new shakespeare play they got the first act of a new comedy
+[3350.72-3355.62] Speaker A:  it's in French because Shakespeare said Shakespeare said to them that is the superior
+[3355.62-3355.82] Speaker C:  I
+[3355.82-3355.92] Speaker A:  language
+[3355.92-3356.12] Speaker C:  mean,
+[3356.12-3356.17] Speaker D:  of
+[3356.17-3356.67] Speaker C:  it's a pity Cuba
+[3356.67-3356.82] Speaker D:  course
+[3356.82-3358.07] Speaker C:  didn't speak English that well.
+[3358.07-3362.57] Speaker A:  yeah exactly and so that's out there I don't think it's ever been performed there's
+[3362.57-3362.72] Speaker D:  isn't
+[3362.72-3363.17] Speaker A:  a one-act play
+[3363.17-3367.27] Speaker D:  it sad because obviously he was a great you know he wrote Les Miserables you know I mean a great isn't
+[3367.27-3367.32] Speaker C:  Oh
+[3367.32-3374.07] Speaker D:  it sad when you discover the feet of clay that everyone has concealed you know like apparently Newton dabbled in alchemy and
+[3374.07-3374.22] Speaker C:  he
+[3374.22-3374.62] Speaker D:  went kind
+[3374.62-3374.77] Speaker C:  wrote
+[3374.77-3374.87] Speaker D:  of mad
+[3374.87-3376.42] Speaker C:  more alchemy than physics.
+[3376.42-3377.07] Speaker D:  yeah you know
+[3377.07-3378.62] Speaker C:  He's very into it. But from...
+[3378.34-3382.34] Speaker C:  From from the off and just quickly you mentioned anti-vax theories as
+[3382.34-3382.39] Speaker D:  yeah
+[3382.39-3391.99] Speaker C:  a result of this thin end of the wedge riddle me this Ben the second man who ever got the Pfizer jab in the UK against COVID was called Bill Shakespeare how
+[3391.99-3398.69] Speaker D:  no that's a loop you've brought us all the way back haven't you you've you've stitched together so much there
+[3398.69-3403.99] Speaker C:  the famous image of what's it called Matt Hancock sort of pretending to cry was when someone told him that
+[3404.23-3404.73] Speaker C:  Is that so?
+[3404.73-3404.88] Speaker A:  but
+[3404.88-3404.93] Speaker D:  Yeah.
+[3404.93-3407.68] Speaker C:  Well, there were a lot of unbelievably good jokes as a result.
+[3407.68-3407.98] Speaker D:  Yeah.
+[3407.98-3409.08] Speaker C:  Two gentlemen of corona,
+[3409.43-3411.48] Speaker C:  taming of the flu.
+[3412.13-3413.98] Speaker C:  Is this a jabber I see before me?
+[3413.98-3414.13] Speaker D:  I
+[3414.13-3415.88] Speaker C:  I mean, there were some very good things.
+[3415.88-3430.08] Speaker A:  yeah but one of the most amazing things is that that Bill Shakespeare eventually died not of COVID of something else not long after and in Argentina when the news announced his death they said we have lost one of the most important writers in the English language
+[3430.37-3430.37] Speaker D:  Oh
+[3430.37-3430.62] Speaker A:  It's for
+[3430.62-3430.72] Speaker D:  my
+[3430.72-3430.77] Speaker E:  Yeah.
+[3430.77-3431.17] Speaker D:  god.
+[3431.17-3431.67] Speaker F:  Come Oh on.
+[3431.67-3432.32] Speaker D:  my god.
+[3432.32-3432.62] Speaker A:  me,
+[3432.67-3433.67] Speaker A:  he is the master,
+[3433.77-3435.57] Speaker A:  is what she said on TV.
+[3436.57-3439.02] Speaker A:  And she had to come back on and apologize and say,
+[3439.07-3439.47] Speaker A:  oh, no,
+[3439.52-3440.17] Speaker A:  no, that's not what
+[3440.17-3440.22] Speaker D:  Well,
+[3440.22-3440.52] Speaker A:  I meant.
+[3440.52-3441.97] Speaker D:  linking vaccination back,
+[3442.02-3443.97] Speaker D:  I bet that newsreader felt a bit of a prick.
+[3445.72-3451.07] Speaker E:  One really good fact about Shakespeare I like because we talked about his daughters before is he had four grandchildren.
+[3451.77-3454.02] Speaker E:  Unfortunately, none of them had children afterwards,
+[3454.17-3455.52] Speaker E:  so that's where the line died out.
+[3455.62-3457.82] Speaker E:  But one of his grandchildren was called Shakespeare.
+[3458.28-3459.78] Speaker E:  As in the first name with Shakespeare.
+[3459.78-3459.88] Speaker D:  Oh,
+[3459.88-3460.18] Speaker G:  Really?
+[3460.18-3460.38] Speaker D:  really?
+[3460.38-3460.93] Speaker E:  Isn't that cool?
+[3460.93-3461.18] Speaker G:  That is
+[3461.18-3461.33] Speaker E:  Yeah.
+[3461.33-3461.68] Speaker G:  That is cool.
+[3461.68-3462.53] Speaker E:  It wasn't a surname.
+[3462.63-3464.68] Speaker E:  No, the surname was Quinnie or Quiney.
+[3464.73-3464.93] Speaker D:  So
+[3464.93-3465.08] Speaker E:  That's
+[3465.08-3465.23] Speaker D:  obviously
+[3465.23-3465.48] Speaker E:  great.
+[3465.48-3470.93] Speaker D:  they wanted to pay tribute to the famous grandfather who sired them and wrote the canon of Shakespeare.
+[3470.93-3473.43] Speaker G:  But his lineage died outright with the granddaughter,
+[3473.63-3477.08] Speaker G:  except there are few peoples who claim that it went on,
+[3477.13-3480.18] Speaker G:  including an American footballer who's called William Shakespeare,
+[3480.18-3480.58] Speaker E:  Oh, yeah.
+[3480.58-3480.78] Speaker G:  who died
+[3480.78-3481.18] Speaker E:  I met him.
+[3481.18-3482.18] Speaker G:  in 1974,
+[3482.48-3484.38] Speaker G:  also known as the Merchant of Menace.
+[3484.32-3484.37] Speaker G:  Yes.
+[3484.42-3484.52] Speaker C:  Hmm.
+[3484.52-3484.82] Speaker E:  Brilliant.
+[3484.82-3485.02] Speaker G:  Yes.
+[3485.02-3486.02] Speaker D:  That's superb.
+[3486.02-3491.97] Speaker G:  Yeah, he was part of the Notre Dame Fighting Irish football team and they claimed lineage, direct lineage from Shakespeare,
+[3492.07-3493.17] Speaker G:  despite having no evidence.
+[3493.62-3496.52] Speaker G:  It was pointed out that he failed at English at college.
+[3496.52-3497.27] Speaker D:  So that yeah.
+[3497.27-3497.97] Speaker E:  Oh, it must be.
+[3497.97-3498.37] Speaker G:  Yeah,
+[3498.47-3498.52] Speaker G:  yeah.
+[3498.52-3502.17] Speaker C:  But there is a descent from, I think, Shakespeare's father or grandfather.
+[3502.17-3502.62] Speaker E:  Oh,
+[3502.62-3502.72] Speaker C:  I
+[3502.72-3502.77] Speaker E:  yeah.
+[3502.77-3508.02] Speaker C:  think these days there is a baronet of, I think he's called Thomas, maybe, Shakespeare.
+[3508.32-3509.57] Speaker C:  So the line,
+[3509.72-3510.17] Speaker C:  the Shakespeare
+[3510.17-3510.42] Speaker D:  Oh,
+[3510.42-3510.47] Speaker C:  family
+[3510.47-3510.87] Speaker D:  yeah, Thomas Shakespeare.
+[3510.87-3511.52] Speaker C:  do have a direct.
+[3511.75-3511.75] Speaker E:  Shakespeare.
+[3511.75-3513.25] Speaker A:  Is that a claim that he's connected?
+[3513.65-3515.25] Speaker C:  well i think it's not a claim i think he's descended
+[3515.25-3515.45] Speaker A:  He
+[3515.45-3515.70] Speaker C:  from
+[3515.70-3515.80] Speaker A:  is,
+[3515.80-3515.95] Speaker C:  the
+[3515.95-3516.10] Speaker A:  sorry.
+[3516.10-3516.40] Speaker C:  dad or
+[3516.40-3516.60] Speaker D:  But there
+[3516.60-3516.75] Speaker C:  the grandfather
+[3516.75-3517.15] Speaker D:  are I mean
+[3517.15-3517.30] Speaker C:  or
+[3517.30-3518.95] Speaker D:  it is a surname I mean there are other
+[3518.95-3519.15] Speaker E:  Yeah.
+[3519.15-3519.35] Speaker D:  Shakespeare's
+[3519.35-3519.80] Speaker C:  yeah yeah yeah yeah
+[3519.80-3522.50] Speaker D:  well we know from the bloke who got the second Yeah. Pfizer
+[3522.50-3522.80] Speaker C:  true yeah
+[3522.80-3523.15] Speaker D:  vaccine there
+[3523.15-3523.50] Speaker C:  yeah yeah
+[3523.50-3531.65] Speaker D:  are other Shakespeare's and they're obviously always cursed with that name you know and like poor we occasionally get letters from Black Adders who hate
+[3531.65-3532.15] Speaker C:  Oh no, really?
+[3532.15-3535.55] Speaker D:  hate hate Richard and me forever for
+[3535.95-3539.70] Speaker E:  And the other thing about Shakespeare the surname is we don't know what it means.
+[3539.65-3541.60] Speaker E:  but it might have been someone who uses a lance
+[3541.60-3541.70] Speaker G:  Oh,
+[3541.70-3542.80] Speaker E:  oh oh
+[3542.80-3551.35] Speaker D:  oh yes honestly the degrees of separation shrinking we're literally we're cuddling around these subjects
+[3551.35-3552.30] Speaker G:  Wait a second.
+[3552.60-3554.15] Speaker G:  Stratford is Warwickshire, right?
+[3554.15-3554.45] Speaker E:  yeah
+[3554.45-3556.30] Speaker C:  Do you know what else was filmed in Warwickshire?
+[3556.40-3556.90] Speaker A:  Teletubbies?
+[3556.90-3557.90] Speaker E:  the Teletubbies
+[3558.40-3563.95] Speaker D:  and and and isn't a needle a very small lance i mean really
+[3565.20-3568.25] Speaker C:  Dan, wrap it up. We can't cap this. We do actually need to wrap up.
+[3568.23-3568.33] Speaker C:  I hope.
+[3572.64-3573.24] Speaker G:  Okay,
+[3573.29-3576.39] Speaker G:  that's it. That is all of our facts. Thank you so much for listening.
+[3576.49-3580.44] Speaker G:  If you'd like to get in contact with any of us about the things that we've said over the course of this podcast,
+[3580.64-3584.84] Speaker G:  we can all be found on our online accounts. I'm on Instagram on at Shribaland,
+[3584.94-3585.09] Speaker G:  James.
+[3585.09-3587.09] Speaker E:  My Instagram is NoSuchThingAsJamesHarkin.
+[3587.09-3587.44] Speaker G:  Andy?
+[3587.44-3588.89] Speaker C:  I'm at AndrewHunterM.
+[3589.09-3589.14] Speaker G:  Ben?
+[3589.14-3591.64] Speaker D:  And I am not on any social media whatsoever,
+[3591.84-3596.09] Speaker D:  so you can't get me and say I ruined your no such thing as fish.
+[3596.39-3599.89] Speaker G:  But if you want to send your furious letters to us, you can get us at...
+[3599.72-3600.12] Speaker G:  A podcast
+[3600.12-3605.72] Speaker A:  at qi.com will forward them on to Ben or Andy will use them as part of our mailbag episode,
+[3605.82-3607.22] Speaker A:  which is called Drop Us a Line.
+[3607.42-3609.57] Speaker A:  If you want to get access to Drop Us a Line,
+[3609.72-3610.82] Speaker A:  that's part of Club Fish.
+[3610.92-3612.62] Speaker A:  That's our secret members club. So go to our website.
+[3612.67-3614.67] Speaker A:  No such thing as a fish dot com. Check it out there.
+[3614.67-3615.72] Speaker E:  What's the book called?
+[3615.82-3622.42] Speaker D:  The book is called What Have I Done? And it's my autobiography, and it does exactly what it says on the tin.
+[3622.57-3623.67] Speaker D:  It's about what I've done.
