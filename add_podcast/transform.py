@@ -45,21 +45,21 @@ def validate_language(language: str) -> str:
 
 
 def get_rss_link(feed: dict) -> str:
-    """Extracts the RSS feed link from the feed data."""
+    """Extracts the RSS feed link from the feed data, preferring the actual RSS URL."""
 
-    # Try itunes_new-feed-url first (most reliable for RSS URL)
+    # Try itunes_new-feed-url first (most reliable for RSS URL with .rss)
     if feed.get("itunes_new-feed-url"):
         return feed.get("itunes_new-feed-url")
 
-    # Try to find the self link in the links array
+    # Try to find the self link in the links array (canonical RSS URL)
     links = feed.get("links", [])
     for link in links:
         if link.get("rel") == "self" and link.get("type") == "application/rss+xml":
             return link.get("href")
 
-    # Fall back to the main link and append .rss if not present
-    main_link = feed.get("link", "")
-    if not main_link.endswith(".rss") and not main_link.endswith(".xml"):
+    # Fall back to the main link and append .rss if needed
+    main_link = feed.get("link")
+    if main_link and not main_link.endswith(".rss") and not main_link.endswith(".xml"):
         main_link += ".rss"
 
     return main_link
