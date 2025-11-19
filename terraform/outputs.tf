@@ -27,3 +27,8 @@ output "tfstate_s3_bucket_arn" {
   description = "ARN of the S3 bucket used for Terraform state"
   value       = aws_s3_bucket.terraform_state.arn
 }
+
+output "ecr_repository_url" {
+  description = "URL of the ECR repository for Streamlit dashboard"
+  value       = aws_ecr_repository.streamlit.repository_url
+}
