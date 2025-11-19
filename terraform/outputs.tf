@@ -17,3 +17,18 @@ output "secrets_manager_arn" {
   description = "ARN of the Secrets Manager secret"
   value       = aws_secretsmanager_secret.quadcast_secrets.arn
 }
+
+output "s3_bucket_arn" {
+  description = "ARN of the S3 bucket"
+  value       = aws_s3_bucket.quadcast_data.arn
+}
+
+output "tfstate_s3_bucket_arn" {
+  description = "ARN of the S3 bucket used for Terraform state"
+  value       = aws_s3_bucket.terraform_state.arn
+}
+
+output "ecr_repository_url" {
+  description = "URL of the ECR repository for Streamlit dashboard"
+  value       = aws_ecr_repository.streamlit.repository_url
+}
