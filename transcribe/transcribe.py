@@ -2,6 +2,7 @@
 Transcription logic for Lambda
 """
 import asyncio
+import random
 from io import BytesIO
 from pydub import AudioSegment
 from openai import AsyncOpenAI
@@ -61,7 +62,6 @@ async def transcribe_chunk_async(client, chunk):
 
 async def robust_transcribe_chunk(client, chunk, retries=3):
     """Robust async retry wrapper."""
-    import random
     for attempt in range(retries):
         try:
             return await transcribe_chunk_async(client, chunk)
@@ -100,7 +100,8 @@ async def transcribe_full_audio_async(path, concurrency=4):
         idx = chunk["index"]
         if isinstance(res, Exception):
             print(f"Chunk {idx+1} failed permanently: {res}")
-            continue
+            raise Exception(
+                f"Transcription failed: chunk {idx+1} could not be processed")
 
         idx_returned, r = res
 

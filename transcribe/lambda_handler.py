@@ -6,7 +6,17 @@ from extract_urls import get_rds_connection, get_untranscribed_episode, update_e
 from transcribe import transcribe_audio
 
 s3_client = boto3.client('s3')
-S3_BUCKET = "c20-quadcast-s3-bucket"
+S3_BUCKET = os.getenv('S3_BUCKET', 'c20-quadcast-s3-bucket')
+
+
+def sanitize_s3_key(text):
+    """Remove or replace characters that are problematic in S3 keys."""
+    import re
+    # Replace problematic characters with underscores
+    sanitized = re.sub(r'[/<>:"|?*\\]', '_', text)
+    # Remove leading/trailing whitespace and replace internal spaces
+    sanitized = sanitized.strip().replace(' ', '_')
+    return sanitized
 
 
 def download_audio(audio_url, local_path):
@@ -51,15 +61,21 @@ def save_transcript_files(podcast_name, podcast_id, episode_title, episode_id, t
             )
 
     # Upload to S3 with partitioned structure: {podcast_name}{podcast_id}/{episode_title}{episode_id}/
+    safe_podcast = sanitize_s3_key(podcast_name)
+    safe_episode = sanitize_s3_key(episode_title)
+
     transcript_s3_key = upload_to_s3(
         transcript_path,
-        f"{podcast_name}({podcast_id})/{episode_title}({episode_id})/transcript.txt"
+        f"{safe_podcast}({podcast_id})/{safe_episode}({episode_id})/transcript.txt"
     )
 
     segments_s3_key = upload_to_s3(
         segments_path,
-        f"{podcast_name}({podcast_id})/{episode_title}({episode_id})/diarized_segments.txt"
+        f"{safe_podcast}({podcast_id})/{safe_episode}({episode_id})/diarized_segments.txt"
     )
+    # Cleanup temporary files
+    os.remove(transcript_path)
+    os.remove(segments_path)
 
     return transcript_s3_key, segments_s3_key
 
@@ -92,6 +108,19 @@ def lambda_handler(event, context):
         podcast_name = episode['podcast_name']
         episode_title = episode['episode_title']
         audio_url = episode['audio_url']
+
+        # Validate required fields
+        if not podcast_name or not episode_title or not audio_url:
+            print(
+                f"Missing required fields: podcast_name={podcast_name}, episode_title={episode_title}, audio_url={audio_url}")
+            conn.close()
+            return {
+                'statusCode': 400,
+                'body': json.dumps({
+                    'status': 'error',
+                    'message': 'Missing required episode fields'
+                })
+            }
 
         print(f"Processing episode {episode_id}: {episode_title}")
 
