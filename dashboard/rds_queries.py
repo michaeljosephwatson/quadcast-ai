@@ -18,12 +18,21 @@ def get_rds_connection() -> connection:
     return conn
 
 
+def get_number_of_podcasts(conn: connection) -> int:
+    """Returns the total number of podcasts in the database"""
+    cur = conn.cursor()
+    cur.execute("SELECT COUNT(*) FROM podcast;")
+    result = cur.fetchone()
+    cur.close()
+    return result[0]
+
+
 if __name__ == "__main__":
-    # Test the connection
     conn = get_rds_connection()
     with conn.cursor() as cursor:
         cursor.execute("SELECT * FROM podcast")
         result = cursor.fetchall()
         print(
             f"Connection Successful! Found {len(result)} results")
+    print(f"Total Podcasts: {get_number_of_podcasts(conn)}")
     conn.close()

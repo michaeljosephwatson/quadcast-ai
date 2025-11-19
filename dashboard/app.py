@@ -1,5 +1,7 @@
 import streamlit as st
-import os
+from rds_queries import get_rds_connection, get_number_of_podcasts
+
+conn = get_rds_connection()
 
 # Page configuration
 st.set_page_config(
@@ -18,7 +20,7 @@ st.divider()
 st.markdown("""
 ## Welcome to QuadCast
 
-QuadCast helps you manage and analyze your favorite podcasts with AI-powered insights. 
+QuadCast helps you manage and analyze your favorite podcasts with AI-powered insights.
 
 **What you can do:**
 - 🎙️ **Subscribe to Podcasts** - Add your favorite podcasts via RSS feed
@@ -39,7 +41,7 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.metric(
         label="Total Podcasts",
-        value="0",
+        value=get_number_of_podcasts(conn),
         delta="Coming soon"
     )
 
