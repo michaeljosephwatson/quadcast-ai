@@ -79,8 +79,6 @@ logs/
 # Test files
 test_api.py
 test.py
-test_*.py
-*_test.py
 
 # Terraform
 .terraform/
