@@ -2,6 +2,10 @@
 
 import feedparser
 from pprint import pprint
+import logging
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 
 def get_data_from_rss(rss_url: str) -> dict:
@@ -13,7 +17,18 @@ def get_data_from_rss(rss_url: str) -> dict:
     if len(rss_url) == 0:
         raise ValueError("The provided RSS feed URL is empty.")
 
-    return feedparser.parse(rss_url).feed
+    logger.info(f"Parsing RSS feed from: {rss_url}")
+    parsed = feedparser.parse(rss_url)
+
+    logger.info(f"Feedparser status: {parsed.get('status', 'No status')}")
+    logger.info(f"Feedparser bozo: {parsed.get('bozo', 'No bozo')}")
+    if parsed.get('bozo'):
+        logger.error(f"Feedparser exception: {parsed.get('bozo_exception', 'No exception details')}")
+
+    logger.info(f"Feed keys: {list(parsed.feed.keys())}")
+    logger.info(f"Number of entries: {len(parsed.get('entries', []))}")
+
+    return parsed.feed
 
 
 if __name__ == "__main__":
