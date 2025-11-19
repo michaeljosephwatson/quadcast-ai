@@ -27,19 +27,33 @@ def get_number_of_podcasts(conn: connection) -> int:
     return result[0]
 
 
-def get_number_of_episodes(conn: connection) -> int:
-    """Returns the total number of episodes in the database"""
+def get_number_of_episodes(conn: connection, podcast_name=None) -> int:
+    """Returns the total number of episodes in the database or for a specific podcast"""
     cur = conn.cursor()
-    cur.execute("SELECT COUNT(*) FROM episode;")
+    if not podcast_name:
+        cur.execute("SELECT COUNT(*) FROM episode;")
+    else:
+        cur.execute("""
+            SELECT COUNT(*) FROM episode e
+            JOIN podcast p  ON e.podcast_id = p.podcast_id
+            WHERE p.podcast_name = %s;
+        """, (podcast_name,))
     result = cur.fetchone()
     cur.close()
     return result[0]
 
 
-def get_number_of_transcripts(conn: connection) -> int:
-    """Returns the total number of transcripts in the database"""
+def get_number_of_transcripts(conn: connection, podcast_name=None) -> int:
+    """Returns the total number of transcripts in the database or for a specific podcast"""
     cur = conn.cursor()
-    cur.execute("SELECT COUNT(*) FROM episode WHERE transcribed = TRUE;")
+    if not podcast_name:
+        cur.execute("SELECT COUNT(*) FROM episode WHERE transcribed = TRUE;")
+    else:
+        cur.execute("""
+            SELECT COUNT(*) FROM episode e
+            JOIN podcast p  ON e.podcast_id = p.podcast_id
+            WHERE p.podcast_name = %s AND e.transcribed = TRUE;
+        """, (podcast_name,))
     result = cur.fetchone()
     cur.close()
     return result[0]
