@@ -3,15 +3,15 @@ from unittest.mock import patch, MagicMock
 import os
 from psycopg2.extensions import connection as psycopg2_connection
 from psycopg2 import OperationalError
-from extract_urls import get_rds_connection, get_untranscribed_podcasts
+from extract_urls import get_rds_connection, get_untranscribed_episode, update_episode_transcribed
 
 
 class TestGetRdsConnection:
     """Test suite for get_rds_connection function"""
 
     @patch('extract_urls.connect')
-    def test_get_rds_connection_valid_env_vars(self, mock_connect):
-        """Test successful connection with valid environment variables"""
+    def test_get_rds_connection_local_env_vars(self, mock_connect):
+        """Test successful connection with local environment variables"""
 
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
@@ -21,8 +21,9 @@ class TestGetRdsConnection:
             'RDS_HOST': 'localhost',
             'RDS_DB_NAME': 'testdb',
             'RDS_USERNAME': 'testuser',
-            'RDS_PASSWORD': 'testpass'
-        }):
+            'RDS_PASSWORD': 'testpass',
+            'USE_SECRETS_MANAGER': 'false'
+        }, clear=False):
             # Act
             result = get_rds_connection()
 
@@ -32,12 +33,13 @@ class TestGetRdsConnection:
                 host='localhost',
                 database='testdb',
                 user='testuser',
-                password='testpass'
+                password='testpass',
+                port=5432
             )
 
     @patch('extract_urls.connect')
-    def test_get_rds_connection_correct_parameters(self, mock_connect):
-        """Test that connection uses correct parameter names"""
+    def test_get_rds_connection_with_custom_port(self, mock_connect):
+        """Test connection with custom RDS port"""
 
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
@@ -47,18 +49,55 @@ class TestGetRdsConnection:
             'RDS_HOST': 'db.example.com',
             'RDS_DB_NAME': 'production_db',
             'RDS_USERNAME': 'admin',
-            'RDS_PASSWORD': 'secure_pass'
-        }):
+            'RDS_PASSWORD': 'secure_pass',
+            'RDS_PORT': '5433',
+            'USE_SECRETS_MANAGER': 'false'
+        }, clear=False):
             # Act
-            get_rds_connection()
+            result = get_rds_connection()
 
             # Assert
-            mock_connect.assert_called_once()
-            call_kwargs = mock_connect.call_args.kwargs
-            assert 'host' in call_kwargs
-            assert 'database' in call_kwargs
-            assert 'user' in call_kwargs
-            assert 'password' in call_kwargs
+            assert result == mock_conn
+            mock_connect.assert_called_once_with(
+                host='db.example.com',
+                database='production_db',
+                user='admin',
+                password='secure_pass',
+                port=5433
+            )
+
+    @patch('extract_urls.get_secret')
+    @patch('extract_urls.connect')
+    def test_get_rds_connection_with_secrets_manager(self, mock_connect, mock_get_secret):
+        """Test connection using AWS Secrets Manager"""
+
+        # Arrange
+        mock_conn = MagicMock(spec=psycopg2_connection)
+        mock_connect.return_value = mock_conn
+        mock_get_secret.return_value = {
+            'RDS_HOST': 'secrets-host.rds.amazonaws.com',
+            'RDS_DB_NAME': 'secrets_db',
+            'RDS_USERNAME': 'secrets_user',
+            'RDS_PASSWORD': 'secrets_pass',
+            'RDS_PORT': '5432'
+        }
+
+        with patch.dict(os.environ, {
+            'USE_SECRETS_MANAGER': 'true'
+        }, clear=False):
+            # Act
+            result = get_rds_connection()
+
+            # Assert
+            assert result == mock_conn
+            mock_get_secret.assert_called_once()
+            mock_connect.assert_called_once_with(
+                host='secrets-host.rds.amazonaws.com',
+                database='secrets_db',
+                user='secrets_user',
+                password='secrets_pass',
+                port=5432
+            )
 
     @patch('extract_urls.connect')
     def test_get_rds_connection_connection_error(self, mock_connect):
@@ -71,8 +110,9 @@ class TestGetRdsConnection:
             'RDS_HOST': 'invalid_host',
             'RDS_DB_NAME': 'testdb',
             'RDS_USERNAME': 'testuser',
-            'RDS_PASSWORD': 'testpass'
-        }):
+            'RDS_PASSWORD': 'testpass',
+            'USE_SECRETS_MANAGER': 'false'
+        }, clear=False):
             # Act & Assert
             with pytest.raises(OperationalError):
                 get_rds_connection()
@@ -89,8 +129,9 @@ class TestGetRdsConnection:
             'RDS_HOST': 'localhost',
             'RDS_DB_NAME': 'testdb',
             'RDS_USERNAME': 'testuser',
-            'RDS_PASSWORD': 'testpass'
-        }):
+            'RDS_PASSWORD': 'testpass',
+            'USE_SECRETS_MANAGER': 'false'
+        }, clear=False):
             # Act
             result = get_rds_connection()
 
@@ -100,71 +141,13 @@ class TestGetRdsConnection:
             assert hasattr(result, 'rollback')
             assert hasattr(result, 'close')
 
-    @patch('extract_urls.connect')
-    def test_get_rds_connection_missing_env_var(self, mock_connect):
-        """Test that missing environment variables cause error"""
 
-        # Arrange - Provide only partial environment variables
-        with patch.dict(os.environ, {
-            'RDS_HOST': 'localhost',
-            'RDS_DB_NAME': 'testdb'
-            # Missing RDS_USERNAME and RDS_PASSWORD
-        }, clear=False):
-            # Act & Assert
-            # This will raise TypeError or similar when None is passed
-            mock_connect.side_effect = TypeError(
-                "'NoneType' object is not a string")
-            with pytest.raises(TypeError):
-                get_rds_connection()
+class TestGetUntranscribedEpisode:
+    """Test suite for get_untranscribed_episode function"""
 
     @patch('extract_urls.connect')
-    def test_get_rds_connection_with_special_characters(self, mock_connect):
-        """Test connection with special characters in credentials"""
-
-        # Arrange
-        mock_conn = MagicMock(spec=psycopg2_connection)
-        mock_connect.return_value = mock_conn
-
-        with patch.dict(os.environ, {
-            'RDS_HOST': 'db.us-east-1.rds.amazonaws.com',
-            'RDS_DB_NAME': 'prod_db_2024',
-            'RDS_USERNAME': 'admin_user',
-            'RDS_PASSWORD': 'P@ssw0rd!#$%'
-        }):
-            # Act
-            result = get_rds_connection()
-
-            # Assert
-            assert result == mock_conn
-
-    @patch('extract_urls.connect')
-    def test_get_rds_connection_with_aws_rds_host(self, mock_connect):
-        """Test connection with AWS RDS endpoint"""
-
-        # Arrange
-        mock_conn = MagicMock(spec=psycopg2_connection)
-        mock_connect.return_value = mock_conn
-
-        with patch.dict(os.environ, {
-            'RDS_HOST': 'mydb.c9akciq32.us-east-1.rds.amazonaws.com',
-            'RDS_DB_NAME': 'postgres',
-            'RDS_USERNAME': 'postgres',
-            'RDS_PASSWORD': 'mypassword'
-        }):
-            # Act
-            result = get_rds_connection()
-
-            # Assert
-            assert result == mock_conn
-            mock_connect.assert_called_once()
-
-
-class TestGetUntranscribedPodcasts:
-    """Test suite for get_untranscribed_podcasts function"""
-
-    @patch('extract_urls.connect')
-    def test_get_untranscribed_podcasts_returns_list(self, mock_connect):
-        """Test that function returns a list of tuples"""
+    def test_get_untranscribed_episode_returns_dict(self, _):
+        """Test that function returns a dictionary"""
 
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
@@ -174,23 +157,19 @@ class TestGetUntranscribedPodcasts:
         mock_conn.cursor.return_value.__exit__ = MagicMock(
             return_value=False)
 
-        test_data = [
-            ('Podcast A', 'Episode 1', 'https://example.com/audio1.mp3'),
-            ('Podcast B', 'Episode 2', 'https://example.com/audio2.mp3'),
-        ]
-        mock_cursor.fetchall.return_value = test_data
+        mock_cursor.fetchone.return_value = (
+            1, 10, 'Podcast Name', 'Episode Title', 'https://example.com/audio.mp3'
+        )
 
         # Act
-        result = get_untranscribed_podcasts(mock_conn)
+        result = get_untranscribed_episode(mock_conn)
 
         # Assert
-        assert isinstance(result, list)
-        assert len(result) == 2
+        assert isinstance(result, dict)
 
     @patch('extract_urls.connect')
-    def test_get_untranscribed_podcasts_correct_tuple_structure(
-            self, mock_connect):
-        """Test that each result tuple has correct structure"""
+    def test_get_untranscribed_episode_correct_structure(self, _):
+        """Test that returned dict has correct keys"""
 
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
@@ -200,21 +179,23 @@ class TestGetUntranscribedPodcasts:
         mock_conn.cursor.return_value.__exit__ = MagicMock(
             return_value=False)
 
-        test_data = [
-            ('Podcast Name', 'Episode Title', 'https://example.com/audio.mp3'),
-        ]
-        mock_cursor.fetchall.return_value = test_data
+        mock_cursor.fetchone.return_value = (
+            1, 10, 'Test Podcast', 'Test Episode', 'https://example.com/audio.mp3'
+        )
 
         # Act
-        result = get_untranscribed_podcasts(mock_conn)
+        result = get_untranscribed_episode(mock_conn)
 
         # Assert
-        assert result[0] == ('Podcast Name', 'Episode Title',
-                             'https://example.com/audio.mp3')
+        assert result['episode_id'] == 1
+        assert result['podcast_id'] == 10
+        assert result['podcast_name'] == 'Test Podcast'
+        assert result['episode_title'] == 'Test Episode'
+        assert result['audio_url'] == 'https://example.com/audio.mp3'
 
     @patch('extract_urls.connect')
-    def test_get_untranscribed_podcasts_empty_result(self, mock_connect):
-        """Test that function handles empty result set"""
+    def test_get_untranscribed_episode_no_results(self, _):
+        """Test that function returns None when no results"""
 
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
@@ -224,18 +205,16 @@ class TestGetUntranscribedPodcasts:
         mock_conn.cursor.return_value.__exit__ = MagicMock(
             return_value=False)
 
-        mock_cursor.fetchall.return_value = []
+        mock_cursor.fetchone.return_value = None
 
         # Act
-        result = get_untranscribed_podcasts(mock_conn)
+        result = get_untranscribed_episode(mock_conn)
 
         # Assert
-        assert isinstance(result, list)
-        assert len(result) == 0
+        assert result is None
 
     @patch('extract_urls.connect')
-    def test_get_untranscribed_podcasts_sql_query_correct(
-            self, mock_connect):
+    def test_get_untranscribed_episode_sql_query_correct(self, _):
         """Test that correct SQL query is executed"""
 
         # Arrange
@@ -246,50 +225,24 @@ class TestGetUntranscribedPodcasts:
         mock_conn.cursor.return_value.__exit__ = MagicMock(
             return_value=False)
 
-        mock_cursor.fetchall.return_value = []
+        mock_cursor.fetchone.return_value = None
 
         # Act
-        get_untranscribed_podcasts(mock_conn)
+        get_untranscribed_episode(mock_conn)
 
         # Assert
         executed_query = mock_cursor.execute.call_args[0][0]
         assert 'SELECT' in executed_query
+        assert 'e.episode_id' in executed_query
+        assert 'p.podcast_id' in executed_query
         assert 'p.podcast_name' in executed_query
         assert 'e.episode_title' in executed_query
         assert 'e.audio_url' in executed_query
         assert 'WHERE e.transcribed = FALSE' in executed_query
+        assert 'LIMIT 1' in executed_query
 
     @patch('extract_urls.connect')
-    def test_get_untranscribed_podcasts_multiple_results(
-            self, mock_connect):
-        """Test function with multiple results"""
-
-        # Arrange
-        mock_conn = MagicMock(spec=psycopg2_connection)
-        mock_cursor = MagicMock()
-        mock_conn.cursor.return_value.__enter__ = MagicMock(
-            return_value=mock_cursor)
-        mock_conn.cursor.return_value.__exit__ = MagicMock(
-            return_value=False)
-
-        test_data = [
-            ('Podcast A', 'Episode 1', 'https://example.com/audio1.mp3'),
-            ('Podcast B', 'Episode 2', 'https://example.com/audio2.mp3'),
-            ('Podcast C', 'Episode 3', 'https://example.com/audio3.mp3'),
-            ('Podcast A', 'Episode 4', 'https://example.com/audio4.mp3'),
-        ]
-        mock_cursor.fetchall.return_value = test_data
-
-        # Act
-        result = get_untranscribed_podcasts(mock_conn)
-
-        # Assert
-        assert len(result) == 4
-        assert all(isinstance(item, tuple) for item in result)
-
-    @patch('extract_urls.connect')
-    def test_get_untranscribed_podcasts_cursor_context_manager(
-            self, mock_connect):
+    def test_get_untranscribed_episode_cursor_context_manager(self, _):
         """Test that cursor is used as context manager"""
 
         # Arrange
@@ -300,10 +253,10 @@ class TestGetUntranscribedPodcasts:
         mock_conn.cursor.return_value.__exit__ = MagicMock(
             return_value=False)
 
-        mock_cursor.fetchall.return_value = []
+        mock_cursor.fetchone.return_value = None
 
         # Act
-        get_untranscribed_podcasts(mock_conn)
+        get_untranscribed_episode(mock_conn)
 
         # Assert
         mock_conn.cursor.assert_called_once()
@@ -311,9 +264,8 @@ class TestGetUntranscribedPodcasts:
         mock_conn.cursor.return_value.__exit__.assert_called_once()
 
     @patch('extract_urls.connect')
-    def test_get_untranscribed_podcasts_with_special_characters_in_urls(
-            self, mock_connect):
-        """Test function with special characters in URLs"""
+    def test_get_untranscribed_episode_with_special_characters(self, _):
+        """Test function with special characters in data"""
 
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
@@ -323,16 +275,121 @@ class TestGetUntranscribedPodcasts:
         mock_conn.cursor.return_value.__exit__ = MagicMock(
             return_value=False)
 
-        test_data = [
-            ('Podcast & Co', 'Episode #1: Test',
-             'https://example.com/audio?id=123&token=abc'),
-        ]
-        mock_cursor.fetchall.return_value = test_data
+        mock_cursor.fetchone.return_value = (
+            1, 5, 'Podcast & Co', 'Episode #1: "Test"',
+            'https://example.com/audio?id=123&token=abc'
+        )
 
         # Act
-        result = get_untranscribed_podcasts(mock_conn)
+        result = get_untranscribed_episode(mock_conn)
 
         # Assert
-        assert len(result) == 1
-        assert result[0][0] == 'Podcast & Co'
-        assert result[0][1] == 'Episode #1: Test'
+        assert result['podcast_name'] == 'Podcast & Co'
+        assert result['episode_title'] == 'Episode #1: "Test"'
+        assert result['audio_url'] == 'https://example.com/audio?id=123&token=abc'
+
+
+class TestUpdateEpisodeTranscribed:
+    """Test suite for update_episode_transcribed function"""
+
+    @patch('extract_urls.connect')
+    def test_update_episode_transcribed_executes_query(self, _):
+        """Test that SQL UPDATE query is executed"""
+
+        # Arrange
+        mock_conn = MagicMock(spec=psycopg2_connection)
+        mock_cursor = MagicMock()
+        mock_conn.cursor.return_value.__enter__ = MagicMock(
+            return_value=mock_cursor)
+        mock_conn.cursor.return_value.__exit__ = MagicMock(
+            return_value=False)
+
+        # Act
+        update_episode_transcribed(mock_conn, 123)
+
+        # Assert
+        mock_cursor.execute.assert_called_once()
+        executed_query = mock_cursor.execute.call_args[0][0]
+        assert 'UPDATE episode' in executed_query
+        assert 'SET transcribed = TRUE' in executed_query
+        assert 'WHERE episode_id = %s' in executed_query
+
+    @patch('extract_urls.connect')
+    def test_update_episode_transcribed_correct_parameter(self, _):
+        """Test that correct episode_id parameter is passed"""
+
+        # Arrange
+        mock_conn = MagicMock(spec=psycopg2_connection)
+        mock_cursor = MagicMock()
+        mock_conn.cursor.return_value.__enter__ = MagicMock(
+            return_value=mock_cursor)
+        mock_conn.cursor.return_value.__exit__ = MagicMock(
+            return_value=False)
+
+        episode_id = 456
+
+        # Act
+        update_episode_transcribed(mock_conn, episode_id)
+
+        # Assert
+        call_args = mock_cursor.execute.call_args
+        assert call_args[0][1] == (episode_id,)
+
+    @patch('extract_urls.connect')
+    def test_update_episode_transcribed_commits_transaction(self, _):
+        """Test that transaction is committed"""
+
+        # Arrange
+        mock_conn = MagicMock(spec=psycopg2_connection)
+        mock_cursor = MagicMock()
+        mock_conn.cursor.return_value.__enter__ = MagicMock(
+            return_value=mock_cursor)
+        mock_conn.cursor.return_value.__exit__ = MagicMock(
+            return_value=False)
+
+        # Act
+        update_episode_transcribed(mock_conn, 789)
+
+        # Assert
+        mock_conn.commit.assert_called_once()
+
+    @patch('extract_urls.connect')
+    def test_update_episode_transcribed_cursor_context_manager(self, _):
+        """Test that cursor is used as context manager"""
+
+        # Arrange
+        mock_conn = MagicMock(spec=psycopg2_connection)
+        mock_cursor = MagicMock()
+        mock_conn.cursor.return_value.__enter__ = MagicMock(
+            return_value=mock_cursor)
+        mock_conn.cursor.return_value.__exit__ = MagicMock(
+            return_value=False)
+
+        # Act
+        update_episode_transcribed(mock_conn, 999)
+
+        # Assert
+        mock_conn.cursor.assert_called_once()
+        mock_conn.cursor.return_value.__enter__.assert_called_once()
+        mock_conn.cursor.return_value.__exit__.assert_called_once()
+
+    @patch('extract_urls.connect')
+    def test_update_episode_transcribed_multiple_episodes(self, _):
+        """Test updating multiple episodes sequentially"""
+
+        # Arrange
+        mock_conn = MagicMock(spec=psycopg2_connection)
+        mock_cursor = MagicMock()
+        mock_conn.cursor.return_value.__enter__ = MagicMock(
+            return_value=mock_cursor)
+        mock_conn.cursor.return_value.__exit__ = MagicMock(
+            return_value=False)
+
+        # Act
+        update_episode_transcribed(mock_conn, 1)
+        update_episode_transcribed(mock_conn, 2)
+        update_episode_transcribed(mock_conn, 3)
+
+        # Assert
+        assert mock_cursor.execute.call_count == 3
+        assert mock_conn.commit.call_count == 3
