@@ -10,10 +10,13 @@ Episode table requires:
 - transcribed: BOOLEAN (defaults to FALSE)
 """
 
+import logging
 from datetime import datetime
 from email.utils import parsedate_to_datetime
 from pprint import pprint
 from dotenv import load_dotenv
+
+logger = logging.getLogger(__name__)
 
 
 def validate_episode_title(title) -> str:
@@ -248,8 +251,8 @@ def transform_podcast_episodes(podcast_data: dict) -> dict:
             validated_episodes.append(validated_ep)
         except ValueError as e:
             # Log which episode failed but continue processing
-            print(
-                f"Warning: Episode {i} in podcast {podcast_id} failed validation: {str(e)}")
+            logger.warning(
+                f"Episode {i} in podcast {podcast_id} failed validation: {str(e)}")
             continue
 
     return {
@@ -288,8 +291,8 @@ def transform_all_episodes(podcast_episodes_list: list) -> list:
         except ValueError as e:
             # Log error but continue processing other podcasts
             podcast_id = podcast_data.get('podcast_id', 'unknown')
-            print(
-                f"Warning: Podcast {podcast_id} failed transformation: {str(e)}")
+            logger.warning(
+                f"Podcast {podcast_id} failed transformation: {str(e)}")
             continue
 
     return transformed_podcasts
