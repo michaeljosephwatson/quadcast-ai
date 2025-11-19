@@ -248,7 +248,7 @@ class TestGetLatestEpisodeDate:
         mock_cursor.execute.assert_called_once()
         # Verify the SQL query includes ORDER BY and LIMIT
         sql = mock_cursor.execute.call_args[0][0]
-        assert 'ORDER BY published_at DESC' in sql
+        assert 'ORDER BY uploaded_at DESC' in sql
         assert 'LIMIT 1' in sql
 
     def test_returns_none_when_no_episodes(self):
