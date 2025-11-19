@@ -5,9 +5,7 @@ from psycopg2 import OperationalError
 from psycopg2.extensions import connection as psycopg2_connection
 from extract_episodes import (
     get_rds_connection,
-    get_data_from_rss,
     get_episodes_from_rss,
-    get_episode_by_index,
     get_all_podcasts,
     get_latest_episode_date,
     get_new_episodes_since,
@@ -137,47 +135,6 @@ class TestGetRdsConnection:
             )
 
 
-class TestGetDataFromRss:
-    """Tests for get_data_from_rss function"""
-
-    def test_valid_rss_url(self):
-        """Test that a valid RSS URL returns feed data"""
-
-        with patch('extract_episodes.feedparser.parse') as mock_parse:
-            mock_feed = MagicMock()
-            mock_feed.feed = {'title': 'Test Podcast', 'description': 'A test'}
-            mock_parse.return_value = mock_feed
-
-            result = get_data_from_rss("https://example.com/feed.rss")
-
-            assert result == {'title': 'Test Podcast', 'description': 'A test'}
-            mock_parse.assert_called_once_with("https://example.com/feed.rss")
-
-    def test_valid_xml_url(self):
-        """Test that a valid XML URL returns feed data"""
-
-        with patch('extract_episodes.feedparser.parse') as mock_parse:
-            mock_feed = MagicMock()
-            mock_feed.feed = {'title': 'Test Podcast'}
-            mock_parse.return_value = mock_feed
-
-            result = get_data_from_rss("https://example.com/feed.xml")
-
-            assert result == {'title': 'Test Podcast'}
-
-    def test_invalid_url_format(self):
-        """Test that non-RSS/XML URLs raise ValueError"""
-
-        with pytest.raises(ValueError, match="not a valid RSS feed URL"):
-            get_data_from_rss("https://example.com/feed.json")
-
-    def test_empty_url(self):
-        """Test that empty URL raises ValueError"""
-
-        with pytest.raises(ValueError, match="RSS feed URL is empty"):
-            get_data_from_rss("")
-
-
 class TestGetEpisodesFromRss:
     """Tests for get_episodes_from_rss function"""
 
@@ -221,76 +178,6 @@ class TestGetEpisodesFromRss:
 
         with pytest.raises(ValueError, match="RSS feed URL is empty"):
             get_episodes_from_rss("")
-
-
-class TestGetEpisodeByIndex:
-    """Tests for get_episode_by_index function"""
-
-    def test_get_first_episode(self):
-        """Test retrieving the first (most recent) episode"""
-
-        with patch('extract_episodes.feedparser.parse') as mock_parse:
-            mock_feed = MagicMock()
-            mock_feed.entries = [
-                {'title': 'Latest Episode', 'published': '2024-01-03'},
-                {'title': 'Previous Episode', 'published': '2024-01-02'}
-            ]
-            mock_parse.return_value = mock_feed
-
-            result = get_episode_by_index("https://example.com/feed.rss", 0)
-
-            assert result['title'] == 'Latest Episode'
-
-    def test_get_middle_episode(self):
-        """Test retrieving an episode from the middle of the list"""
-
-        with patch('extract_episodes.feedparser.parse') as mock_parse:
-            mock_feed = MagicMock()
-            mock_feed.entries = [
-                {'title': 'Episode 1'},
-                {'title': 'Episode 2'},
-                {'title': 'Episode 3'}
-            ]
-            mock_parse.return_value = mock_feed
-
-            result = get_episode_by_index("https://example.com/feed.rss", 1)
-
-            assert result['title'] == 'Episode 2'
-
-    def test_negative_index_raises_error(self):
-        """Test that negative index raises IndexError"""
-
-        with patch('extract_episodes.feedparser.parse') as mock_parse:
-            mock_feed = MagicMock()
-            mock_feed.entries = [{'title': 'Episode 1'}]
-            mock_parse.return_value = mock_feed
-
-            with pytest.raises(IndexError, match="Episode index -1 out of range"):
-                get_episode_by_index("https://example.com/feed.rss", -1)
-
-    def test_index_too_large_raises_error(self):
-        """Test that index larger than list size raises IndexError"""
-
-        with patch('extract_episodes.feedparser.parse') as mock_parse:
-            mock_feed = MagicMock()
-            mock_feed.entries = [
-                {'title': 'Episode 1'}, {'title': 'Episode 2'}]
-            mock_parse.return_value = mock_feed
-
-            with pytest.raises(IndexError, match="Episode index 5 out of range"):
-                get_episode_by_index("https://example.com/feed.rss", 5)
-
-    def test_invalid_url_format(self):
-        """Test that non-RSS/XML URLs raise ValueError"""
-
-        with pytest.raises(ValueError, match="not a valid RSS feed URL"):
-            get_episode_by_index("https://example.com/feed.html", 0)
-
-    def test_empty_url(self):
-        """Test that empty URL raises ValueError"""
-
-        with pytest.raises(ValueError, match="RSS feed URL is empty"):
-            get_episode_by_index("", 0)
 
 
 class TestGetAllPodcasts:

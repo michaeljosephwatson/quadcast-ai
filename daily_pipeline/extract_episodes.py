@@ -41,27 +41,6 @@ def get_rds_connection() -> connection:
     return conn
 
 
-def get_data_from_rss(rss_url: str) -> dict:
-    """Gets all the metadata for the podcast from the RSS feed
-
-    Args:
-        rss_url: The URL of the RSS feed (.rss or .xml)
-
-    Returns:
-        dict: The feed metadata from the RSS feed
-
-    Raises:
-        ValueError: If URL is empty or not a valid RSS/XML feed URL
-    """
-    if len(rss_url) == 0:
-        raise ValueError("The provided RSS feed URL is empty.")
-
-    if not rss_url.endswith(".rss") and not rss_url.endswith(".xml"):
-        raise ValueError("The provided URL is not a valid RSS feed URL.")
-
-    return feedparser.parse(rss_url).feed
-
-
 def get_episodes_from_rss(rss_url: str) -> list:
     """Gets all episodes from an RSS feed
 
@@ -83,37 +62,6 @@ def get_episodes_from_rss(rss_url: str) -> list:
 
     parsed_feed = feedparser.parse(rss_url)
     return parsed_feed.entries
-
-
-def get_episode_by_index(rss_url: str, index: int) -> dict:
-    """Gets a specific episode from an RSS feed by index
-
-    Args:
-        rss_url: The URL of the RSS feed (.rss or .xml)
-        index: The index of the episode to retrieve (0 = most recent)
-
-    Returns:
-        dict: The episode dictionary at the specified index
-
-    Raises:
-        ValueError: If URL is empty or not a valid RSS/XML feed URL
-        IndexError: If index is out of range or negative
-    """
-    if len(rss_url) == 0:
-        raise ValueError("The provided RSS feed URL is empty.")
-
-    if not rss_url.endswith(".rss") and not rss_url.endswith(".xml"):
-        raise ValueError("The provided URL is not a valid RSS feed URL.")
-
-    if index < 0:
-        raise IndexError(f"Episode index {index} out of range")
-
-    episodes = get_episodes_from_rss(rss_url)
-
-    if index >= len(episodes):
-        raise IndexError(f"Episode index {index} out of range")
-
-    return episodes[index]
 
 
 def get_all_podcasts(conn: connection) -> list:
