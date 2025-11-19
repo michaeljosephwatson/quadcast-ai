@@ -1,5 +1,7 @@
+"""QuadCast Dashboard Application Homepage"""
 import streamlit as st
-from rds_queries import get_rds_connection, get_number_of_podcasts, get_number_of_episodes, get_number_of_transcripts
+from rds_queries import (get_rds_connection, get_number_of_podcasts,
+                         get_number_of_episodes, get_number_of_transcripts)
 
 conn = get_rds_connection()
 
