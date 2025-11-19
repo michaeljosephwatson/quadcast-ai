@@ -1,6 +1,7 @@
+"""Module for RDS database queries"""
+import os
 from psycopg2 import connect
 from psycopg2.extensions import connection
-import os
 from dotenv import load_dotenv
 
 load_dotenv()  # .env for local development, ignored in production
@@ -57,14 +58,3 @@ def get_number_of_transcripts(conn: connection, podcast_name=None) -> int:
     result = cur.fetchone()
     cur.close()
     return result[0]
-
-
-if __name__ == "__main__":
-    conn = get_rds_connection()
-    with conn.cursor() as cursor:
-        cursor.execute("SELECT * FROM podcast")
-        result = cursor.fetchall()
-        print(
-            f"Connection Successful! Found {len(result)} results")
-    print(f"Total Podcasts: {get_number_of_podcasts(conn)}")
-    conn.close()
