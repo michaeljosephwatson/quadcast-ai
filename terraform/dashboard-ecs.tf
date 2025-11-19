@@ -142,4 +142,40 @@ resource "aws_iam_role_policy" "ecs_task_policy" {
   })
 }
 
+resource "aws_cloudwatch_log_group" "streamlit" {
+  name              = "/ecs/c20-quadcast-streamlit"
+  retention_in_days = 7
 
+  tags = {
+    Name    = "c20-quadcast-streamlit-logs"
+    Project = "QuadCast"
+  }
+}
+
+resource "aws_security_group" "ecs_tasks" {
+  name        = "c20-quadcast-ecs-tasks-sg"
+  description = "Security group for ECS tasks"
+  vpc_id      = data.aws_vpc.c20.id
+
+  ingress {
+    description = "Streamlit port"
+    from_port   = 8501
+    to_port     = 8501
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    description = "Allow all outbound"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name    = "c20-quadcast-ecs-tasks-sg"
+    Project = "QuadCast"
+    Environment = "dev"
+  }
+}
