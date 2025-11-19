@@ -170,13 +170,13 @@ class TestGetEpisodesFromRss:
     def test_invalid_url_format(self):
         """Test that non-RSS/XML URLs raise ValueError"""
 
-        with pytest.raises(ValueError, match="not a valid RSS feed URL"):
+        with pytest.raises(ValueError, match="must end with .rss or .xml"):
             get_episodes_from_rss("https://example.com/feed.txt")
 
     def test_empty_url(self):
         """Test that empty URL raises ValueError"""
 
-        with pytest.raises(ValueError, match="RSS feed URL is empty"):
+        with pytest.raises(ValueError, match="RSS feed URL cannot be empty"):
             get_episodes_from_rss("")
 
 
@@ -344,14 +344,14 @@ class TestGetNewEpisodesSince:
     def test_invalid_url_format(self):
         """Test that non-RSS/XML URLs raise ValueError"""
 
-        with pytest.raises(ValueError, match="not a valid RSS feed URL"):
+        with pytest.raises(ValueError, match="must end with .rss or .xml"):
             get_new_episodes_since(
                 "https://example.com/feed.json", datetime.now())
 
     def test_empty_url(self):
         """Test that empty URL raises ValueError"""
 
-        with pytest.raises(ValueError, match="RSS feed URL is empty"):
+        with pytest.raises(ValueError, match="RSS feed URL cannot be empty"):
             get_new_episodes_since("", datetime.now())
 
     def test_handles_episodes_without_date(self):

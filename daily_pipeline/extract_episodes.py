@@ -8,6 +8,7 @@ and RSS feeds. It's used to:
 """
 
 import os
+import logging
 import feedparser
 from datetime import datetime
 from email.utils import parsedate_to_datetime
@@ -15,6 +16,8 @@ from psycopg2 import connect
 from psycopg2.extensions import connection
 from psycopg2.extras import RealDictCursor
 from dotenv import load_dotenv
+
+logger = logging.getLogger(__name__)
 
 
 def get_rds_connection() -> connection:
@@ -56,10 +59,10 @@ def get_episodes_from_rss(rss_url: str) -> list:
         ValueError: If URL is empty or not a valid RSS/XML feed URL
     """
     if len(rss_url) == 0:
-        raise ValueError("The provided RSS feed URL is empty.")
+        raise ValueError("RSS feed URL cannot be empty.")
 
     if not rss_url.endswith(".rss") and not rss_url.endswith(".xml"):
-        raise ValueError("The provided URL is not a valid RSS feed URL.")
+        raise ValueError("RSS feed URL must end with .rss or .xml")
 
     parsed_feed = feedparser.parse(rss_url)
     return parsed_feed.entries
@@ -100,10 +103,10 @@ def get_latest_episode_date(conn: connection, podcast_id: int) -> datetime:
     """
     with conn.cursor() as cursor:
         cursor.execute("""
-            SELECT published_at
+            SELECT uploaded_at
             FROM episode
             WHERE podcast_id = %s
-            ORDER BY published_at DESC
+            ORDER BY uploaded_at DESC
             LIMIT 1
         """, (podcast_id,))
         result = cursor.fetchone()
@@ -122,10 +125,10 @@ def get_new_episodes_since(rss_url: str, since_date: datetime) -> list:
         list: Episodes published after since_date, ordered newest first
     """
     if len(rss_url) == 0:
-        raise ValueError("The provided RSS feed URL is empty.")
+        raise ValueError("RSS feed URL cannot be empty.")
 
     if not rss_url.endswith(".rss") and not rss_url.endswith(".xml"):
-        raise ValueError("The provided URL is not a valid RSS feed URL.")
+        raise ValueError("RSS feed URL must end with .rss or .xml")
 
     episodes = get_episodes_from_rss(rss_url)
 
@@ -229,8 +232,7 @@ def extract_all_new_episodes(conn: connection) -> list[dict]:
                 all_podcast_episodes.append(podcast_data)
         except Exception as e:
             # Log error but continue processing other podcasts
-            # In production, you'd want proper logging here
-            print(
+            logger.error(
                 f"Error extracting episodes for podcast {podcast['podcast_id']}: {str(e)}")
             continue
 
@@ -240,4 +242,5 @@ def extract_all_new_episodes(conn: connection) -> list[dict]:
 if __name__ == "__main__":
     load_dotenv()
     conn = get_rds_connection()
-    extract_all_new_episodes(conn)
+    # extract_all_new_episodes(conn)
+    print(type(get_latest_episode_date(conn, 6)))
