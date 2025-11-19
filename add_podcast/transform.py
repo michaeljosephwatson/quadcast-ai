@@ -4,7 +4,8 @@ from datetime import datetime
 def validate_podcast_name(podcast_name: str) -> str:
     """Validates the podcast name to ensure it meets criteria."""
     if not isinstance(podcast_name, str):
-        raise ValueError("Podcast name must be a string.")
+        raise ValueError(
+            f"Podcast name must be a string, type is {type(podcast_name)}.")
 
     podcast_name = podcast_name.strip()
 
@@ -43,13 +44,34 @@ def validate_language(language: str) -> str:
     return language.lower()
 
 
+def get_rss_link(feed: dict) -> str:
+    """Extracts the RSS feed link from the feed data."""
+
+    # Try itunes_new-feed-url first (most reliable for RSS URL)
+    if feed.get("itunes_new-feed-url"):
+        return feed.get("itunes_new-feed-url")
+
+    # Try to find the self link in the links array
+    links = feed.get("links", [])
+    for link in links:
+        if link.get("rel") == "self" and link.get("type") == "application/rss+xml":
+            return link.get("href")
+
+    # Fall back to the main link and append .rss if not present
+    main_link = feed.get("link", "")
+    if not main_link.endswith(".rss") and not main_link.endswith(".xml"):
+        main_link += ".rss"
+
+    return main_link
+
+
 def validate_feed(feed: dict) -> dict:
     """Validates the feed data to ensure required fields are present."""
 
     podcast_name = validate_podcast_name(feed.get("author"))
     publish_date = validate_publish_date(feed.get("published"))
     language = validate_language(feed.get("language"))
-    link = feed.get("link")
+    link = get_rss_link(feed)
 
     return {
         "podcast_name": podcast_name,
