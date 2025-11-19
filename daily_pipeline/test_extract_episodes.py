@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 from datetime import datetime
 from psycopg2 import OperationalError
 from psycopg2.extensions import connection as psycopg2_connection
-from extract import (
+from extract_episodes import (
     get_rds_connection,
     get_data_from_rss,
     get_episodes_from_rss,
@@ -19,7 +19,7 @@ from extract import (
 class TestGetRdsConnection:
     """Tests for get_rds_connection function"""
 
-    @patch('extract.connect')
+    @patch('extract_episodes.connect')
     def test_get_rds_connection_valid_env_vars(self, mock_connect):
         """Test successful connection with valid environment variables"""
 
@@ -45,7 +45,7 @@ class TestGetRdsConnection:
                 password='testpass'
             )
 
-    @patch('extract.connect')
+    @patch('extract_episodes.connect')
     def test_get_rds_connection_correct_parameters(self, mock_connect):
         """Test that connection uses correct parameter names"""
 
@@ -71,7 +71,7 @@ class TestGetRdsConnection:
                 password='secure_pass'
             )
 
-    @patch('extract.connect')
+    @patch('extract_episodes.connect')
     def test_get_rds_connection_returns_connection_object(self, mock_connect):
         """Test that connection object is returned with required methods"""
 
@@ -93,7 +93,7 @@ class TestGetRdsConnection:
             assert hasattr(result, 'commit')
             assert hasattr(result, 'close')
 
-    @patch('extract.connect')
+    @patch('extract_episodes.connect')
     def test_get_rds_connection_operational_error(self, mock_connect):
         """Test handling of database connection error"""
 
@@ -110,7 +110,7 @@ class TestGetRdsConnection:
             with pytest.raises(OperationalError):
                 get_rds_connection()
 
-    @patch('extract.connect')
+    @patch('extract_episodes.connect')
     def test_get_rds_connection_with_special_characters_in_password(self, mock_connect):
         """Test connection with special characters in password"""
 
@@ -143,7 +143,7 @@ class TestGetDataFromRss:
     def test_valid_rss_url(self):
         """Test that a valid RSS URL returns feed data"""
 
-        with patch('extract.feedparser.parse') as mock_parse:
+        with patch('extract_episodes.feedparser.parse') as mock_parse:
             mock_feed = MagicMock()
             mock_feed.feed = {'title': 'Test Podcast', 'description': 'A test'}
             mock_parse.return_value = mock_feed
@@ -156,7 +156,7 @@ class TestGetDataFromRss:
     def test_valid_xml_url(self):
         """Test that a valid XML URL returns feed data"""
 
-        with patch('extract.feedparser.parse') as mock_parse:
+        with patch('extract_episodes.feedparser.parse') as mock_parse:
             mock_feed = MagicMock()
             mock_feed.feed = {'title': 'Test Podcast'}
             mock_parse.return_value = mock_feed
@@ -184,7 +184,7 @@ class TestGetEpisodesFromRss:
     def test_valid_rss_returns_episodes(self):
         """Test that valid RSS URL returns list of episodes"""
 
-        with patch('extract.feedparser.parse') as mock_parse:
+        with patch('extract_episodes.feedparser.parse') as mock_parse:
             mock_feed = MagicMock()
             mock_feed.entries = [
                 {'title': 'Episode 1', 'published': '2024-01-01'},
@@ -201,7 +201,7 @@ class TestGetEpisodesFromRss:
     def test_empty_feed_returns_empty_list(self):
         """Test that feed with no episodes returns empty list"""
 
-        with patch('extract.feedparser.parse') as mock_parse:
+        with patch('extract_episodes.feedparser.parse') as mock_parse:
             mock_feed = MagicMock()
             mock_feed.entries = []
             mock_parse.return_value = mock_feed
@@ -229,7 +229,7 @@ class TestGetEpisodeByIndex:
     def test_get_first_episode(self):
         """Test retrieving the first (most recent) episode"""
 
-        with patch('extract.feedparser.parse') as mock_parse:
+        with patch('extract_episodes.feedparser.parse') as mock_parse:
             mock_feed = MagicMock()
             mock_feed.entries = [
                 {'title': 'Latest Episode', 'published': '2024-01-03'},
@@ -244,7 +244,7 @@ class TestGetEpisodeByIndex:
     def test_get_middle_episode(self):
         """Test retrieving an episode from the middle of the list"""
 
-        with patch('extract.feedparser.parse') as mock_parse:
+        with patch('extract_episodes.feedparser.parse') as mock_parse:
             mock_feed = MagicMock()
             mock_feed.entries = [
                 {'title': 'Episode 1'},
@@ -260,7 +260,7 @@ class TestGetEpisodeByIndex:
     def test_negative_index_raises_error(self):
         """Test that negative index raises IndexError"""
 
-        with patch('extract.feedparser.parse') as mock_parse:
+        with patch('extract_episodes.feedparser.parse') as mock_parse:
             mock_feed = MagicMock()
             mock_feed.entries = [{'title': 'Episode 1'}]
             mock_parse.return_value = mock_feed
@@ -271,7 +271,7 @@ class TestGetEpisodeByIndex:
     def test_index_too_large_raises_error(self):
         """Test that index larger than list size raises IndexError"""
 
-        with patch('extract.feedparser.parse') as mock_parse:
+        with patch('extract_episodes.feedparser.parse') as mock_parse:
             mock_feed = MagicMock()
             mock_feed.entries = [
                 {'title': 'Episode 1'}, {'title': 'Episode 2'}]
@@ -397,17 +397,21 @@ class TestGetNewEpisodesSince:
     def test_returns_episodes_after_date(self):
         """Test that only episodes after since_date are returned"""
 
-        with patch('extract.feedparser.parse') as mock_parse:
+        with patch('extract_episodes.feedparser.parse') as mock_parse:
             mock_feed = MagicMock()
             mock_feed.entries = [
-                {'title': 'New Episode', 'published_parsed': (2024, 1, 20, 10, 0, 0, 0, 0, 0)},
-                {'title': 'Mid Episode', 'published_parsed': (2024, 1, 15, 10, 0, 0, 0, 0, 0)},
-                {'title': 'Old Episode', 'published_parsed': (2024, 1, 10, 10, 0, 0, 0, 0, 0)}
+                {'title': 'New Episode', 'published_parsed': (
+                    2024, 1, 20, 10, 0, 0, 0, 0, 0)},
+                {'title': 'Mid Episode', 'published_parsed': (
+                    2024, 1, 15, 10, 0, 0, 0, 0, 0)},
+                {'title': 'Old Episode', 'published_parsed': (
+                    2024, 1, 10, 10, 0, 0, 0, 0, 0)}
             ]
             mock_parse.return_value = mock_feed
 
             since_date = datetime(2024, 1, 12, 10, 0, 0)
-            result = get_new_episodes_since("https://example.com/feed.rss", since_date)
+            result = get_new_episodes_since(
+                "https://example.com/feed.rss", since_date)
 
             assert len(result) == 2
             assert result[0]['title'] == 'New Episode'
@@ -416,23 +420,26 @@ class TestGetNewEpisodesSince:
     def test_returns_empty_list_when_no_new_episodes(self):
         """Test that empty list is returned when no episodes are newer than since_date"""
 
-        with patch('extract.feedparser.parse') as mock_parse:
+        with patch('extract_episodes.feedparser.parse') as mock_parse:
             mock_feed = MagicMock()
             mock_feed.entries = [
-                {'title': 'Episode 1', 'published_parsed': (2024, 1, 5, 10, 0, 0, 0, 0, 0)},
-                {'title': 'Episode 2', 'published_parsed': (2024, 1, 3, 10, 0, 0, 0, 0, 0)}
+                {'title': 'Episode 1', 'published_parsed': (
+                    2024, 1, 5, 10, 0, 0, 0, 0, 0)},
+                {'title': 'Episode 2', 'published_parsed': (
+                    2024, 1, 3, 10, 0, 0, 0, 0, 0)}
             ]
             mock_parse.return_value = mock_feed
 
             since_date = datetime(2024, 1, 15, 10, 0, 0)
-            result = get_new_episodes_since("https://example.com/feed.rss", since_date)
+            result = get_new_episodes_since(
+                "https://example.com/feed.rss", since_date)
 
             assert result == []
 
     def test_returns_latest_20_when_since_date_is_none(self):
         """Test that latest 20 episodes are returned when since_date is None"""
 
-        with patch('extract.feedparser.parse') as mock_parse:
+        with patch('extract_episodes.feedparser.parse') as mock_parse:
             mock_feed = MagicMock()
             # Create 30 test episodes
             mock_feed.entries = [
@@ -441,7 +448,8 @@ class TestGetNewEpisodesSince:
             ]
             mock_parse.return_value = mock_feed
 
-            result = get_new_episodes_since("https://example.com/feed.rss", None)
+            result = get_new_episodes_since(
+                "https://example.com/feed.rss", None)
 
             assert len(result) == 20
             assert result[0]['title'] == 'Episode 0'
@@ -450,7 +458,8 @@ class TestGetNewEpisodesSince:
         """Test that non-RSS/XML URLs raise ValueError"""
 
         with pytest.raises(ValueError, match="not a valid RSS feed URL"):
-            get_new_episodes_since("https://example.com/feed.json", datetime.now())
+            get_new_episodes_since(
+                "https://example.com/feed.json", datetime.now())
 
     def test_empty_url(self):
         """Test that empty URL raises ValueError"""
@@ -461,17 +470,20 @@ class TestGetNewEpisodesSince:
     def test_handles_episodes_without_date(self):
         """Test that episodes without dates are skipped"""
 
-        with patch('extract.feedparser.parse') as mock_parse:
+        with patch('extract_episodes.feedparser.parse') as mock_parse:
             mock_feed = MagicMock()
             mock_feed.entries = [
-                {'title': 'Episode with date', 'published_parsed': (2024, 1, 20, 10, 0, 0, 0, 0, 0)},
+                {'title': 'Episode with date', 'published_parsed': (
+                    2024, 1, 20, 10, 0, 0, 0, 0, 0)},
                 {'title': 'Episode without date'},
-                {'title': 'Another with date', 'published_parsed': (2024, 1, 18, 10, 0, 0, 0, 0, 0)}
+                {'title': 'Another with date', 'published_parsed': (
+                    2024, 1, 18, 10, 0, 0, 0, 0, 0)}
             ]
             mock_parse.return_value = mock_feed
 
             since_date = datetime(2024, 1, 15, 10, 0, 0)
-            result = get_new_episodes_since("https://example.com/feed.rss", since_date)
+            result = get_new_episodes_since(
+                "https://example.com/feed.rss", since_date)
 
             assert len(result) == 2
             assert result[0]['title'] == 'Episode with date'
@@ -480,9 +492,9 @@ class TestGetNewEpisodesSince:
 class TestExtractEpisodesForPodcast:
     """Tests for extract_episodes_for_podcast function"""
 
-    @patch('extract.get_new_episodes_since')
-    @patch('extract.get_latest_episode_date')
-    @patch('extract.get_episodes_from_rss')
+    @patch('extract_episodes.get_new_episodes_since')
+    @patch('extract_episodes.get_latest_episode_date')
+    @patch('extract_episodes.get_episodes_from_rss')
     def test_returns_latest_20_when_podcast_has_no_episodes(self, mock_get_episodes, mock_get_latest, mock_get_new):
         """Test that latest 20 episodes are returned for new podcast"""
 
@@ -502,12 +514,13 @@ class TestExtractEpisodesForPodcast:
 
         assert len(result) == 20
         mock_get_latest.assert_called_once_with(mock_conn, 1)
-        mock_get_episodes.assert_called_once_with('https://example.com/feed.rss')
+        mock_get_episodes.assert_called_once_with(
+            'https://example.com/feed.rss')
         mock_get_new.assert_not_called()
 
-    @patch('extract.get_new_episodes_since')
-    @patch('extract.get_latest_episode_date')
-    @patch('extract.get_episodes_from_rss')
+    @patch('extract_episodes.get_new_episodes_since')
+    @patch('extract_episodes.get_latest_episode_date')
+    @patch('extract_episodes.get_episodes_from_rss')
     def test_returns_new_episodes_when_podcast_has_episodes(self, mock_get_episodes, mock_get_latest, mock_get_new):
         """Test that only new episodes are returned for existing podcast"""
 
@@ -532,12 +545,13 @@ class TestExtractEpisodesForPodcast:
         assert len(result) == 2
         assert result[0]['title'] == 'New Episode 1'
         mock_get_latest.assert_called_once_with(mock_conn, 1)
-        mock_get_new.assert_called_once_with('https://example.com/feed.rss', latest_date)
+        mock_get_new.assert_called_once_with(
+            'https://example.com/feed.rss', latest_date)
         mock_get_episodes.assert_not_called()
 
-    @patch('extract.get_new_episodes_since')
-    @patch('extract.get_latest_episode_date')
-    @patch('extract.get_episodes_from_rss')
+    @patch('extract_episodes.get_new_episodes_since')
+    @patch('extract_episodes.get_latest_episode_date')
+    @patch('extract_episodes.get_episodes_from_rss')
     def test_uses_correct_podcast_id(self, mock_get_episodes, mock_get_latest, mock_get_new):
         """Test that the correct podcast_id is used in queries"""
 
@@ -555,9 +569,9 @@ class TestExtractEpisodesForPodcast:
 
         mock_get_latest.assert_called_once_with(mock_conn, 42)
 
-    @patch('extract.get_new_episodes_since')
-    @patch('extract.get_latest_episode_date')
-    @patch('extract.get_episodes_from_rss')
+    @patch('extract_episodes.get_new_episodes_since')
+    @patch('extract_episodes.get_latest_episode_date')
+    @patch('extract_episodes.get_episodes_from_rss')
     def test_uses_correct_rss_url(self, mock_get_episodes, mock_get_latest, mock_get_new):
         """Test that the correct RSS URL is used"""
 
@@ -573,11 +587,12 @@ class TestExtractEpisodesForPodcast:
 
         extract_episodes_for_podcast(mock_conn, podcast)
 
-        mock_get_episodes.assert_called_once_with('https://example.com/custom-feed.rss')
+        mock_get_episodes.assert_called_once_with(
+            'https://example.com/custom-feed.rss')
 
-    @patch('extract.get_new_episodes_since')
-    @patch('extract.get_latest_episode_date')
-    @patch('extract.get_episodes_from_rss')
+    @patch('extract_episodes.get_new_episodes_since')
+    @patch('extract_episodes.get_latest_episode_date')
+    @patch('extract_episodes.get_episodes_from_rss')
     def test_returns_empty_list_when_no_new_episodes(self, mock_get_episodes, mock_get_latest, mock_get_new):
         """Test that empty list is returned when there are no new episodes"""
 
@@ -599,8 +614,8 @@ class TestExtractEpisodesForPodcast:
 class TestExtractAllNewEpisodes:
     """Tests for extract_all_new_episodes function"""
 
-    @patch('extract.extract_episodes_for_podcast')
-    @patch('extract.get_all_podcasts')
+    @patch('extract_episodes.extract_episodes_for_podcast')
+    @patch('extract_episodes.get_all_podcasts')
     def test_returns_all_podcasts_with_episodes(self, mock_get_all, mock_extract_episodes):
         """Test that all podcasts with new episodes are returned"""
 
@@ -635,8 +650,8 @@ class TestExtractAllNewEpisodes:
         assert result[1]['podcast_id'] == 2
         assert len(result[1]['episodes']) == 1
 
-    @patch('extract.extract_episodes_for_podcast')
-    @patch('extract.get_all_podcasts')
+    @patch('extract_episodes.extract_episodes_for_podcast')
+    @patch('extract_episodes.get_all_podcasts')
     def test_returns_empty_list_when_no_podcasts(self, mock_get_all, mock_extract_episodes):
         """Test that empty list is returned when no podcasts exist"""
 
@@ -648,8 +663,8 @@ class TestExtractAllNewEpisodes:
         assert result == []
         mock_extract_episodes.assert_not_called()
 
-    @patch('extract.extract_episodes_for_podcast')
-    @patch('extract.get_all_podcasts')
+    @patch('extract_episodes.extract_episodes_for_podcast')
+    @patch('extract_episodes.get_all_podcasts')
     def test_skips_podcasts_with_no_new_episodes(self, mock_get_all, mock_extract_episodes):
         """Test that podcasts with no new episodes are excluded from results"""
 
@@ -686,8 +701,8 @@ class TestExtractAllNewEpisodes:
         assert result[0]['podcast_id'] == 1
         assert result[1]['podcast_id'] == 3
 
-    @patch('extract.extract_episodes_for_podcast')
-    @patch('extract.get_all_podcasts')
+    @patch('extract_episodes.extract_episodes_for_podcast')
+    @patch('extract_episodes.get_all_podcasts')
     def test_includes_podcast_metadata(self, mock_get_all, mock_extract_episodes):
         """Test that podcast metadata is included in results"""
 
@@ -711,8 +726,8 @@ class TestExtractAllNewEpisodes:
         assert result[0]['podcast_url'] == 'https://example.com/special.rss'
         assert result[0]['episodes'] == [{'title': 'Episode 1'}]
 
-    @patch('extract.extract_episodes_for_podcast')
-    @patch('extract.get_all_podcasts')
+    @patch('extract_episodes.extract_episodes_for_podcast')
+    @patch('extract_episodes.get_all_podcasts')
     def test_continues_on_extraction_error(self, mock_get_all, mock_extract_episodes):
         """Test that function continues processing if one podcast fails"""
 
@@ -750,8 +765,8 @@ class TestExtractAllNewEpisodes:
         assert result[0]['podcast_id'] == 1
         assert result[1]['podcast_id'] == 3
 
-    @patch('extract.extract_episodes_for_podcast')
-    @patch('extract.get_all_podcasts')
+    @patch('extract_episodes.extract_episodes_for_podcast')
+    @patch('extract_episodes.get_all_podcasts')
     def test_handles_multiple_episodes_per_podcast(self, mock_get_all, mock_extract_episodes):
         """Test that multiple episodes from a single podcast are all included"""
 
@@ -778,8 +793,8 @@ class TestExtractAllNewEpisodes:
         for i, ep in enumerate(result[0]['episodes'], 1):
             assert ep['title'] == f'Episode {i}'
 
-    @patch('extract.extract_episodes_for_podcast')
-    @patch('extract.get_all_podcasts')
+    @patch('extract_episodes.extract_episodes_for_podcast')
+    @patch('extract_episodes.get_all_podcasts')
     def test_preserves_podcast_order(self, mock_get_all, mock_extract_episodes):
         """Test that podcasts are processed and returned in the same order"""
 
