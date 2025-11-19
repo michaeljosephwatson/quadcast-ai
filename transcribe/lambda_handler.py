@@ -33,7 +33,7 @@ def upload_to_s3(local_path, s3_key):
     return s3_key
 
 
-def save_transcript_files(episode_id, transcript_data):
+def save_transcript_files(podcast_name, podcast_id, episode_title, episode_id, transcript_data):
     """Save transcript and diarized segments to /tmp and upload to S3."""
 
     # Save transcript text
@@ -50,15 +50,15 @@ def save_transcript_files(episode_id, transcript_data):
                 f"Speaker {seg['speaker']}: {seg['text']}\n"
             )
 
-    # Upload to S3
+    # Upload to S3 with partitioned structure: {podcast_name}{podcast_id}/{episode_title}{episode_id}/
     transcript_s3_key = upload_to_s3(
         transcript_path,
-        f"transcripts/episode_{episode_id}_transcript.txt"
+        f"{podcast_name}({podcast_id})/{episode_title}({episode_id})/transcript.txt"
     )
 
     segments_s3_key = upload_to_s3(
         segments_path,
-        f"transcripts/episode_{episode_id}_diarized_segments.txt"
+        f"{podcast_name}({podcast_id})/{episode_title}({episode_id})/diarized_segments.txt"
     )
 
     return transcript_s3_key, segments_s3_key
@@ -88,9 +88,12 @@ def lambda_handler(event, context):
             }
 
         episode_id = episode['episode_id']
+        podcast_id = episode['podcast_id']
+        podcast_name = episode['podcast_name']
+        episode_title = episode['episode_title']
         audio_url = episode['audio_url']
 
-        print(f"Processing episode {episode_id}: {episode['episode_title']}")
+        print(f"Processing episode {episode_id}: {episode_title}")
 
         # Download audio to /tmp
         audio_path = f"/tmp/episode_{episode_id}.mp3"
@@ -103,7 +106,7 @@ def lambda_handler(event, context):
 
         # Save and upload results to S3
         transcript_s3_key, segments_s3_key = save_transcript_files(
-            episode_id, transcript_data)
+            podcast_name, podcast_id, episode_title, episode_id, transcript_data)
 
         # Update database (only mark as transcribed)
         update_episode_transcribed(conn, episode_id)
