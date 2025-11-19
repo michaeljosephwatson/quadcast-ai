@@ -179,3 +179,109 @@ resource "aws_security_group" "ecs_tasks" {
     Environment = "dev"
   }
 }
+
+resource "aws_security_group_rule" "rds_from_ecs" {
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.ecs_tasks.id
+  security_group_id        = aws_security_group.quadcast_rds.id
+  description              = "Allow ECS tasks to connect to RDS"
+}
+
+resource "aws_ecs_task_definition" "streamlit" {
+  family                   = "c20-quadcast-streamlit"
+  requires_compatibilities = ["FARGATE"]
+  network_mode             = "awsvpc"
+  cpu                      = "512"
+  memory                   = "1024"
+  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
+  task_role_arn            = aws_iam_role.ecs_task_role.arn
+
+  container_definitions = jsonencode([
+    {
+      name  = "streamlit"
+      image = "${aws_ecr_repository.streamlit.repository_url}@${data.aws_ecr_image.streamlit.image_digest}"
+
+      portMappings = [
+        {
+          containerPort = 8501
+          hostPort      = 8501
+          protocol      = "tcp"
+        }
+      ]
+
+      environment = [
+        {
+          name  = "AWS_DEFAULT_REGION"
+          value = "eu-west-2"
+        }
+      ]
+
+      secrets = [
+        {
+          name      = "DB_HOST"
+          valueFrom = "${aws_secretsmanager_secret.quadcast_secrets.arn}:DB_HOST::"
+        },
+        {
+          name      = "DB_PORT"
+          valueFrom = "${aws_secretsmanager_secret.quadcast_secrets.arn}:DB_PORT::"
+        },
+        {
+          name      = "DB_NAME"
+          valueFrom = "${aws_secretsmanager_secret.quadcast_secrets.arn}:DB_NAME::"
+        },
+        {
+          name      = "DB_USER"
+          valueFrom = "${aws_secretsmanager_secret.quadcast_secrets.arn}:DB_USER::"
+        },
+        {
+          name      = "DB_PASSWORD"
+          valueFrom = "${aws_secretsmanager_secret.quadcast_secrets.arn}:DB_PASSWORD::"
+        },
+        {
+          name      = "OPENAI_API_KEY"
+          valueFrom = "${aws_secretsmanager_secret.quadcast_secrets.arn}:OPENAI_API_KEY::"
+        }
+      ]
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = aws_cloudwatch_log_group.streamlit.name
+          "awslogs-region"        = "eu-west-2"
+          "awslogs-stream-prefix" = "ecs"
+        }
+      }
+
+      essential = true
+    }
+  ])
+
+  tags = {
+    Name    = "c20-quadcast-streamlit-task"
+    Project = "QuadCast"
+    Environment = "dev"
+  }
+}
+
+resource "aws_ecs_service" "streamlit" {
+  name            = "c20-quadcast-streamlit-service"
+  cluster         = aws_ecs_cluster.main.id
+  task_definition = aws_ecs_task_definition.streamlit.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    subnets          = data.aws_subnets.public.ids
+    security_groups  = [aws_security_group.ecs_tasks.id]
+    assign_public_ip = true
+  }
+
+  tags = {
+    Name    = "c20-quadcast-streamlit-service"
+    Project = "QuadCast"
+    Environment = "dev"
+  }
+}
