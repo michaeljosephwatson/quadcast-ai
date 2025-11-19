@@ -5,6 +5,9 @@ from extract import get_data_from_rss
 from transform import validate_feed
 import logging
 
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
 
 def get_rds_connection() -> connection:
     """Returns the connection to the RDS database"""
@@ -59,14 +62,17 @@ def load_data_to_db_from_rss(rss: str) -> None:
     """Loads the podcast data from the RSS feed into the RDS database"""
 
     feed = get_data_from_rss(rss)
+
+    logger.info(f"Extracted feed data: %s", feed)
+
     values_to_add = validate_feed(feed)
 
-    logging.info(f"Data to add: %s", values_to_add)
+    logger.info(f"Data to add: %s", values_to_add)
 
     with get_rds_connection() as conn:
 
         language_id = upload_language(conn, values_to_add.get('language'))
-        logging.info(f"Uploaded language with ID: %s", language_id)
+        logger.info(f"Uploaded language with ID: %s", language_id)
 
         values_to_add['language_id'] = language_id
         conn.commit()
@@ -74,7 +80,7 @@ def load_data_to_db_from_rss(rss: str) -> None:
         upload_podcast(conn, values_to_add)
         conn.commit()
 
-        logging.info("Podcast data uploaded successfully.")
+        logger.info("Podcast data uploaded successfully.")
 
 
 if __name__ == "__main__":
