@@ -15,9 +15,9 @@ This module provides a serverless transcription pipeline that:
 
 - **Audio Transcription**: Converts podcast audio to text using GPT-4o-transcribe-diarize model
 - **Speaker Diarization**: Identifies and labels different speakers with timestamps
-- **Automatic Chunking**: Splits audio into 2-minute chunks for optimal processing
-- **Async Concurrency**: Processes chunks concurrently (default: 5) for faster transcription
-- **Retry Logic**: Automatic retry with exponential backoff for failed chunks
+- **automatic chunking**: Splits audio into 2-minute chunks for optimal processing
+- **async concurrency**: Processes chunks concurrently (default: 5) for faster transcription
+- **retry logic**: Automatic retry with exponential backoff for failed chunks
 - **S3 Output Storage**: Stores transcripts and segments in S3
 - **Database Integration**: Reads from RDS PostgreSQL and marks episodes as processed
 - **Error Handling**: Comprehensive error handling and logging

@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import boto3
 import requests
@@ -11,7 +12,6 @@ S3_BUCKET = os.getenv('S3_BUCKET', 'c20-quadcast-s3-bucket')
 
 def sanitize_s3_key(text):
     """Remove or replace characters that are problematic in S3 keys."""
-    import re
     # Replace problematic characters with underscores
     sanitized = re.sub(r'[/<>:"|?*\\]', '_', text)
     # Remove leading/trailing whitespace and replace internal spaces
@@ -97,10 +97,12 @@ def lambda_handler(event, context):
 
         if not episode:
             print("No untranscribed episodes found")
-            conn.close()
             return {
                 'statusCode': 200,
-                'body': json.dumps({'status': 'no_work'})
+                'body': json.dumps({
+                    'status': 'no_work',
+                    'message': 'No untranscribed episodes available'
+                })
             }
 
         episode_id = episode['episode_id']
