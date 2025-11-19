@@ -1,5 +1,5 @@
 import streamlit as st
-from rds_queries import get_rds_connection, get_number_of_podcasts
+from rds_queries import get_rds_connection, get_number_of_podcasts, get_number_of_episodes
 
 conn = get_rds_connection()
 
@@ -48,7 +48,7 @@ with col1:
 with col2:
     st.metric(
         label="Episodes Analyzed",
-        value="0",
+        value=get_number_of_episodes(conn),
         delta="Coming soon"
     )
 
