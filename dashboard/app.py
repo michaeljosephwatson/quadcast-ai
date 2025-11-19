@@ -10,57 +10,77 @@ st.set_page_config(
     layout="wide"
 )
 
-with get_rds_connection() as conn:
+# Cache the database connection
 
-    # Header
-    st.title("🎙️ QuadCast Dashboard")
-    st.markdown("### AI-Powered Podcast Analytics Platform")
 
-    st.divider()
+@st.cache_resource
+def get_connection():
+    """Get cached database connection"""
+    return get_rds_connection()
 
-    # Description section
-    st.markdown("""
-    ## Welcome to QuadCast
+# Cache the metrics (refresh every 60 seconds)
 
-    QuadCast helps you manage and analyze your favorite podcasts with AI-powered insights.
 
-    **What you can do:**
-    - 🎙️ **Subscribe to Podcasts** - Add your favorite podcasts via RSS feed
-    - 📊 **View Episode Data** - Access detailed information about each episode
-    - 📝 **Read Transcripts** - Get full AI-generated transcripts of episodes
-    - 💡 **Explore Insights** - Discover trends, summaries, and analytics across your podcast library
+@st.cache_data(ttl=60)
+def get_metrics(_conn) -> dict:
+    """Get platform metrics with caching"""
+    return {
+        'podcasts': get_number_of_podcasts(_conn),
+        'episodes': get_number_of_episodes(_conn),
+        'transcripts': get_number_of_transcripts(_conn)
+    }
 
-    Navigate through the pages to explore your podcasts and gain valuable insights!
-    """)
 
-    st.divider()
+# Get connection and metrics
+conn = get_connection()
+metrics = get_metrics(conn)
 
-    # Metrics section
-    st.subheader("📈 Platform Overview")
+# Header
+st.title("🎙️ QuadCast Dashboard")
+st.markdown("### AI-Powered Podcast Analytics Platform")
 
-    col1, col2, col3 = st.columns(3)
+st.divider()
 
-    with col1:
-        st.metric(
-            label="Total Podcasts",
-            value=get_number_of_podcasts(conn),
-            delta="Coming soon"
-        )
+# Description section
+st.markdown("""
+## Welcome to QuadCast
 
-    with col2:
-        st.metric(
-            label="Episodes Analyzed",
-            value=get_number_of_episodes(conn),
-            delta="Coming soon"
-        )
+QuadCast helps you manage and analyze your favorite podcasts with AI-powered insights.
 
-    with col3:
-        st.metric(
-            label="Transcripts Generated",
-            value=get_number_of_transcripts(conn),
-            delta="Coming soon"
-        )
+**What you can do:**
+- 🎙️ **Subscribe to Podcasts** - Add your favorite podcasts via RSS feed
+- 📊 **View Episode Data** - Access detailed information about each episode
+- 📝 **Read Transcripts** - Get full AI-generated transcripts of episodes
+- 💡 **Explore Insights** - Discover trends, summaries, and analytics across your podcast library
 
-    # Footer
-    st.divider()
-    st.caption("QuadCast Dashboard | Built with Streamlit")
+Navigate through the pages to explore your podcasts and gain valuable insights!
+""")
+
+st.divider()
+
+# Metrics section
+st.subheader("📈 Platform Overview")
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.metric(
+        label="Total Podcasts",
+        value=metrics['podcasts']
+    )
+
+with col2:
+    st.metric(
+        label="Episodes Analyzed",
+        value=metrics['episodes']
+    )
+
+with col3:
+    st.metric(
+        label="Transcripts Generated",
+        value=metrics['transcripts']
+    )
+
+# Footer
+st.divider()
+st.caption("QuadCast Dashboard | Built with Streamlit")
