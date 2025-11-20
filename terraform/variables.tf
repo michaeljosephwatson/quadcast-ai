@@ -4,3 +4,7 @@ variable "openai_api_key" {
   sensitive   = true
   default = ""
 }
+
+# Data sources for account and region
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
