@@ -39,7 +39,7 @@ QuadCast runs on AWS and processes podcasts automatically:
 ## Tech Stack
 
 - **Backend**: AWS Lambda (Python), RDS PostgreSQL
-- **AI**: OpenAI GPT-4o for transcription and diarization
+- **AI**: OpenAI gpt-4o-transcribe-diarize for transcription and diarization
 - **Storage**: AWS S3 for transcripts
 - **Frontend**: Streamlit dashboard
 - **Infrastructure**: Terraform
