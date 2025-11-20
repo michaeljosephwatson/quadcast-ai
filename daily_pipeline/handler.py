@@ -13,7 +13,6 @@ Environment variables are provided via:
 
 import logging
 import json
-from dotenv import load_dotenv
 from extract_episodes import get_rds_connection, extract_all_new_episodes
 from transform_episodes import transform_all_episodes
 from load_episodes import load_all_episodes
@@ -22,11 +21,8 @@ from load_episodes import load_all_episodes
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-# Load environment variables from .env file (for local development)
-load_dotenv()
 
-
-def lambda_handler(event, context):
+def lambda_handler(event=None, context=None):
     """
     Lambda handler that runs the daily episode pipeline.
 
@@ -66,10 +62,17 @@ def lambda_handler(event, context):
         # Close database connection
         conn.close()
 
-        # Return success response with statistics
+        # Return success response with detailed statistics
         response_body = {
+            'status': 'success',
             'message': 'Daily episode pipeline completed successfully',
-            'statistics': load_stats
+            'summary': {
+                'total_podcasts_checked': load_stats['total_podcasts'],
+                'total_episodes_processed': load_stats['total_episodes'],
+                'total_episodes_inserted': load_stats['total_inserted'],
+                'total_episodes_skipped': load_stats['total_skipped']
+            },
+            'details': load_stats['podcast_stats']
         }
 
         logger.info("Pipeline completed successfully")
@@ -87,7 +90,8 @@ def lambda_handler(event, context):
         }
 
         try:
-            conn.close()
+            if 'conn' in locals():
+                conn.close()
         except Exception as close_err:
             logger.warning("Failed to close database connection during error handling: %s", str(
                 close_err), exc_info=True)
@@ -100,5 +104,7 @@ def lambda_handler(event, context):
 
 if __name__ == "__main__":
     # For local testing
+    from dotenv import load_dotenv
+    load_dotenv()
     response = lambda_handler(None, None)
     print(json.dumps(json.loads(response['body']), indent=2))
