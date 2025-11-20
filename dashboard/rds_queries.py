@@ -1,5 +1,6 @@
 """Module for RDS database queries"""
 import os
+import pandas as pd
 from psycopg2 import connect
 from psycopg2.extensions import connection
 from dotenv import load_dotenv
@@ -18,40 +19,49 @@ def get_rds_connection() -> connection:
     return conn
 
 
+def get_all_podcasts(conn: connection) -> pd.DataFrame:
+    """Returns all podcasts as a DataFrame"""
+    query = "SELECT * FROM podcast;"
+    return pd.read_sql(query, conn)
+
+
+def get_all_episodes(conn: connection) -> pd.DataFrame:
+    """Returns all episodes as a DataFrame"""
+    query = "SELECT * FROM episode;"
+    return pd.read_sql(query, conn)
+
+
+def get_episodes_with_podcast_info(conn: connection) -> pd.DataFrame:
+    """Returns all episodes joined with their podcast information"""
+    query = """
+        SELECT e.*, p.podcast_name, p.author, p.description as podcast_description
+        FROM episode e
+        JOIN podcast p ON e.podcast_id = p.podcast_id;
+    """
+    return pd.read_sql(query, conn)
+
+
 def get_number_of_podcasts(conn: connection) -> int:
     """Returns the total number of podcasts in the database"""
-    with conn.cursor() as cur:
-        cur.execute("SELECT COUNT(*) FROM podcast;")
-        result = cur.fetchone()
-    return result[0]
+    df = get_all_podcasts(conn)
+    return len(df)
 
 
 def get_number_of_episodes(conn: connection, podcast_name=None) -> int:
     """Returns the total number of episodes in the database or for a specific podcast"""
-    with conn.cursor() as cur:
-        if not podcast_name:
-            cur.execute("SELECT COUNT(*) FROM episode;")
-        else:
-            cur.execute("""
-                SELECT COUNT(*) FROM episode e
-                JOIN podcast p  ON e.podcast_id = p.podcast_id
-                WHERE p.podcast_name = %s;
-            """, (podcast_name,))
-        result = cur.fetchone()
-    return result[0]
+    if not podcast_name:
+        df = get_all_episodes(conn)
+        return len(df)
+    else:
+        df = get_episodes_with_podcast_info(conn)
+        return len(df[df['podcast_name'] == podcast_name])
 
 
 def get_number_of_transcripts(conn: connection, podcast_name=None) -> int:
     """Returns the total number of transcripts in the database or for a specific podcast"""
-    with conn.cursor() as cur:
-        if not podcast_name:
-            cur.execute(
-                "SELECT COUNT(*) FROM episode WHERE transcribed = TRUE;")
-        else:
-            cur.execute("""
-                SELECT COUNT(*) FROM episode e
-                JOIN podcast p  ON e.podcast_id = p.podcast_id
-                WHERE p.podcast_name = %s AND e.transcribed = TRUE;
-            """, (podcast_name,))
-        result = cur.fetchone()
-    return result[0]
+    if not podcast_name:
+        df = get_all_episodes(conn)
+        return len(df[df['transcribed'] == True])
+    else:
+        df = get_episodes_with_podcast_info(conn)
+        return len(df[(df['podcast_name'] == podcast_name) & (df['transcribed'] == True)])
