@@ -1,13 +1,14 @@
 """QuadCast Dashboard Application Homepage"""
 import streamlit as st
-from rds_queries import (get_rds_connection, get_number_of_podcasts,
-                         get_number_of_episodes, get_number_of_transcripts)
+from rds_queries import (
+    get_rds_connection, get_all_podcasts, get_all_episodes)
 
 # Page configuration
 st.set_page_config(
     page_title="QuadCast Homepage",
     page_icon="🎙️",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
 # Cache the database connection
@@ -18,22 +19,38 @@ def get_connection():
     """Get cached database connection"""
     return get_rds_connection()
 
-# Cache the metrics (refresh every 60 seconds)
+# Cache the data (refresh every 60 seconds)
 
 
 @st.cache_data(ttl=60)
-def get_metrics(_conn) -> dict:
-    """Get platform metrics with caching"""
+def get_all_data(_conn) -> dict:
+    """Get all platform data with caching"""
+    podcasts_df = get_all_podcasts(_conn)
+    episodes_df = get_all_episodes(_conn)
+
     return {
-        'podcasts': get_number_of_podcasts(_conn),
-        'episodes': get_number_of_episodes(_conn),
-        'transcripts': get_number_of_transcripts(_conn)
+        'podcasts_df': podcasts_df,
+        'episodes_df': episodes_df
     }
 
 
-# Get connection and metrics
+@st.cache_data(ttl=60)
+def calculate_metrics(data: dict) -> dict:
+    """Calculate metrics from the cached data"""
+    podcasts_df = data['podcasts_df']
+    episodes_df = data['episodes_df']
+
+    return {
+        'podcasts': len(podcasts_df),
+        'episodes': len(episodes_df),
+        'transcripts': len(episodes_df[episodes_df['transcribed'] == True])
+    }
+
+
+# Get connection and data
 conn = get_connection()
-metrics = get_metrics(conn)
+data = get_all_data(conn)
+metrics = calculate_metrics(data)
 
 # Header
 st.title("🎙️ QuadCast Dashboard")
