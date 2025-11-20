@@ -10,16 +10,15 @@ Episode table requires:
 - transcribed: BOOLEAN (defaults to FALSE)
 """
 
+from dotenv import load_dotenv
 import logging
 from datetime import datetime
 from email.utils import parsedate_to_datetime
-from pprint import pprint
-from dotenv import load_dotenv
 
 logger = logging.getLogger(__name__)
 
 
-def validate_episode_title(title) -> str:
+def validate_episode_title(title: str) -> str:
     """Validates the episode title to ensure it meets criteria.
 
     Args:
@@ -42,7 +41,7 @@ def validate_episode_title(title) -> str:
     return title
 
 
-def validate_audio_url(audio_url) -> str:
+def validate_audio_url(audio_url: str) -> str:
     """Validates the audio URL to ensure it meets criteria.
 
     Audio URL is the unique identifier for episodes and is required.
@@ -180,6 +179,7 @@ def validate_episode(episode: dict, podcast_id: int) -> dict:
     links = episode.get('links', [])
     try:
         audio_url = extract_audio_url_from_links(links)
+        audio_url = validate_audio_url(audio_url)
     except ValueError:
         # If no audio link, try alternate_link or link field
         audio_url = episode.get('link') or episode.get('href')
@@ -213,7 +213,6 @@ def transform_podcast_episodes(podcast_data: dict) -> dict:
                       {
                           'podcast_id': int,
                           'podcast_name': str,
-                          'podcast_url': str,
                           'episodes': list[dict]  # Raw RSS episode data
                       }
 
@@ -232,7 +231,7 @@ def transform_podcast_episodes(podcast_data: dict) -> dict:
         raise ValueError("Podcast data must be a dictionary.")
 
     podcast_id = podcast_data.get('podcast_id')
-    if not podcast_id:
+    if podcast_id is None:
         raise ValueError("Podcast data must include podcast_id.")
 
     podcast_name = podcast_data.get('podcast_name')
@@ -242,6 +241,9 @@ def transform_podcast_episodes(podcast_data: dict) -> dict:
     episodes = podcast_data.get('episodes', [])
     if not isinstance(episodes, list):
         raise ValueError("Episodes must be a list.")
+
+    logger.info(
+        f"Transforming {len(episodes)} episodes for podcast {podcast_id} ({podcast_name})")
 
     # Validate each episode
     validated_episodes = []
@@ -254,6 +256,9 @@ def transform_podcast_episodes(podcast_data: dict) -> dict:
             logger.warning(
                 f"Episode {i} in podcast {podcast_id} failed validation: {str(e)}")
             continue
+
+    logger.info(
+        f"Successfully validated {len(validated_episodes)}/{len(episodes)} episodes for podcast {podcast_id}")
 
     return {
         'podcast_id': podcast_id,
@@ -280,6 +285,9 @@ def transform_all_episodes(podcast_episodes_list: list) -> list:
     if not isinstance(podcast_episodes_list, list):
         raise ValueError("Input must be a list of podcast data.")
 
+    logger.info(
+        f"Starting transformation of {len(podcast_episodes_list)} podcasts")
+
     transformed_podcasts = []
 
     for podcast_data in podcast_episodes_list:
@@ -288,6 +296,10 @@ def transform_all_episodes(podcast_episodes_list: list) -> list:
             # Only include podcasts that have validated episodes
             if transformed['episodes']:
                 transformed_podcasts.append(transformed)
+            else:
+                podcast_id = podcast_data.get('podcast_id', 'unknown')
+                logger.info(
+                    f"Podcast {podcast_id} has no validated episodes after transformation")
         except ValueError as e:
             # Log error but continue processing other podcasts
             podcast_id = podcast_data.get('podcast_id', 'unknown')
@@ -295,10 +307,15 @@ def transform_all_episodes(podcast_episodes_list: list) -> list:
                 f"Podcast {podcast_id} failed transformation: {str(e)}")
             continue
 
+    logger.info(
+        f"Transformation complete: {len(transformed_podcasts)} podcasts with validated episodes")
+
     return transformed_podcasts
 
 
 if __name__ == "__main__":
+    from pprint import pprint
+    from dotenv import load_dotenv
     from extract_episodes import (
         get_rds_connection,
         extract_all_new_episodes

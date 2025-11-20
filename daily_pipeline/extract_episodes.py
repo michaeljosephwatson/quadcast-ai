@@ -16,6 +16,7 @@ from psycopg2 import connect
 from psycopg2.extensions import connection
 from psycopg2.extras import RealDictCursor
 from dotenv import load_dotenv
+from pprint import pprint
 
 logger = logging.getLogger(__name__)
 
@@ -205,7 +206,6 @@ def extract_all_new_episodes(conn: connection) -> list[dict]:
               {
                   'podcast_id': int,
                   'podcast_name': str,
-                  'podcast_url': str (RSS feed URL),
                   'episodes': list[dict]  # Raw episode data from RSS
               }
               Each episode dict contains all RSS fields like:
@@ -226,7 +226,6 @@ def extract_all_new_episodes(conn: connection) -> list[dict]:
                 podcast_data = {
                     'podcast_id': podcast['podcast_id'],
                     'podcast_name': podcast['podcast_name'],
-                    'podcast_url': podcast['podcast_url'],
                     'episodes': episodes
                 }
                 all_podcast_episodes.append(podcast_data)
@@ -242,5 +241,5 @@ def extract_all_new_episodes(conn: connection) -> list[dict]:
 if __name__ == "__main__":
     load_dotenv()
     conn = get_rds_connection()
-    # extract_all_new_episodes(conn)
-    print(type(get_latest_episode_date(conn, 6)))
+    pprint(extract_all_new_episodes(conn))
+    # print(type(get_latest_episode_date(conn, 6)))
