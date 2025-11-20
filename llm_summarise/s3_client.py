@@ -1,7 +1,10 @@
 """S3 operations for reading transcripts."""
 import os
+import logging
 import boto3
 from botocore.exceptions import ClientError
+
+logger = logging.getLogger(__name__)
 
 
 # Configuration
@@ -19,21 +22,18 @@ def read_transcript(s3_key: str, bucket_name: str = S3_BUCKET) -> str:
     s3 = get_s3_client()
 
     try:
-        print(f"Reading from s3://{bucket_name}/{s3_key}")
+        logger.info(f"Reading from s3://{bucket_name}/{s3_key}")
 
         response = s3.get_object(Bucket=bucket_name, Key=s3_key)
         transcript = response['Body'].read().decode('utf-8')
 
-        print(f"Read {len(transcript)} characters")
+        logger.info(f"Read {len(transcript)} characters")
         return transcript
 
     except ClientError as e:
         if e.response['Error']['Code'] == 'NoSuchKey':
             raise FileNotFoundError(f"Not found: s3://{bucket_name}/{s3_key}")
-        raise Exception(f"S3 error: {str(e)}")
-
-    except Exception as e:
-        raise Exception(f"Failed to read transcript: {str(e)}")
+        raise Exception(f"S3 error: {str(e)}") from e
 
 
 def transcript_exists(s3_key: str, bucket_name: str = S3_BUCKET) -> bool:
