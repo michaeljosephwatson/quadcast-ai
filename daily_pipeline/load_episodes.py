@@ -140,8 +140,10 @@ def load_podcast_episodes(conn: connection, podcast_data: dict) -> dict:
         raise ValueError("Podcast data must include podcast_id.")
 
     podcast_name = podcast_data.get('podcast_name')
-    episodes = podcast_data.get('episodes', [])
+    episodes = podcast_data.get('episodes')
 
+    if episodes is None:
+        raise ValueError("Podcast data must include episodes key.")
     if not isinstance(episodes, list):
         raise ValueError("Episodes must be a list.")
 
@@ -225,7 +227,8 @@ def load_all_episodes(conn: connection, podcast_episodes_list: list) -> dict:
 
         except ValueError as e:
             podcast_id = podcast_data.get('podcast_id', 'unknown')
-            logger.error("Podcast %s validation failed: %s", podcast_id, str(e))
+            logger.error("Podcast %s validation failed: %s",
+                         podcast_id, str(e))
             continue
         except Exception as e:
             podcast_id = podcast_data.get('podcast_id', 'unknown')
@@ -254,10 +257,11 @@ if __name__ == "__main__":
     load_dotenv()
     conn = get_rds_connection()
 
-    # Extract -> Transform -> Load pipeline
-    extracted_data = extract_all_new_episodes(conn)
-    transformed_data = transform_all_episodes(extracted_data)
-    load_stats = load_all_episodes(conn, transformed_data)
-
-    pprint(load_stats)
-    conn.close()
+    try:
+        # Extract -> Transform -> Load pipeline
+        extracted_data = extract_all_new_episodes(conn)
+        transformed_data = transform_all_episodes(extracted_data)
+        load_stats = load_all_episodes(conn, transformed_data)
+        pprint(load_stats)
+    finally:
+        conn.close()
