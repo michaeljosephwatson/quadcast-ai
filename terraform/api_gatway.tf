@@ -65,15 +65,95 @@ resource "aws_api_gateway_deployment" "quadcast_api" {
   }
 }
 
+# CloudWatch Log Group for API Gateway
+resource "aws_cloudwatch_log_group" "api_gateway" {
+  name              = "/aws/apigateway/c20-quadcast-api"
+  retention_in_days = 7
+
+  tags = {
+    Name        = "c20-quadcast-api-gateway-logs"
+    Project     = "QuadCast"
+    Environment = "dev"
+  }
+}
+
+# IAM Role for API Gateway CloudWatch Logging
+resource "aws_iam_role" "api_gateway_cloudwatch" {
+  name = "c20-quadcast-api-gateway-cloudwatch-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "apigateway.amazonaws.com"
+        }
+      }
+    ]
+  })
+
+  tags = {
+    Name        = "c20-quadcast-api-gateway-cloudwatch-role"
+    Project     = "QuadCast"
+    Environment = "dev"
+  }
+}
+
+# Attach CloudWatch Logs policy to the role
+resource "aws_iam_role_policy_attachment" "api_gateway_cloudwatch" {
+  role       = aws_iam_role.api_gateway_cloudwatch.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+}
+
+# API Gateway Account settings for CloudWatch
+resource "aws_api_gateway_account" "main" {
+  cloudwatch_role_arn = aws_iam_role.api_gateway_cloudwatch.arn
+}
+
 # Stage
 resource "aws_api_gateway_stage" "dev" {
   deployment_id = aws_api_gateway_deployment.quadcast_api.id
   rest_api_id   = aws_api_gateway_rest_api.quadcast_api.id
   stage_name    = "dev"
 
+  access_log_settings {
+    destination_arn = aws_cloudwatch_log_group.api_gateway.arn
+    format = jsonencode({
+      requestId      = "$context.requestId"
+      ip             = "$context.identity.sourceIp"
+      caller         = "$context.identity.caller"
+      user           = "$context.identity.user"
+      requestTime    = "$context.requestTime"
+      httpMethod     = "$context.httpMethod"
+      resourcePath   = "$context.resourcePath"
+      status         = "$context.status"
+      protocol       = "$context.protocol"
+      responseLength = "$context.responseLength"
+    })
+  }
+
+  xray_tracing_enabled = true
+
   tags = {
     Name        = "c20-quadcast-api-gateway-dev"
     Project     = "QuadCast"
     Environment = "dev"
+  }
+
+  depends_on = [aws_api_gateway_account.main]
+}
+
+# Method Settings for detailed CloudWatch metrics and logging
+resource "aws_api_gateway_method_settings" "all" {
+  rest_api_id = aws_api_gateway_rest_api.quadcast_api.id
+  stage_name  = aws_api_gateway_stage.dev.stage_name
+  method_path = "*/*"
+
+  settings {
+    metrics_enabled    = true
+    logging_level      = "INFO"
+    data_trace_enabled = true
   }
 }
