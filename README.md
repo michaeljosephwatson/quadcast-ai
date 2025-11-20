@@ -4,12 +4,12 @@ QuadCast is an AI-powered podcast analytics platform that helps you discover ins
 
 ## Team
 
-Lorenzo - @Lorenzo-O114 - Project Manager
-Mikey - @michaeljosephwatson - Architect & DevOps
-Helena - @helenacalvert - QA Tester
-Zuhayr - @zu56789 - Business Analyst
+* Lorenzo - @Lorenzo-O114 - Project Manager
+* Mikey - @michaeljosephwatson - Architect & DevOps
+* Helena - @helenacalvert - QA Tester
+* Zuhayr - @zu56789 - Business Analyst
 
-Additionally, everyone had the additional role of Engineer & Analyst
+Additionally, everyone had the additional role of Engineer & Analyst.
 
 ## What It Does
 
