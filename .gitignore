@@ -100,3 +100,4 @@ Thumbs.db
 *.crt
 secrets/
 credentials/
+test_local.py
