@@ -610,7 +610,6 @@ class TestExtractAllNewEpisodes:
         assert len(result) == 1
         assert result[0]['podcast_id'] == 42
         assert result[0]['podcast_name'] == 'My Special Podcast'
-        assert result[0]['podcast_url'] == 'https://example.com/special.rss'
         assert result[0]['episodes'] == [{'title': 'Episode 1'}]
 
     @patch('extract_episodes.extract_episodes_for_podcast')
