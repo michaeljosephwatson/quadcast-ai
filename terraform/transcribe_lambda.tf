@@ -1,35 +1,3 @@
-# Security Group for Transcribe Lambda
-resource "aws_security_group" "transcribe_lambda" {
-  name        = "c20-quadcast-transcribe-lambda-sg"
-  description = "Security group for Transcribe Lambda function"
-  vpc_id      = data.aws_vpc.c20.id
-
-  egress {
-    description = "Allow all outbound traffic"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name        = "c20-quadcast-transcribe-lambda-sg"
-    Project     = "QuadCast"
-    Environment = "dev"
-  }
-}
-
-# Allow Transcribe Lambda to access RDS
-resource "aws_security_group_rule" "transcribe_lambda_to_rds" {
-  type                     = "ingress"
-  from_port                = 5432
-  to_port                  = 5432
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.transcribe_lambda.id
-  security_group_id        = aws_security_group.quadcast_rds.id
-  description              = "Allow Transcribe Lambda to access RDS"
-}
-
 # IAM Role for Transcribe Lambda Execution
 resource "aws_iam_role" "transcribe_lambda" {
   name = "c20-quadcast-transcribe-lambda-role"
@@ -145,7 +113,6 @@ resource "aws_lambda_function" "transcribe" {
 
   depends_on = [
     aws_cloudwatch_log_group.transcribe_lambda,
-    aws_iam_role_policy_attachment.transcribe_lambda_vpc_execution,
     aws_iam_role_policy_attachment.transcribe_lambda_basic_execution,
     aws_iam_role_policy_attachment.transcribe_lambda_secrets_access,
     aws_iam_role_policy_attachment.transcribe_lambda_s3_access
