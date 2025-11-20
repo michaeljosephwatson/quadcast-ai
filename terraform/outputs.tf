@@ -32,3 +32,18 @@ output "ecr_repository_url" {
   description = "URL of the ECR repository for Streamlit dashboard"
   value       = aws_ecr_repository.streamlit.repository_url
 }
+
+output "transcribe_ecr_repository_url" {
+  description = "URL of the Transcribe ECR repository"
+  value       = aws_ecr_repository.transcribe_ecr.repository_url
+}
+
+output "transcribe_lambda_function_name" {
+  description = "Name of the Transcribe Lambda function"
+  value       = aws_lambda_function.transcribe.function_name
+}
+
+output "transcribe_lambda_arn" {
+  description = "ARN of the Transcribe Lambda function"
+  value       = aws_lambda_function.transcribe.arn
+}
