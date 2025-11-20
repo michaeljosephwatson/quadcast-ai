@@ -32,6 +32,42 @@ def get_episodes_data(_conn):
     """Get all episodes with podcast info"""
     return get_episodes_with_podcast_info(_conn)
 
+# Modal dialog for adding a new podcast
+
+
+@st.dialog("Add New Podcast")
+def add_podcast_modal() -> None:
+    """Modal dialog for adding a new podcast"""
+    st.write("Enter the RSS feed URL of the podcast you want to add:")
+
+    rss_url = st.text_input(
+        "RSS Feed URL",
+        placeholder="https://audioboom.com/channels/2399216.rss",
+        label_visibility="collapsed"
+    )
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        if st.button("Add Podcast", use_container_width=True):
+            if rss_url:
+                with st.spinner("Adding podcast..."):
+                    # TODO: Call API here
+                    success = False  # Placeholder
+
+                    if success:
+                        st.success("✅ Podcast added successfully!")
+                        st.cache_data.clear()  # Clear cache to refresh data
+                        st.rerun()
+                    else:
+                        st.error("❌ Failed to add podcast")
+            else:
+                st.error("⚠️ Please enter a valid RSS URL")
+
+    with col2:
+        if st.button("Cancel", use_container_width=True):
+            st.rerun()
+
 
 conn = get_connection()
 st.title("🎙️ Podcasts")
@@ -47,6 +83,11 @@ if podcasts_df.empty:
 episodes_df = get_episodes_data(conn)
 
 st.sidebar.markdown("## 🎯 Select Content")
+
+# Add New Podcast Button
+if st.sidebar.button("🎙️ Add New Podcast", use_container_width=True):
+    add_podcast_modal()
+
 st.sidebar.markdown("---")
 
 # Podcasts sorted by upload date
