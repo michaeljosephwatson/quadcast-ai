@@ -91,19 +91,19 @@ def load_episode(conn: connection, episode: dict) -> bool:
             """, (podcast_id, audio_url, episode_title, published_at, transcribed))
             conn.commit()
             logger.debug(
-                f"Successfully inserted episode {audio_url} for podcast {podcast_id}")
+                "Successfully inserted episode %s for podcast %s", audio_url, podcast_id)
             return True
 
     except db_errors.UniqueViolation:
         # Episode with this audio_url already exists
         conn.rollback()
         logger.debug(
-            f"Episode {audio_url} already exists in database, skipping")
+            "Episode %s already exists in database, skipping", audio_url)
         return False
 
     except Exception as e:
         conn.rollback()
-        logger.error(f"Error inserting episode {audio_url}: {str(e)}")
+        logger.error("Error inserting episode %s: %s", audio_url, str(e))
         raise
 
 
@@ -146,7 +146,7 @@ def load_podcast_episodes(conn: connection, podcast_data: dict) -> dict:
         raise ValueError("Episodes must be a list.")
 
     logger.info(
-        f"Loading {len(episodes)} episodes for podcast {podcast_id} ({podcast_name})")
+        "Loading %s episodes for podcast %s (%s)", len(episodes), podcast_id, podcast_name)
 
     inserted_count = 0
     skipped_count = 0
@@ -160,12 +160,12 @@ def load_podcast_episodes(conn: connection, podcast_data: dict) -> dict:
                 skipped_count += 1
         except Exception as e:
             logger.warning(
-                f"Failed to load episode for podcast {podcast_id}: {str(e)}")
+                "Failed to load episode for podcast %s: %s", podcast_id, str(e))
             skipped_count += 1
             continue
 
     logger.info(
-        f"Podcast {podcast_id}: inserted {inserted_count}/{len(episodes)} episodes, skipped {skipped_count}")
+        "Podcast %s: inserted %s/%s episodes, skipped %s", podcast_id, inserted_count, len(episodes), skipped_count)
 
     return {
         'podcast_id': podcast_id,
@@ -210,7 +210,7 @@ def load_all_episodes(conn: connection, podcast_episodes_list: list) -> dict:
     if not isinstance(podcast_episodes_list, list):
         raise ValueError("Input must be a list of podcast data.")
 
-    logger.info(f"Starting load of {len(podcast_episodes_list)} podcasts")
+    logger.info("Starting load of %s podcasts", len(podcast_episodes_list))
 
     total_inserted = 0
     total_skipped = 0
@@ -225,17 +225,17 @@ def load_all_episodes(conn: connection, podcast_episodes_list: list) -> dict:
 
         except ValueError as e:
             podcast_id = podcast_data.get('podcast_id', 'unknown')
-            logger.error(f"Podcast {podcast_id} validation failed: {str(e)}")
+            logger.error("Podcast %s validation failed: %s", podcast_id, str(e))
             continue
         except Exception as e:
             podcast_id = podcast_data.get('podcast_id', 'unknown')
-            logger.error(f"Error loading podcast {podcast_id}: {str(e)}")
+            logger.error("Error loading podcast %s: %s", podcast_id, str(e))
             continue
 
     total_episodes = total_inserted + total_skipped
 
     logger.info(
-        f"Load complete: {total_inserted} episodes inserted, {total_skipped} episodes skipped")
+        "Load complete: %s episodes inserted, %s episodes skipped", total_inserted, total_skipped)
 
     return {
         'total_podcasts': len(podcast_episodes_list),
