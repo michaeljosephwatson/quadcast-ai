@@ -32,3 +32,13 @@ output "ecr_repository_url" {
   description = "URL of the ECR repository for Streamlit dashboard"
   value       = aws_ecr_repository.streamlit.repository_url
 }
+
+output "api_gateway_url" {
+  description = "Base URL of the API Gateway"
+  value       = aws_api_gateway_stage.dev.invoke_url
+}
+
+output "add_podcast_endpoint" {
+  description = "Full URL for adding a podcast"
+  value       = "${aws_api_gateway_stage.dev.invoke_url}/podcast"
+}
