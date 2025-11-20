@@ -1,0 +1,21 @@
+FROM public.ecr.aws/lambda/python:3.11
+
+# Install tar and download ffmpeg static binary
+RUN yum install -y tar xz && \
+    curl -L https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz \
+    -o /tmp/ffmpeg.tar.xz && \
+    tar -xJf /tmp/ffmpeg.tar.xz -C /tmp && \
+    mv /tmp/ffmpeg-*-amd64-static/ffmpeg /usr/local/bin/ffmpeg && \
+    mv /tmp/ffmpeg-*-amd64-static/ffprobe /usr/local/bin/ffprobe && \
+    chmod +x /usr/local/bin/ffmpeg && \
+    chmod +x /usr/local/bin/ffprobe && \
+    rm -rf /tmp/*
+
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy your function code
+COPY . ${LAMBDA_TASK_ROOT}
+
+CMD ["lambda_handler.lambda_handler"]
