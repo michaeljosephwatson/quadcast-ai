@@ -7,7 +7,8 @@ from rds_queries import (
 st.set_page_config(
     page_title="QuadCast Homepage",
     page_icon="🎙️",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
 # Cache the database connection
