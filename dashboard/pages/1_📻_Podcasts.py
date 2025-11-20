@@ -49,10 +49,123 @@ episodes_df = get_episodes_data(conn)
 st.sidebar.markdown("## 🎯 Select Content")
 st.sidebar.markdown("---")
 
-podcast_names = sorted(podcasts_df['podcast_name'].unique().tolist())
+# Podcasts sorted by upload date
+podcast_names = podcasts_df.sort_values('uploaded_at', ascending=False)[
+    'podcast_name'].unique().tolist()
 
 selected_podcast_name = st.sidebar.selectbox(
     "📻 Choose a Podcast:",
     options=podcast_names,
     key="podcast_selector"
 )
+
+# Filter episodes for selected podcast
+podcast_episodes = episodes_df[episodes_df['podcast_name']
+                               == selected_podcast_name].copy()
+
+# Sort episodes by published date (newest first)
+if 'published_at' in podcast_episodes.columns:
+    podcast_episodes = podcast_episodes.sort_values(
+        'published_at', ascending=True)
+
+# Episode selector in sidebar
+if not podcast_episodes.empty:
+    # Create episode display names (title + date)
+    episode_options = []
+    episode_map = {}
+
+    for idx, episode in podcast_episodes.iterrows():
+        title = episode['episode_title'] if pd.notna(
+            episode['episode_title']) else "Untitled Episode"
+        if 'published_at' in episode and pd.notna(episode['published_at']):
+            date_str = pd.to_datetime(
+                episode['published_at']).strftime('%Y-%m-%d')
+            display_name = f"{title} ({date_str})"
+        else:
+            display_name = title
+
+        episode_options.append(display_name)
+        episode_map[display_name] = episode
+
+    st.sidebar.markdown("---")
+    selected_episode_display = st.sidebar.selectbox(
+        "🎧 Choose an Episode:",
+        options=episode_options,
+        key="episode_selector"
+    )
+
+    selected_episode = episode_map[selected_episode_display]
+else:
+    selected_episode = None
+
+st.sidebar.markdown("---")
+
+st.divider()
+
+# Get selected podcast details
+selected_podcast = podcasts_df[podcasts_df['podcast_name']
+                               == selected_podcast_name].iloc[0]
+
+# Podcast Details Section
+st.subheader(f"📻 {selected_podcast_name}")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.metric("Total Episodes", len(podcast_episodes))
+
+with col2:
+    transcripts_count = len(
+        podcast_episodes[podcast_episodes['transcribed'] == True])
+    st.metric("Transcripts Available", transcripts_count)
+
+
+# Show podcast description if available
+if 'podcast_description' in selected_podcast and pd.notna(selected_podcast['podcast_description']):
+    with st.expander("📝 About this Podcast"):
+        st.write(selected_podcast['podcast_description'])
+
+st.divider()
+
+# Selected Episode Details
+if selected_episode is not None:
+    st.subheader("🎧 Episode Details")
+
+    episode_title = selected_episode['episode_title'] if pd.notna(
+        selected_episode['episode_title']) else "Untitled Episode"
+    st.markdown(f"### {episode_title}")
+
+    # Episode metadata
+    col1, col2 = st.columns(2)
+
+    with col1:
+        if 'published_at' in selected_episode and pd.notna(selected_episode['published_at']):
+            st.markdown(
+                f"**📅 Published:** {pd.to_datetime(selected_episode['published_at']).strftime('%B %d, %Y')}")
+
+    with col2:
+        if selected_episode['transcribed']:
+            st.markdown("**✅ Transcript Available**")
+        else:
+            st.markdown("**⏳ No Transcript**")
+
+    # Episode description
+    if 'description' in selected_episode and pd.notna(selected_episode['description']):
+        st.markdown("#### Description")
+        st.write(selected_episode['description'])
+
+    # Audio link
+    if 'audio_url' in selected_episode and pd.notna(selected_episode['audio_url']):
+        st.markdown("#### 🎵 Listen Now")
+        try:
+            st.audio(selected_episode['audio_url'])
+        except Exception as e:
+            st.error(f"Unable to load audio player: {e}")
+            st.markdown(
+                f"**🔗 [Direct Audio Link]({selected_episode['audio_url']})**")
+
+else:
+    st.info("No episodes found for this podcast.")
+
+st.divider()
+st.caption("QuadCast Dashboard | Built with Streamlit")
