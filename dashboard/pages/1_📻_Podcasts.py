@@ -2,6 +2,7 @@
 import streamlit as st
 import pandas as pd
 from rds_queries import get_rds_connection, get_all_podcasts, get_episodes_with_podcast_info
+from api_calls import add_podcast  # Import the API function
 
 # Page configuration
 st.set_page_config(
@@ -48,24 +49,27 @@ def add_podcast_modal() -> None:
 
     col1, col2 = st.columns(2)
 
-    with col1:
-        if st.button("Add Podcast", use_container_width=True):
-            if rss_url:
-                with st.spinner("Adding podcast..."):
-                    # TODO: Call API here
-                    success = False  # Placeholder
+    add_button = col1.button("Add Podcast", use_container_width=True)
+    cancel_button = col2.button("Cancel", use_container_width=True)
 
-                    if success:
-                        st.success("✅ Podcast added successfully!")
-                        st.cache_data.clear()  # Clear cache to refresh data
-                        st.rerun()
-                    else:
-                        st.error("❌ Failed to add podcast")
-            else:
-                st.error("⚠️ Please enter a valid RSS URL")
+    if cancel_button:
+        st.rerun()
 
-    with col2:
-        if st.button("Cancel", use_container_width=True):
+    if add_button:
+        with st.spinner("Adding podcast..."):
+            response = add_podcast(rss_url)
+
+            # Handle non-200 responses
+            if response.status_code != 200:
+                st.error(
+                    f"❌ Failed to add podcast (Status: {response.status_code} {response.text})")
+                return
+
+            import time
+            # Success case
+            st.success("✅ Podcast added successfully!")
+            st.cache_data.clear()
+            time.sleep(0.5)
             st.rerun()
 
 
@@ -234,7 +238,6 @@ st.divider()
 st.caption("QuadCast Dashboard | Built with Streamlit")
 
 # TODO : Add search feature for podcasts and episodes
-# TODO : Add new podcast subscription feature
 # TODO : Add more filtering options for episodes (e.g., by date, transcript status)
 # TODO : Improve UI/UX with better styling and layout
 # TODO : Add visualisations
