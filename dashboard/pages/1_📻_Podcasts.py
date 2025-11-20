@@ -68,13 +68,30 @@ if 'published_at' in podcast_episodes.columns:
     podcast_episodes = podcast_episodes.sort_values(
         'published_at', ascending=True)
 
-# Episode selector in sidebar
-if not podcast_episodes.empty:
+# Add filter for transcribed episodes in sidebar
+st.sidebar.markdown("---")
+transcript_filter = st.sidebar.radio(
+    "📝 Filter by Transcript:",
+    options=["All Episodes", "With Transcript", "Without Transcript"],
+    key="transcript_filter"
+)
+
+# Apply transcript filter
+filtered_episodes = podcast_episodes.copy()
+if transcript_filter == "With Transcript":
+    filtered_episodes = filtered_episodes[filtered_episodes['transcribed'] == True]
+elif transcript_filter == "Without Transcript":
+    filtered_episodes = filtered_episodes[filtered_episodes['transcribed'] == False]
+
+st.sidebar.markdown("---")
+
+# Episode selector in sidebar - now with filtered episodes
+if not filtered_episodes.empty:
     # Create episode display names (title + date)
     episode_options = []
     episode_map = {}
 
-    for idx, episode in podcast_episodes.iterrows():
+    for idx, episode in filtered_episodes.iterrows():
         title = episode['episode_title'] if pd.notna(
             episode['episode_title']) else "Untitled Episode"
         if 'published_at' in episode and pd.notna(episode['published_at']):
@@ -87,7 +104,6 @@ if not podcast_episodes.empty:
         episode_options.append(display_name)
         episode_map[display_name] = episode
 
-    st.sidebar.markdown("---")
     selected_episode_display = st.sidebar.selectbox(
         "🎧 Choose an Episode:",
         options=episode_options,
@@ -95,8 +111,18 @@ if not podcast_episodes.empty:
     )
 
     selected_episode = episode_map[selected_episode_display]
+
+    # Show count of filtered episodes
+    if transcript_filter != "All Episodes":
+        st.sidebar.info(
+            f"📊 Showing {len(filtered_episodes)} of {len(podcast_episodes)} episodes")
 else:
     selected_episode = None
+    if transcript_filter != "All Episodes":
+        st.sidebar.warning(
+            f"⚠️ No episodes match the '{transcript_filter}' filter")
+    else:
+        st.sidebar.info("No episodes found for this podcast.")
 
 st.sidebar.markdown("---")
 
@@ -119,11 +145,6 @@ with col2:
         podcast_episodes[podcast_episodes['transcribed'] == True])
     st.metric("Transcripts Available", transcripts_count)
 
-
-# Show podcast description if available
-if 'podcast_description' in selected_podcast and pd.notna(selected_podcast['podcast_description']):
-    with st.expander("📝 About this Podcast"):
-        st.write(selected_podcast['podcast_description'])
 
 st.divider()
 
@@ -165,7 +186,14 @@ if selected_episode is not None:
                 f"**🔗 [Direct Audio Link]({selected_episode['audio_url']})**")
 
 else:
-    st.info("No episodes found for this podcast.")
+    st.info(
+        "No episodes found for this podcast or no episodes match the current filter.")
 
 st.divider()
 st.caption("QuadCast Dashboard | Built with Streamlit")
+
+# TODO : Add search feature for podcasts and episodes
+# TODO : Add new podcast subscription feature
+# TODO : Add more filtering options for episodes (e.g., by date, transcript status)
+# TODO : Improve UI/UX with better styling and layout
+# TODO : Add visualisations
