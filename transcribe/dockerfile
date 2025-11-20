@@ -1,18 +1,55 @@
 FROM public.ecr.aws/lambda/python:3.11
 
-# Copy requirements
-COPY requirements.txt ${LAMBDA_TASK_ROOT}/
+# Install tar and download ffmpeg static binary
+RUN yum install -y tar xz && \
+    curl -L https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz \
+    -o /tmp/ffmpeg.tar.xz && \
+    tar -xJf /tmp/ffmpeg.tar.xz -C /tmp && \
+    mv /tmp/ffmpeg-*-amd64-static/ffmpeg /usr/local/bin/ffmpeg && \
+    mv /tmp/ffmpeg-*-amd64-static/ffprobe /usr/local/bin/ffprobe && \
+    chmod +x /usr/local/bin/ffmpeg && \
+    chmod +x /usr/local/bin/ffprobe && \
+    rm -rf /tmp/*
 
 # Install Python dependencies
-RUN pip install --no-cache-dir -r ${LAMBDA_TASK_ROOT}/requirements.txt
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install system dependencies for pydub and audio processing
-RUN yum install -y ffmpeg libsndfile
+# Copy your function code
+COPY . ${LAMBDA_TASK_ROOT}
 
-# Copy Lambda function code
-COPY lambda_handler.py ${LAMBDA_TASK_ROOT}/
-COPY transcribe.py ${LAMBDA_TASK_ROOT}/
-COPY extract_urls.py ${LAMBDA_TASK_ROOT}/
+CMD ["lambda_handler.lambda_handler"]
 
-# Set the CMD to your handler
-CMD [ "lambda_handler.lambda_handler" ]
+
+
+
+#   # 1. Create build script
+#   mkdir -p /Users/lorenzookpewo/Desktop/quadcast-ai/transcribe/bash_scripts/
+#   # (scripts were created via Write tool)
+
+#   # 2. Make scripts executable
+#   chmod +x /Users/lorenzookpewo/Desktop/quadcast-ai/transcribe/bash_scripts/*.sh
+
+#   # 3. Rename dockerfile to Dockerfile
+#   mv /Users/lorenzookpewo/Desktop/quadcast-ai/transcribe/dockerfile
+#   /Users/lorenzookpewo/Desktop/quadcast-ai/transcribe/Dockerfile
+
+#   # 4. Build the Docker image
+#   cd /Users/lorenzookpewo/Desktop/quadcast-ai/transcribe
+#   docker build --platform linux/amd64 --provenance=false --no-cache -t
+#   c20-quadcast-transcribe-ecr:latest .
+
+#   # 5. Login to AWS ECR
+#   aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin
+#   129033205317.dkr.ecr.eu-west-2.amazonaws.com
+
+#   # 6. Tag the image for ECR
+#   docker tag c20-quadcast-transcribe-ecr:latest
+#   129033205317.dkr.ecr.eu-west-2.amazonaws.com/c20-quadcast-transcribe-ecr:latest
+
+#   # 7. Push to ECR
+#   docker push 129033205317.dkr.ecr.eu-west-2.amazonaws.com/c20-quadcast-transcribe-ecr:latest
+
+#   # 8. Verify image in ECR
+#   aws ecr describe-images --repository-name c20-quadcast-transcribe-ecr --region eu-west-2 --query
+#   'imageDetails[*].[imageId,imageSizeInBytes,imagePushedAt]' --output table
