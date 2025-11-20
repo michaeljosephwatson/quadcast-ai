@@ -47,3 +47,12 @@ output "transcribe_lambda_arn" {
   description = "ARN of the Transcribe Lambda function"
   value       = aws_lambda_function.transcribe.arn
 }
+output "api_gateway_url" {
+  description = "Base URL of the API Gateway"
+  value       = aws_api_gateway_stage.dev.invoke_url
+}
+
+output "add_podcast_endpoint" {
+  description = "Full URL for adding a podcast"
+  value       = "${aws_api_gateway_stage.dev.invoke_url}/podcast"
+}
