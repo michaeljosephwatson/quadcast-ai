@@ -34,7 +34,7 @@ def get_all_episodes(conn: connection) -> pd.DataFrame:
 def get_episodes_with_podcast_info(conn: connection) -> pd.DataFrame:
     """Returns all episodes joined with their podcast information"""
     query = """
-        SELECT e.*, p.podcast_name, p.author, p.description as podcast_description
+        SELECT *
         FROM episode e
         JOIN podcast p ON e.podcast_id = p.podcast_id;
     """
@@ -65,3 +65,11 @@ def get_number_of_transcripts(conn: connection, podcast_name=None) -> int:
     else:
         df = get_episodes_with_podcast_info(conn)
         return len(df[(df['podcast_name'] == podcast_name) & (df['transcribed'] == True)])
+
+
+if __name__ == "__main__":
+    # For quick testing
+    conn = get_rds_connection()
+    print("Number of Podcasts:", get_number_of_podcasts(conn))
+    print("Number of Episodes:", get_number_of_episodes(conn))
+    print("Number of Transcripts:", get_number_of_transcripts(conn))
