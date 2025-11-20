@@ -65,7 +65,7 @@ async def robust_transcribe_chunk(client, chunk, retries=3):
     for attempt in range(retries):
         try:
             return await transcribe_chunk_async(client, chunk)
-        except Exception as e:
+        except Exception:
             if attempt == retries - 1:
                 raise
             wait = 1.5 + random.random() * 2

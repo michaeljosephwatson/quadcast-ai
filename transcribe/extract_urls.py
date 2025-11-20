@@ -1,7 +1,8 @@
-from psycopg2 import connect
+"""Module to extract untranscribed episode URLs from the database and mark them as transcribed."""
 import os
 import json
 import boto3
+from psycopg2 import connect
 from psycopg2.extensions import connection
 
 
