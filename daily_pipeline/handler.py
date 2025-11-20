@@ -88,8 +88,9 @@ def lambda_handler(event, context):
 
         try:
             conn.close()
-        except Exception:
-            pass
+        except Exception as close_err:
+            logger.warning("Failed to close database connection during error handling: %s", str(
+                close_err), exc_info=True)
 
         return {
             'statusCode': 500,
