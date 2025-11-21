@@ -1,4 +1,3 @@
-import pytest
 from api_calls import add_podcast
 
 

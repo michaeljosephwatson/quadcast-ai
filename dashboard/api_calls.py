@@ -4,7 +4,7 @@ import requests
 API_BASE_URL = "https://na87woqgo9.execute-api.eu-west-2.amazonaws.com/dev"
 
 
-def add_podcast(rss_url: str) -> dict:
+def add_podcast(rss_url: str) -> requests.Response:
     """
     Add a new podcast via API Gateway
 
@@ -12,7 +12,7 @@ def add_podcast(rss_url: str) -> dict:
         rss_url: The RSS feed URL to add
 
     Returns:
-        Raw JSON response from the API, or error dict if response is not JSON
+        Response object from the requests library containing status code and response data
     """
     endpoint = f"{API_BASE_URL}/podcast"
 

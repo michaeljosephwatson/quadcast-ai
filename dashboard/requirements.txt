@@ -5,3 +5,4 @@ pandas
 pytest
 pytest-mock
 urllib3<2
+requests
