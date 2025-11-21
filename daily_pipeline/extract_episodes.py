@@ -134,8 +134,8 @@ def get_new_episodes_since(rss_url: str, since_date: datetime) -> list:
     episodes = get_episodes_from_rss(rss_url)
 
     if since_date is None:
-        # Return latest 20 episodes if no reference date
-        return episodes[:20]
+        # Return latest 5 episodes if no reference date
+        return episodes[:5]
 
     new_episodes = []
     for episode in episodes:
