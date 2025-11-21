@@ -7,9 +7,9 @@ from openai import OpenAI
 
 logger = logging.getLogger(__name__)
 
-# Configuration
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 OPENAI_MODEL = 'gpt-4o-mini'
+MAX_TRANSCRIPT_CHARS = 10_000
 
 
 def get_openai_client():
@@ -52,7 +52,7 @@ def build_analysis_prompt(transcript: str, speaker_samples: Dict[str, str] = Non
     logger.info(
         f"Building analysis prompt (transcript: {len(transcript)} chars, speaker_samples: {bool(speaker_samples)})")
     # Truncate transcript to avoid token limits (~10k chars = ~2500 tokens)
-    truncated = transcript[:10000]
+    truncated = transcript[:MAX_TRANSCRIPT_CHARS]
 
     prompt = f"""Analyze this podcast transcript and extract:
 
