@@ -1,8 +1,13 @@
 import pytest
 from unittest.mock import patch, MagicMock
+import sys
 import os
 from psycopg2.extensions import connection as psycopg2_connection
 from psycopg2 import OperationalError
+
+# Mock boto3 before importing extract_urls
+sys.modules['boto3'] = MagicMock()
+
 from extract_urls import get_rds_connection, get_untranscribed_episode, update_episode_transcribed
 
 
