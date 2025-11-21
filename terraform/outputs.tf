@@ -56,3 +56,23 @@ output "add_podcast_endpoint" {
   description = "Full URL for adding a podcast"
   value       = "${aws_api_gateway_stage.dev.invoke_url}/podcast"
 }
+
+output "glue_database_name" {
+  description = "Name of the Glue catalog database"
+  value       = aws_glue_catalog_database.quadcast.name
+}
+
+output "glue_crawler_name" {
+  description = "Name of the Glue crawler"
+  value       = aws_glue_crawler.quadcast_transcripts.name
+}
+
+output "athena_workgroup_name" {
+  description = "Name of the Athena workgroup"
+  value       = aws_athena_workgroup.quadcast.name
+}
+
+output "athena_results_bucket" {
+  description = "S3 bucket for Athena query results"
+  value       = aws_s3_bucket.athena_results.bucket
+}

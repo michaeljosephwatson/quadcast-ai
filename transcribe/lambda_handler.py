@@ -44,35 +44,41 @@ def upload_to_s3(local_path, s3_key):
 
 
 def save_transcript_files(podcast_name, podcast_id, episode_title, episode_id, transcript_data):
-    """Save transcript and diarized segments to /tmp and upload to S3."""
+    """Save transcript and diarized segments as JSON Lines to /tmp and upload to S3."""
 
-    # Save transcript text
-    transcript_path = f"/tmp/episode_{episode_id}_transcript.txt"
+    # Save full transcript as JSON Lines (one record)
+    # Note: podcast_id and episode_id are in partition keys, not in data
+    transcript_path = f"/tmp/episode_{episode_id}_transcript.jsonl"
     with open(transcript_path, 'w', encoding='utf-8') as f:
-        f.write(transcript_data['text'])
+        transcript_record = {
+            "transcript_text": transcript_data['text']
+        }
+        f.write(json.dumps(transcript_record) + '\n')
 
-    # Save diarized segments
-    segments_path = f"/tmp/episode_{episode_id}_diarized_segments.txt"
+    # Save diarized segments as JSON Lines (one record per segment)
+    # Note: podcast_id and episode_id are in partition keys, not in data
+    segments_path = f"/tmp/episode_{episode_id}_segments.jsonl"
     with open(segments_path, 'w', encoding='utf-8') as f:
         for seg in transcript_data['segments']:
-            f.write(
-                f"[{seg['start']:.2f}-{seg['end']:.2f}] "
-                f"Speaker {seg['speaker']}: {seg['text']}\n"
-            )
+            segment_record = {
+                "start_time": seg['start'],
+                "end_time": seg['end'],
+                "speaker": seg['speaker'],
+                "text": seg['text']
+            }
+            f.write(json.dumps(segment_record) + '\n')
 
-    # Upload to S3 with partitioned structure: {podcast_name}{podcast_id}/{episode_title}{episode_id}/
-    safe_podcast = sanitize_s3_key(podcast_name)
-    safe_episode = sanitize_s3_key(episode_title)
-
+    # Upload to S3 with Hive-style partitions
     transcript_s3_key = upload_to_s3(
         transcript_path,
-        f"{safe_podcast}({podcast_id})/{safe_episode}({episode_id})/transcript.txt"
+        f"transcripts/podcast_id={podcast_id}/episode_id={episode_id}/data.jsonl"
     )
 
     segments_s3_key = upload_to_s3(
         segments_path,
-        f"{safe_podcast}({podcast_id})/{safe_episode}({episode_id})/diarized_segments.txt"
+        f"segments/podcast_id={podcast_id}/episode_id={episode_id}/data.jsonl"
     )
+
     # Cleanup temporary files
     os.remove(transcript_path)
     os.remove(segments_path)
