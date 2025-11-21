@@ -1,24 +1,25 @@
 """Test suite for lambda_handler.py module"""
-import pytest
-import json
-import sys
-import os
-from unittest.mock import patch, MagicMock, call
+import sys  # noqa: E402
+from unittest.mock import patch, MagicMock  # noqa: E402
 
-# Mock external dependencies before importing lambda_handler and transcribe
+# Mock external dependencies BEFORE any other imports or lambda_handler import
 sys.modules['boto3'] = MagicMock()
 sys.modules['pydub'] = MagicMock()
 sys.modules['pydub.AudioSegment'] = MagicMock()
 sys.modules['openai'] = MagicMock()
 sys.modules['requests'] = MagicMock()
 
-from lambda_handler import (
+import pytest  # noqa: E402
+import json  # noqa: E402
+
+from lambda_handler import (  # noqa: E402
     lambda_handler,
     sanitize_s3_key,
     download_audio,
     upload_to_s3,
     save_transcript_files
 )
+
 
 # Remove boto3 mock from sys.modules after import to avoid affecting other tests
 if 'boto3' in sys.modules and isinstance(sys.modules['boto3'], MagicMock):
@@ -118,7 +119,8 @@ class TestDownloadAudio:
     def test_download_audio_raises_on_http_error(self, mock_get):
         """Test that HTTP errors are raised"""
         # Arrange
-        mock_get.return_value.raise_for_status.side_effect = Exception("HTTP 404")
+        mock_get.return_value.raise_for_status.side_effect = Exception(
+            "HTTP 404")
 
         # Act & Assert
         with pytest.raises(Exception):
@@ -153,7 +155,7 @@ class TestUploadToS3:
 
         # Assert
         call_args = mock_s3.upload_file.call_args[0]
-        assert "c20-quadcast-s3-bucket" in call_args or call_args[1] is not None
+        assert call_args[1] == "c20-quadcast-s3-bucket"
 
 
 class TestSaveTranscriptFiles:
