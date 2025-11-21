@@ -16,7 +16,7 @@ sys.modules['requests'] = MagicMock()
 import pytest  # noqa: E402
 import json  # noqa: E402
 
-from .lambda_handler import (  # noqa: E402
+from transcribe_pipeline.lambda_handler import (  # noqa: E402
     lambda_handler,
     sanitize_s3_key,
     download_audio,
@@ -85,7 +85,7 @@ class TestSanitizeS3Key:
 class TestDownloadAudio:
     """Test suite for download_audio function"""
 
-    @patch('lambda_handler.requests.get')
+    @patch('transcribe_pipeline.lambda_handler.requests.get')
     def test_download_audio_creates_file(self, mock_get):
         """Test that audio file is created"""
         # Arrange
@@ -101,7 +101,7 @@ class TestDownloadAudio:
         mock_open.assert_called_once_with("/tmp/test.mp3", "wb")
         mock_get.assert_called_once()
 
-    @patch('lambda_handler.requests.get')
+    @patch('transcribe_pipeline.lambda_handler.requests.get')
     def test_download_audio_uses_correct_url(self, mock_get):
         """Test that correct URL is requested"""
         # Arrange
@@ -119,7 +119,7 @@ class TestDownloadAudio:
         assert call_kwargs['stream'] is True
         assert call_kwargs['timeout'] == 300
 
-    @patch('lambda_handler.requests.get')
+    @patch('transcribe_pipeline.lambda_handler.requests.get')
     def test_download_audio_raises_on_http_error(self, mock_get):
         """Test that HTTP errors are raised"""
         # Arrange
@@ -135,7 +135,7 @@ class TestDownloadAudio:
 class TestUploadToS3:
     """Test suite for upload_to_s3 function"""
 
-    @patch('lambda_handler.s3_client')
+    @patch('transcribe_pipeline.lambda_handler.s3_client')
     def test_upload_to_s3_calls_upload_file(self, mock_s3):
         """Test that s3_client.upload_file is called"""
         # Arrange
@@ -148,7 +148,7 @@ class TestUploadToS3:
         mock_s3.upload_file.assert_called_once()
         assert result == "transcripts/data.jsonl"
 
-    @patch('lambda_handler.s3_client')
+    @patch('transcribe_pipeline.lambda_handler.s3_client')
     def test_upload_to_s3_uses_correct_bucket(self, mock_s3):
         """Test that correct bucket is used"""
         # Arrange
@@ -165,8 +165,8 @@ class TestUploadToS3:
 class TestSaveTranscriptFiles:
     """Test suite for save_transcript_files function"""
 
-    @patch('lambda_handler.upload_to_s3')
-    @patch('lambda_handler.os.remove')
+    @patch('transcribe_pipeline.lambda_handler.upload_to_s3')
+    @patch('transcribe_pipeline.lambda_handler.os.remove')
     def test_save_transcript_files_creates_files(self, mock_remove, mock_upload):
         """Test that transcript files are created"""
         # Arrange
@@ -193,8 +193,8 @@ class TestSaveTranscriptFiles:
         assert len(result) == 2
         mock_upload.assert_called()
 
-    @patch('lambda_handler.upload_to_s3')
-    @patch('lambda_handler.os.remove')
+    @patch('transcribe_pipeline.lambda_handler.upload_to_s3')
+    @patch('transcribe_pipeline.lambda_handler.os.remove')
     def test_save_transcript_files_cleans_up(self, mock_remove, mock_upload):
         """Test that temporary files are removed"""
         # Arrange
@@ -215,8 +215,8 @@ class TestSaveTranscriptFiles:
 class TestLambdaHandler:
     """Test suite for lambda_handler function"""
 
-    @patch('lambda_handler.get_rds_connection')
-    @patch('lambda_handler.get_untranscribed_episode')
+    @patch('transcribe_pipeline.lambda_handler.get_rds_connection')
+    @patch('transcribe_pipeline.lambda_handler.get_untranscribed_episode')
     def test_lambda_handler_no_episodes(self, mock_get_episode, mock_get_conn):
         """Test handler when no untranscribed episodes available"""
         # Arrange
@@ -234,13 +234,13 @@ class TestLambdaHandler:
         body = json.loads(result['body'])
         assert body['status'] == 'no_work'
 
-    @patch('lambda_handler.download_audio')
-    @patch('lambda_handler.transcribe_audio')
-    @patch('lambda_handler.save_transcript_files')
-    @patch('lambda_handler.update_episode_transcribed')
-    @patch('lambda_handler.get_rds_connection')
-    @patch('lambda_handler.get_untranscribed_episode')
-    @patch('lambda_handler.os.remove')
+    @patch('transcribe_pipeline.lambda_handler.download_audio')
+    @patch('transcribe_pipeline.lambda_handler.transcribe_audio')
+    @patch('transcribe_pipeline.lambda_handler.save_transcript_files')
+    @patch('transcribe_pipeline.lambda_handler.update_episode_transcribed')
+    @patch('transcribe_pipeline.lambda_handler.get_rds_connection')
+    @patch('transcribe_pipeline.lambda_handler.get_untranscribed_episode')
+    @patch('transcribe_pipeline.lambda_handler.os.remove')
     def test_lambda_handler_success(
         self, mock_remove, mock_get_episode, mock_get_conn,
         mock_update, mock_save, mock_transcribe, mock_download
@@ -273,8 +273,8 @@ class TestLambdaHandler:
         mock_transcribe.assert_called_once()
         mock_update.assert_called_once_with(mock_conn, 1)
 
-    @patch('lambda_handler.get_rds_connection')
-    @patch('lambda_handler.get_untranscribed_episode')
+    @patch('transcribe_pipeline.lambda_handler.get_rds_connection')
+    @patch('transcribe_pipeline.lambda_handler.get_untranscribed_episode')
     def test_lambda_handler_missing_required_fields(
         self, mock_get_episode, mock_get_conn
     ):
@@ -300,9 +300,9 @@ class TestLambdaHandler:
         body = json.loads(result['body'])
         assert body['status'] == 'error'
 
-    @patch('lambda_handler.download_audio')
-    @patch('lambda_handler.get_rds_connection')
-    @patch('lambda_handler.get_untranscribed_episode')
+    @patch('transcribe_pipeline.lambda_handler.download_audio')
+    @patch('transcribe_pipeline.lambda_handler.get_rds_connection')
+    @patch('transcribe_pipeline.lambda_handler.get_untranscribed_episode')
     def test_lambda_handler_download_failure(
         self, mock_get_episode, mock_get_conn, mock_download
     ):
@@ -330,13 +330,13 @@ class TestLambdaHandler:
         assert body['status'] == 'error'
         mock_conn.close.assert_called_once()
 
-    @patch('lambda_handler.download_audio')
-    @patch('lambda_handler.transcribe_audio')
-    @patch('lambda_handler.save_transcript_files')
-    @patch('lambda_handler.update_episode_transcribed')
-    @patch('lambda_handler.get_rds_connection')
-    @patch('lambda_handler.get_untranscribed_episode')
-    @patch('lambda_handler.os.remove')
+    @patch('transcribe_pipeline.lambda_handler.download_audio')
+    @patch('transcribe_pipeline.lambda_handler.transcribe_audio')
+    @patch('transcribe_pipeline.lambda_handler.save_transcript_files')
+    @patch('transcribe_pipeline.lambda_handler.update_episode_transcribed')
+    @patch('transcribe_pipeline.lambda_handler.get_rds_connection')
+    @patch('transcribe_pipeline.lambda_handler.get_untranscribed_episode')
+    @patch('transcribe_pipeline.lambda_handler.os.remove')
     def test_lambda_handler_closes_connection(
         self, mock_remove, mock_get_episode, mock_get_conn,
         mock_update, mock_save, mock_transcribe, mock_download
@@ -363,10 +363,10 @@ class TestLambdaHandler:
         # Assert
         mock_conn.close.assert_called_once()
 
-    @patch('lambda_handler.download_audio')
-    @patch('lambda_handler.transcribe_audio')
-    @patch('lambda_handler.get_rds_connection')
-    @patch('lambda_handler.get_untranscribed_episode')
+    @patch('transcribe_pipeline.lambda_handler.download_audio')
+    @patch('transcribe_pipeline.lambda_handler.transcribe_audio')
+    @patch('transcribe_pipeline.lambda_handler.get_rds_connection')
+    @patch('transcribe_pipeline.lambda_handler.get_untranscribed_episode')
     def test_lambda_handler_error_closes_connection(
         self, mock_get_episode, mock_get_conn, mock_transcribe, mock_download
     ):

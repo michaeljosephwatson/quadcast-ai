@@ -1,3 +1,4 @@
+from transcribe_pipeline.extract_urls import get_rds_connection, get_untranscribed_episode, update_episode_transcribed
 import pytest
 from unittest.mock import patch, MagicMock
 import sys
@@ -8,13 +9,11 @@ from psycopg2 import OperationalError
 # Mock boto3 before importing extract_urls
 sys.modules['boto3'] = MagicMock()
 
-from extract_urls import get_rds_connection, get_untranscribed_episode, update_episode_transcribed
-
 
 class TestGetRdsConnection:
     """Test suite for get_rds_connection function"""
 
-    @patch('extract_urls.connect')
+    @patch('transcribe_pipeline.extract_urls.connect')
     def test_get_rds_connection_local_env_vars(self, mock_connect):
         """Test successful connection with local environment variables"""
 
@@ -42,7 +41,7 @@ class TestGetRdsConnection:
                 port=5432
             )
 
-    @patch('extract_urls.connect')
+    @patch('transcribe_pipeline.extract_urls.connect')
     def test_get_rds_connection_with_custom_port(self, mock_connect):
         """Test connection with custom RDS port"""
 
@@ -71,8 +70,8 @@ class TestGetRdsConnection:
                 port=5433
             )
 
-    @patch('extract_urls.get_secret')
-    @patch('extract_urls.connect')
+    @patch('transcribe_pipeline.extract_urls.get_secret')
+    @patch('transcribe_pipeline.extract_urls.connect')
     def test_get_rds_connection_with_secrets_manager(self, mock_connect, mock_get_secret):
         """Test connection using AWS Secrets Manager"""
 
@@ -104,7 +103,7 @@ class TestGetRdsConnection:
                 port=5432
             )
 
-    @patch('extract_urls.connect')
+    @patch('transcribe_pipeline.extract_urls.connect')
     def test_get_rds_connection_connection_error(self, mock_connect):
         """Test that connection errors are propagated"""
 
@@ -122,7 +121,7 @@ class TestGetRdsConnection:
             with pytest.raises(OperationalError):
                 get_rds_connection()
 
-    @patch('extract_urls.connect')
+    @patch('transcribe_pipeline.extract_urls.connect')
     def test_get_rds_connection_returns_connection_object(self, mock_connect):
         """Test that function returns a connection object"""
 
@@ -150,7 +149,7 @@ class TestGetRdsConnection:
 class TestGetUntranscribedEpisode:
     """Test suite for get_untranscribed_episode function"""
 
-    @patch('extract_urls.connect')
+    @patch('transcribe_pipeline.extract_urls.connect')
     def test_get_untranscribed_episode_returns_dict(self, _):
         """Test that function returns a dictionary"""
 
@@ -172,7 +171,7 @@ class TestGetUntranscribedEpisode:
         # Assert
         assert isinstance(result, dict)
 
-    @patch('extract_urls.connect')
+    @patch('transcribe_pipeline.extract_urls.connect')
     def test_get_untranscribed_episode_correct_structure(self, _):
         """Test that returned dict has correct keys"""
 
@@ -198,7 +197,7 @@ class TestGetUntranscribedEpisode:
         assert result['episode_title'] == 'Test Episode'
         assert result['audio_url'] == 'https://example.com/audio.mp3'
 
-    @patch('extract_urls.connect')
+    @patch('transcribe_pipeline.extract_urls.connect')
     def test_get_untranscribed_episode_no_results(self, _):
         """Test that function returns None when no results"""
 
@@ -218,7 +217,7 @@ class TestGetUntranscribedEpisode:
         # Assert
         assert result is None
 
-    @patch('extract_urls.connect')
+    @patch('transcribe_pipeline.extract_urls.connect')
     def test_get_untranscribed_episode_sql_query_correct(self, _):
         """Test that correct SQL query is executed"""
 
@@ -246,7 +245,7 @@ class TestGetUntranscribedEpisode:
         assert 'WHERE e.transcribed = FALSE' in executed_query
         assert 'LIMIT 1' in executed_query
 
-    @patch('extract_urls.connect')
+    @patch('transcribe_pipeline.extract_urls.connect')
     def test_get_untranscribed_episode_cursor_context_manager(self, _):
         """Test that cursor is used as context manager"""
 
@@ -268,7 +267,7 @@ class TestGetUntranscribedEpisode:
         mock_conn.cursor.return_value.__enter__.assert_called_once()
         mock_conn.cursor.return_value.__exit__.assert_called_once()
 
-    @patch('extract_urls.connect')
+    @patch('transcribe_pipeline.extract_urls.connect')
     def test_get_untranscribed_episode_with_special_characters(self, _):
         """Test function with special characters in data"""
 
@@ -297,7 +296,7 @@ class TestGetUntranscribedEpisode:
 class TestUpdateEpisodeTranscribed:
     """Test suite for update_episode_transcribed function"""
 
-    @patch('extract_urls.connect')
+    @patch('transcribe_pipeline.extract_urls.connect')
     def test_update_episode_transcribed_executes_query(self, _):
         """Test that SQL UPDATE query is executed"""
 
@@ -319,7 +318,7 @@ class TestUpdateEpisodeTranscribed:
         assert 'SET transcribed = TRUE' in executed_query
         assert 'WHERE episode_id = %s' in executed_query
 
-    @patch('extract_urls.connect')
+    @patch('transcribe_pipeline.extract_urls.connect')
     def test_update_episode_transcribed_correct_parameter(self, _):
         """Test that correct episode_id parameter is passed"""
 
@@ -340,7 +339,7 @@ class TestUpdateEpisodeTranscribed:
         call_args = mock_cursor.execute.call_args
         assert call_args[0][1] == (episode_id,)
 
-    @patch('extract_urls.connect')
+    @patch('transcribe_pipeline.extract_urls.connect')
     def test_update_episode_transcribed_commits_transaction(self, _):
         """Test that transaction is committed"""
 
@@ -358,7 +357,7 @@ class TestUpdateEpisodeTranscribed:
         # Assert
         mock_conn.commit.assert_called_once()
 
-    @patch('extract_urls.connect')
+    @patch('transcribe_pipeline.extract_urls.connect')
     def test_update_episode_transcribed_cursor_context_manager(self, _):
         """Test that cursor is used as context manager"""
 
@@ -378,7 +377,7 @@ class TestUpdateEpisodeTranscribed:
         mock_conn.cursor.return_value.__enter__.assert_called_once()
         mock_conn.cursor.return_value.__exit__.assert_called_once()
 
-    @patch('extract_urls.connect')
+    @patch('transcribe_pipeline.extract_urls.connect')
     def test_update_episode_transcribed_multiple_episodes(self, _):
         """Test updating multiple episodes sequentially"""
 
