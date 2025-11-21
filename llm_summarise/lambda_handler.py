@@ -1,12 +1,17 @@
 """Main Lambda handler for OpenAI analysis."""
 import json
 import logging
+import sys
 from s3_client import read_transcript, build_transcript_key, save_summary_to_s3, read_segments, build_segments_key
 from analyser import analyze_transcript
 from database import store_analysis, episode_exists
 
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    stream=sys.stdout
+)
+logger = logging.getLogger(__name__)
 
 
 def lambda_handler(event, context):
@@ -19,7 +24,8 @@ def lambda_handler(event, context):
         episode_id = event.get('episode_id')
         podcast_id = event.get('podcast_id')
         transcript_s3_key = event.get('transcript_s3_key')
-        logger.debug(f"Extracted: episode_id={episode_id}, podcast_id={podcast_id}")
+        logger.debug(
+            f"Extracted: episode_id={episode_id}, podcast_id={podcast_id}")
 
         # Validate required fields
         if not episode_id:
@@ -28,7 +34,8 @@ def lambda_handler(event, context):
         # Build S3 key if not provided
         if not transcript_s3_key:
             if not podcast_id:
-                raise ValueError("Missing required field: podcast_id (needed to build S3 key)")
+                raise ValueError(
+                    "Missing required field: podcast_id (needed to build S3 key)")
             transcript_s3_key = build_transcript_key(podcast_id, episode_id)
             logger.info(f"Built S3 key: {transcript_s3_key}")
 
@@ -52,7 +59,8 @@ def lambda_handler(event, context):
         # Analyze with OpenAI (includes speaker identification if segments provided)
         logger.debug("Calling analyze_transcript")
         analysis = analyze_transcript(transcript, segments)
-        logger.info(f"Analysis: {len(analysis['topics'])} topics, {len(analysis.get('speakers', []))} speakers")
+        logger.info(
+            f"Analysis: {len(analysis['topics'])} topics, {len(analysis.get('speakers', []))} speakers")
 
         # Store topics and speakers in database
         logger.debug("Storing analysis in database")
@@ -60,7 +68,8 @@ def lambda_handler(event, context):
 
         # Store summary in S3
         logger.debug("Saving summary to S3")
-        summary_s3_key = save_summary_to_s3(podcast_id, episode_id, analysis['summary'])
+        summary_s3_key = save_summary_to_s3(
+            podcast_id, episode_id, analysis['summary'])
         logger.info(f"Summary saved to S3: {summary_s3_key}")
 
         # Return success response
