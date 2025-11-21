@@ -1,7 +1,9 @@
 """QuadCast Dashboard - Podcasts Page"""
+import time
 import streamlit as st
 import pandas as pd
 from rds_queries import get_rds_connection, get_all_podcasts, get_episodes_with_podcast_info
+from api_calls import add_podcast
 
 # Page configuration
 st.set_page_config(
@@ -32,6 +34,44 @@ def get_episodes_data(_conn):
     """Get all episodes with podcast info"""
     return get_episodes_with_podcast_info(_conn)
 
+# Modal dialog for adding a new podcast
+
+
+@st.dialog("Add New Podcast")
+def add_podcast_modal() -> None:
+    """Modal dialog for adding a new podcast"""
+    st.write("Enter the RSS feed URL of the podcast you want to add:")
+
+    rss_url = st.text_input(
+        "RSS Feed URL",
+        placeholder="https://audioboom.com/channels/2399216.rss",
+        label_visibility="collapsed"
+    )
+
+    col1, col2 = st.columns(2)
+
+    add_button = col1.button("Add Podcast", use_container_width=True)
+    cancel_button = col2.button("Cancel", use_container_width=True)
+
+    if cancel_button:
+        st.rerun()
+
+    if add_button:
+        with st.spinner("Adding podcast..."):
+            response = add_podcast(rss_url)
+
+            # Handle non-200 responses
+            if response.status_code != 200:
+                st.error(
+                    f"❌ Failed to add podcast (Status: {response.status_code} {response.text})")
+                return
+
+            # Success case
+            st.success("✅ Podcast added successfully!")
+            st.cache_data.clear()
+            time.sleep(0.5)
+            st.rerun()
+
 
 conn = get_connection()
 st.title("🎙️ Podcasts")
@@ -47,6 +87,11 @@ if podcasts_df.empty:
 episodes_df = get_episodes_data(conn)
 
 st.sidebar.markdown("## 🎯 Select Content")
+
+# Add New Podcast Button
+if st.sidebar.button("🎙️ Add New Podcast", use_container_width=True):
+    add_podcast_modal()
+
 st.sidebar.markdown("---")
 
 # Podcasts sorted by upload date
@@ -79,9 +124,9 @@ transcript_filter = st.sidebar.radio(
 # Apply transcript filter
 filtered_episodes = podcast_episodes.copy()
 if transcript_filter == "With Transcript":
-    filtered_episodes = filtered_episodes[filtered_episodes['transcribed'] == True]
+    filtered_episodes = filtered_episodes[filtered_episodes['transcribed']]
 elif transcript_filter == "Without Transcript":
-    filtered_episodes = filtered_episodes[filtered_episodes['transcribed'] == False]
+    filtered_episodes = filtered_episodes[~filtered_episodes['transcribed']]
 
 st.sidebar.markdown("---")
 
@@ -142,7 +187,7 @@ with col1:
 
 with col2:
     transcripts_count = len(
-        podcast_episodes[podcast_episodes['transcribed'] == True])
+        podcast_episodes[podcast_episodes['transcribed']])
     st.metric("Transcripts Available", transcripts_count)
 
 
@@ -162,7 +207,8 @@ if selected_episode is not None:
     with col1:
         if 'published_at' in selected_episode and pd.notna(selected_episode['published_at']):
             st.markdown(
-                f"**📅 Published:** {pd.to_datetime(selected_episode['published_at']).strftime('%B %d, %Y')}")
+                f"**📅 Published: **"
+                f"{pd.to_datetime(selected_episode['published_at']).strftime('%B %d, %Y')}")
 
     with col2:
         if selected_episode['transcribed']:
@@ -191,9 +237,3 @@ else:
 
 st.divider()
 st.caption("QuadCast Dashboard | Built with Streamlit")
-
-# TODO : Add search feature for podcasts and episodes
-# TODO : Add new podcast subscription feature
-# TODO : Add more filtering options for episodes (e.g., by date, transcript status)
-# TODO : Improve UI/UX with better styling and layout
-# TODO : Add visualisations

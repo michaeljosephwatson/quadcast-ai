@@ -2,3 +2,7 @@ streamlit
 psycopg2-binary
 python-dotenv
 pandas
+pytest
+pytest-mock
+urllib3<2
+requests
