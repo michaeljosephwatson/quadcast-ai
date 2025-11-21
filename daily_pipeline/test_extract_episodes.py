@@ -382,8 +382,8 @@ class TestExtractEpisodesForPodcast:
     @patch('extract_episodes.get_new_episodes_since')
     @patch('extract_episodes.get_latest_episode_date')
     @patch('extract_episodes.get_episodes_from_rss')
-    def test_returns_latest_20_when_podcast_has_no_episodes(self, mock_get_episodes, mock_get_latest, mock_get_new):
-        """Test that latest 20 episodes are returned for new podcast"""
+    def test_returns_latest_5_when_podcast_has_no_episodes(self, mock_get_episodes, mock_get_latest, mock_get_new):
+        """Test that latest 5 episodes are returned for new podcast"""
 
         mock_conn = MagicMock()
         mock_get_latest.return_value = None  # No episodes yet
@@ -399,7 +399,7 @@ class TestExtractEpisodesForPodcast:
 
         result = extract_episodes_for_podcast(mock_conn, podcast)
 
-        assert len(result) == 20
+        assert len(result) == 5
         mock_get_latest.assert_called_once_with(mock_conn, 1)
         mock_get_episodes.assert_called_once_with(
             'https://example.com/feed.rss')
