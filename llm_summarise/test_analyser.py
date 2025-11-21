@@ -22,7 +22,7 @@ SAMPLE_OPENAI_RESPONSE = {
 
 
 def test_build_analysis_prompt():
-    """Should build proper analysis prompt."""
+    """Tests building proper analysis prompt."""
     prompt = build_analysis_prompt(SAMPLE_TRANSCRIPT)
 
     assert "Analyze this podcast transcript" in prompt
@@ -32,7 +32,7 @@ def test_build_analysis_prompt():
 
 
 def test_build_analysis_prompt_truncates_long_transcript():
-    """Should truncate very long transcripts."""
+    """Tests truncation of very long transcripts."""
     long_transcript = "Test content. " * 2000  # ~26KB
     prompt = build_analysis_prompt(long_transcript)
 
@@ -41,7 +41,7 @@ def test_build_analysis_prompt_truncates_long_transcript():
 
 
 def test_parse_analysis_response():
-    """Should parse OpenAI response correctly."""
+    """Tests parsing OpenAI response correctly."""
     result = parse_analysis_response(SAMPLE_OPENAI_RESPONSE)
 
     assert result['topics'] == ["AI", "machine learning"]
@@ -49,7 +49,7 @@ def test_parse_analysis_response():
 
 
 def test_parse_analysis_response_missing_fields():
-    """Should handle missing fields gracefully."""
+    """Tests handling missing fields gracefully."""
     incomplete_response = {
         "topics": ["AI"]
     }
@@ -61,7 +61,7 @@ def test_parse_analysis_response_missing_fields():
 
 
 def test_parse_analysis_response_empty():
-    """Should handle empty response."""
+    """Tests handling empty response."""
     result = parse_analysis_response({})
 
     assert result['topics'] == []
@@ -70,7 +70,7 @@ def test_parse_analysis_response_empty():
 
 @patch('analyser.get_openai_client')
 def test_call_openai_api_success(mock_get_client):
-    """Should successfully call OpenAI API."""
+    """Tests successful OpenAI API call."""
     mock_client = Mock()
     mock_response = Mock()
     mock_response.choices = [Mock()]
@@ -88,7 +88,7 @@ def test_call_openai_api_success(mock_get_client):
 
 @patch('analyser.get_openai_client')
 def test_call_openai_api_invalid_json(mock_get_client):
-    """Should raise exception for invalid JSON response."""
+    """Tests exception for invalid JSON response."""
     mock_client = Mock()
     mock_response = Mock()
     mock_response.choices = [Mock()]
@@ -104,7 +104,7 @@ def test_call_openai_api_invalid_json(mock_get_client):
 
 @patch('analyser.call_openai_api')
 def test_analyze_transcript_success(mock_call_api):
-    """Should successfully analyze transcript."""
+    """Tests successful transcript analysis."""
     mock_call_api.return_value = SAMPLE_OPENAI_RESPONSE
 
     result = analyze_transcript(SAMPLE_TRANSCRIPT)
@@ -115,7 +115,7 @@ def test_analyze_transcript_success(mock_call_api):
 
 @patch('analyser.call_openai_api')
 def test_analyze_transcript_handles_errors(mock_call_api):
-    """Should propagate OpenAI API errors."""
+    """Tests propagation of OpenAI API errors."""
     mock_call_api.side_effect = Exception("API error")
 
     with pytest.raises(Exception) as exc_info:
