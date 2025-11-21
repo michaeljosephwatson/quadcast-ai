@@ -1,8 +1,9 @@
 """QuadCast Dashboard - Podcasts Page"""
+import time
 import streamlit as st
 import pandas as pd
 from rds_queries import get_rds_connection, get_all_podcasts, get_episodes_with_podcast_info
-from api_calls import add_podcast  # Import the API function
+from api_calls import add_podcast
 
 # Page configuration
 st.set_page_config(
@@ -65,7 +66,6 @@ def add_podcast_modal() -> None:
                     f"❌ Failed to add podcast (Status: {response.status_code} {response.text})")
                 return
 
-            import time
             # Success case
             st.success("✅ Podcast added successfully!")
             st.cache_data.clear()
@@ -124,9 +124,9 @@ transcript_filter = st.sidebar.radio(
 # Apply transcript filter
 filtered_episodes = podcast_episodes.copy()
 if transcript_filter == "With Transcript":
-    filtered_episodes = filtered_episodes[filtered_episodes['transcribed'] == True]
+    filtered_episodes = filtered_episodes[filtered_episodes['transcribed']]
 elif transcript_filter == "Without Transcript":
-    filtered_episodes = filtered_episodes[filtered_episodes['transcribed'] == False]
+    filtered_episodes = filtered_episodes[~filtered_episodes['transcribed']]
 
 st.sidebar.markdown("---")
 
@@ -187,7 +187,7 @@ with col1:
 
 with col2:
     transcripts_count = len(
-        podcast_episodes[podcast_episodes['transcribed'] == True])
+        podcast_episodes[podcast_episodes['transcribed']])
     st.metric("Transcripts Available", transcripts_count)
 
 
@@ -207,7 +207,8 @@ if selected_episode is not None:
     with col1:
         if 'published_at' in selected_episode and pd.notna(selected_episode['published_at']):
             st.markdown(
-                f"**📅 Published:** {pd.to_datetime(selected_episode['published_at']).strftime('%B %d, %Y')}")
+                f"**📅 Published: **"
+                f"{pd.to_datetime(selected_episode['published_at']).strftime('%B %d, %Y')}")
 
     with col2:
         if selected_episode['transcribed']:
@@ -236,8 +237,3 @@ else:
 
 st.divider()
 st.caption("QuadCast Dashboard | Built with Streamlit")
-
-# TODO : Add search feature for podcasts and episodes
-# TODO : Add more filtering options for episodes (e.g., by date, transcript status)
-# TODO : Improve UI/UX with better styling and layout
-# TODO : Add visualisations
