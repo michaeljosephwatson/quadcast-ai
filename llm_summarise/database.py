@@ -19,9 +19,8 @@ RDS_PORT = int(os.getenv('RDS_PORT', 5432))
 
 
 def get_db_connection() -> connection:
-    """Create database connection."""
-    logger.info(
-        f"Connecting to database: {RDS_HOST}:{RDS_PORT}/{RDS_DB_NAME} as {RDS_USERNAME}")
+    """Creates database connection to RDS."""
+    logger.info(f"Connecting to database: {RDS_HOST}:{RDS_PORT}/{RDS_DB_NAME} as {RDS_USERNAME}")
 
     conn = psycopg2.connect(
         host=RDS_HOST,
@@ -36,7 +35,7 @@ def get_db_connection() -> connection:
 
 
 def store_topics(conn: connection, episode_id: int, topics: List[str]):
-    """Store topics and link to episode."""
+    """Stores topics and links them to episode."""
     logger.info(f"Storing {len(topics)} topics for episode {episode_id}")
 
     with conn.cursor() as cursor:
@@ -74,7 +73,7 @@ def store_topics(conn: connection, episode_id: int, topics: List[str]):
 
 
 def store_analysis(episode_id: int, analysis: Dict):
-    """Store complete analysis results in database (topics only)."""
+    """Stores complete analysis results in database (topics and speakers)."""
     logger.info(f"Storing analysis for episode {episode_id}")
 
     if 'topics' not in analysis:
@@ -83,16 +82,19 @@ def store_analysis(episode_id: int, analysis: Dict):
     conn = get_db_connection()
 
     try:
-        # Only store topics (no summary)
+        # Store topics
         store_topics(conn, episode_id, analysis['topics'])
+
+        # Store speakers (if any identified)
+        if 'speakers' in analysis and analysis['speakers']:
+            store_speakers(conn, episode_id, analysis['speakers'])
 
         # Commit transaction
         conn.commit()
-        logger.info(f"✅ Successfully stored analysis for episode {episode_id}")
+        logger.info(f"Successfully stored analysis for episode {episode_id}")
 
     except Exception as e:
-        logger.error(
-            f"Failed to store analysis for episode {episode_id}: {str(e)}")
+        logger.error(f"Failed to store analysis for episode {episode_id}: {str(e)}")
         conn.rollback()
         raise Exception(f"Failed to store analysis: {str(e)}") from e
 
@@ -102,7 +104,7 @@ def store_analysis(episode_id: int, analysis: Dict):
 
 
 def get_episode_analysis(episode_id: int) -> Dict:
-    """Retrieve analysis for an episode. Returns dict with 'topics' and 'speakers'"""
+    """Retrieves analysis for an episode with topics and speakers."""
     logger.info(f"Retrieving analysis for episode {episode_id}")
 
     conn = get_db_connection()
@@ -144,7 +146,7 @@ def get_episode_analysis(episode_id: int) -> Dict:
 
 
 def episode_exists(episode_id: int) -> bool:
-    """Check if episode exists in database.Returns True if exists, False otherwise"""
+    """Checks if episode exists in database."""
     logger.debug(f"Checking if episode {episode_id} exists")
 
     conn = get_db_connection()
@@ -164,10 +166,7 @@ def episode_exists(episode_id: int) -> bool:
 
 
 def store_speakers(conn: connection, episode_id: int, speaker_names: List[str]):
-    """
-    Store speakers and link to episode.
-    Handles deduplication by name (case-insensitive).
-    """
+    """Stores speakers and links them to episode with case-insensitive deduplication."""
     if not speaker_names:
         logger.info(f"No speakers to store for episode {episode_id}")
         return
@@ -214,33 +213,3 @@ def store_speakers(conn: connection, episode_id: int, speaker_names: List[str]):
         f"Stored {len(speaker_names)} speakers for episode {episode_id}")
 
 
-def store_analysis(episode_id: int, analysis: Dict):
-    """Store complete analysis results in database (topics and speakers)."""
-    logger.info(f"Storing analysis for episode {episode_id}")
-
-    if 'topics' not in analysis:
-        raise ValueError("Analysis dictionary must contain 'topics' key")
-
-    conn = get_db_connection()
-
-    try:
-        # Store topics
-        store_topics(conn, episode_id, analysis['topics'])
-
-        # Store speakers (if any identified)
-        if 'speakers' in analysis and analysis['speakers']:
-            store_speakers(conn, episode_id, analysis['speakers'])
-
-        # Commit transaction
-        conn.commit()
-        logger.info(f"✅ Successfully stored analysis for episode {episode_id}")
-
-    except Exception as e:
-        logger.error(
-            f"Failed to store analysis for episode {episode_id}: {str(e)}")
-        conn.rollback()
-        raise Exception(f"Failed to store analysis: {str(e)}") from e
-
-    finally:
-        conn.close()
-        logger.debug("Database connection closed")

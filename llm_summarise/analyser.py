@@ -13,21 +13,14 @@ OPENAI_MODEL = 'gpt-4o-mini'
 
 
 def get_openai_client():
-    """Get OpenAI client."""
+    """Initializes and returns OpenAI client."""
+    logger.debug(f"Getting OpenAI client with model: {OPENAI_MODEL}")
     return OpenAI(api_key=OPENAI_API_KEY)
 
 
 def extract_speaker_samples(segments: List[Dict], max_chars_per_speaker: int = 500) -> Dict[str, str]:
-    """
-    Extract representative text samples from each speaker.
-
-    Args:
-        segments: List of segment dicts with 'speaker' and 'text' keys
-        max_chars_per_speaker: Maximum characters to extract per speaker
-
-    Returns:
-        Dict mapping speaker label (A, B, C...) to sample text
-    """
+    """Extract representative text samples from each speaker."""
+    logger.info(f"Extracting speaker samples from {len(segments)} segments (max {max_chars_per_speaker} chars per speaker)")
     speaker_samples = {}
 
     for segment in segments:
@@ -54,16 +47,8 @@ def extract_speaker_samples(segments: List[Dict], max_chars_per_speaker: int = 5
 
 
 def build_analysis_prompt(transcript: str, speaker_samples: Dict[str, str] = None) -> str:
-    """
-    Build prompt for OpenAI analysis.
-
-    Args:
-        transcript: Full transcript text
-        speaker_samples: Optional dict of speaker samples {label: text}
-
-    Returns:
-        Formatted prompt string
-    """
+    """Build prompt for OpenAI analysis with optional speaker samples."""
+    logger.info(f"Building analysis prompt (transcript: {len(transcript)} chars, speaker_samples: {bool(speaker_samples)})")
     # Truncate transcript to avoid token limits (~10k chars = ~2500 tokens)
     truncated = transcript[:10000]
 
@@ -107,10 +92,12 @@ If no speaker names are identifiable, return empty speakers array: "speakers": [
 
 
 def call_openai_api(prompt: str) -> Dict:
-    """Call OpenAI API with prompt. Returns parsed JSON response from OpenAI."""
+    """Calls OpenAI API and returns parsed JSON response."""
+    logger.info(f"Calling OpenAI API with {OPENAI_MODEL} model (prompt: {len(prompt)} chars)")
     client = get_openai_client()
 
     try:
+        logger.debug("Sending request to OpenAI API")
         response = client.chat.completions.create(
             model=OPENAI_MODEL,
             response_format={"type": "json_object"},
@@ -127,16 +114,20 @@ def call_openai_api(prompt: str) -> Dict:
         )
 
         content = response.choices[0].message.content
+        logger.info("OpenAI API request successful")
         return json.loads(content)
 
     except json.JSONDecodeError as e:
+        logger.error(f"OpenAI returned invalid JSON: {str(e)}")
         raise Exception(f"OpenAI returned invalid JSON: {str(e)}")
     except Exception as e:
+        logger.error(f"OpenAI API error: {str(e)}")
         raise Exception(f"OpenAI API error: {str(e)}")
 
 
 def parse_analysis_response(response: Dict) -> Dict:
-    """Parse and validate OpenAI response. Returns validated analysis dict."""
+    """Parses and validates OpenAI response into structured format."""
+    logger.info(f"Parsing response with {len(response.get('topics', []))} topics, {len(response.get('speakers', []))} speakers")
     speakers = response.get('speakers', [])
 
     # Ensure speakers is a list of dicts with 'name' key
@@ -144,46 +135,38 @@ def parse_analysis_response(response: Dict) -> Dict:
     for speaker in speakers:
         if isinstance(speaker, dict) and 'name' in speaker and speaker['name']:
             validated_speakers.append(speaker['name'])
+            logger.debug(f"Validated speaker: {speaker['name']}")
 
-    return {
+    result = {
         'topics': response.get('topics', []),
         'summary': response.get('summary', ''),
         'speakers': validated_speakers
     }
+    logger.info(f"Parsed {len(result['topics'])} topics, {len(result['speakers'])} speakers")
+    return result
 
 
 def analyze_transcript(transcript: str, segments: List[Dict] = None) -> Dict:
-    """
-    Analyze transcript using OpenAI.
-
-    Args:
-        transcript: Full transcript text
-        segments: Optional list of diarized segments for speaker identification
-
-    Returns:
-        Analysis results dict with keys:
-        - topics: List of topic strings
-        - summary: Summary string
-        - speakers: List of speaker names (empty if none identified)
-    """
-    logger.info(f"Analyzing transcript ({len(transcript)} chars)")
+    """Analyzes transcript using OpenAI API and returns topics, summary, and speakers."""
+    logger.info(f"Starting analysis: {len(transcript)} chars, {len(segments or [])} segments")
 
     # Extract speaker samples if segments provided
     speaker_samples = None
     if segments:
         speaker_samples = extract_speaker_samples(segments)
-        logger.info(f"Analyzing with {len(speaker_samples)} speaker samples")
+        logger.info(f"Using {len(speaker_samples)} speaker samples for identification")
 
     # Build prompt
+    logger.debug("Building analysis prompt")
     prompt = build_analysis_prompt(transcript, speaker_samples)
 
     # Call OpenAI
+    logger.debug("Calling OpenAI API")
     raw_response = call_openai_api(prompt)
 
     # Parse and validate
+    logger.debug("Parsing response")
     analysis = parse_analysis_response(raw_response)
 
-    logger.info(
-        f"Analysis complete: {len(analysis['topics'])} topics, {len(analysis['speakers'])} speakers identified")
-
+    logger.info(f"Analysis complete: {len(analysis['topics'])} topics, {len(analysis['speakers'])} speakers")
     return analysis

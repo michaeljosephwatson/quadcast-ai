@@ -25,7 +25,7 @@ def mock_connection():
 
 
 def test_store_topics_new_topics(mock_connection):
-    """Should insert new topics and link to episode."""
+    """Tests inserting new topics and linking to episode."""
     conn, cursor = mock_connection
 
     # Mock topic_id returns
