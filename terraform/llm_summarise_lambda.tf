@@ -144,7 +144,6 @@ resource "aws_lambda_function" "analysis" {
       RDS_PASSWORD    = jsondecode(data.aws_secretsmanager_secret_version.quadcast_secrets.secret_string)["RDS_PASSWORD"]
       OPENAI_API_KEY  = var.openai_api_key
       S3_BUCKET       = aws_s3_bucket.quadcast_data.id
-      AWS_REGION      = data.aws_region.current.id
     }
   }
 
