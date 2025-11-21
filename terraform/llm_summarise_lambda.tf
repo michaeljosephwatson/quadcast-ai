@@ -1,35 +1,3 @@
-# Security Group for Analysis Lambda
-resource "aws_security_group" "analysis_lambda" {
-  name        = "c20-quadcast-analysis-lambda-sg"
-  description = "Security group for OpenAI Analysis Lambda function"
-  vpc_id      = data.aws_vpc.c20.id
-
-  egress {
-    description = "Allow all outbound traffic"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name        = "c20-quadcast-analysis-lambda-sg"
-    Project     = "QuadCast"
-    Environment = "dev"
-  }
-}
-
-# Allow Analysis Lambda to access RDS
-resource "aws_security_group_rule" "analysis_lambda_to_rds" {
-  type                     = "ingress"
-  from_port                = 5432
-  to_port                  = 5432
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.analysis_lambda.id
-  security_group_id        = aws_security_group.quadcast_rds.id
-  description              = "Allow Analysis Lambda to access RDS"
-}
-
 # IAM Role for Analysis Lambda Execution
 resource "aws_iam_role" "analysis_lambda" {
   name = "c20-quadcast-analysis-lambda-role"
@@ -52,12 +20,6 @@ resource "aws_iam_role" "analysis_lambda" {
     Project     = "QuadCast"
     Environment = "dev"
   }
-}
-
-# IAM Policy for VPC Access
-resource "aws_iam_role_policy_attachment" "analysis_lambda_vpc_execution" {
-  role       = aws_iam_role.analysis_lambda.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
 
 # IAM Policy for CloudWatch Logs
@@ -142,14 +104,13 @@ resource "aws_lambda_function" "analysis" {
       RDS_DB_NAME     = jsondecode(data.aws_secretsmanager_secret_version.quadcast_secrets.secret_string)["RDS_DB_NAME"]
       RDS_USERNAME    = jsondecode(data.aws_secretsmanager_secret_version.quadcast_secrets.secret_string)["RDS_USERNAME"]
       RDS_PASSWORD    = jsondecode(data.aws_secretsmanager_secret_version.quadcast_secrets.secret_string)["RDS_PASSWORD"]
-      OPENAI_API_KEY  = var.openai_api_key
+      OPENAI_API_KEY  = jsondecode(data.aws_secretsmanager_secret_version.quadcast_secrets.secret_string)["OPENAI_API_KEY"]
       S3_BUCKET       = aws_s3_bucket.quadcast_data.id
     }
   }
 
   depends_on = [
     aws_cloudwatch_log_group.analysis_lambda,
-    aws_iam_role_policy_attachment.analysis_lambda_vpc_execution,
     aws_iam_role_policy_attachment.analysis_lambda_basic_execution,
     aws_iam_role_policy_attachment.analysis_lambda_secrets_access,
     aws_iam_role_policy_attachment.analysis_lambda_s3_access
