@@ -7,10 +7,10 @@ from unittest.mock import patch, MagicMock, call
 
 # Mock external dependencies before importing lambda_handler and transcribe
 sys.modules['boto3'] = MagicMock()
-sys.modules['requests'] = MagicMock()
 sys.modules['pydub'] = MagicMock()
 sys.modules['pydub.AudioSegment'] = MagicMock()
 sys.modules['openai'] = MagicMock()
+sys.modules['requests'] = MagicMock()
 
 from lambda_handler import (
     lambda_handler,
@@ -19,6 +19,10 @@ from lambda_handler import (
     upload_to_s3,
     save_transcript_files
 )
+
+# Remove boto3 mock from sys.modules after import to avoid affecting other tests
+if 'boto3' in sys.modules and isinstance(sys.modules['boto3'], MagicMock):
+    del sys.modules['boto3']
 
 
 class TestSanitizeS3Key:
