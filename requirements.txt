@@ -2,3 +2,13 @@ feedparser
 psycopg2-binary
 python-dotenv
 pytest
+boto3
+requests
+pydub
+openai
+moto
+streamlit
+pandas
+pytest-mock
+urllib3<2
+python-dateutil

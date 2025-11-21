@@ -50,7 +50,13 @@ def get_rds_connection() -> connection:
 
 
 def get_untranscribed_episode(conn: connection) -> dict:
-    """Fetches ONE untranscribed episode from the database."""
+    """
+    Fetches ONE untranscribed episode from the database with row-level locking.
+    Uses SELECT FOR UPDATE SKIP LOCKED to ensure parallel Lambda executions
+    don't pick the same episode.
+
+    The lock is held until the transaction commits (via update_episode_transcribed).
+    """
     with conn.cursor() as cursor:
         cursor.execute("""
             SELECT
@@ -65,6 +71,7 @@ def get_untranscribed_episode(conn: connection) -> dict:
             WHERE e.transcribed = FALSE
             ORDER BY e.uploaded_at ASC
             LIMIT 1
+            FOR UPDATE OF e SKIP LOCKED
         """)
         result = cursor.fetchone()
 
