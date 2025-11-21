@@ -1,15 +1,19 @@
 """Test suite for transcribe.py module"""
-import pytest
-from unittest.mock import patch, MagicMock
-import sys
-from io import BytesIO
+import pytest  # noqa: E402
+from unittest.mock import patch, MagicMock  # noqa: E402
+import sys  # noqa: E402
+import os  # noqa: E402
+from io import BytesIO  # noqa: E402
+
+# Add transcribe directory to path to ensure we import from the correct modules
+sys.path.insert(0, os.path.dirname(__file__))
 
 # Mock external dependencies before importing transcribe
 sys.modules['pydub'] = MagicMock()
 sys.modules['pydub.AudioSegment'] = MagicMock()
 sys.modules['openai'] = MagicMock()
 
-from transcribe import (
+from transcribe_pipeline.transcribe import (  # noqa: E402
     split_audio_2min,
     transcribe_audio
 )
@@ -18,7 +22,7 @@ from transcribe import (
 class TestSplitAudio2Min:
     """Test suite for split_audio_2min function"""
 
-    @patch('transcribe.AudioSegment.from_file')
+    @patch('transcribe_pipeline.transcribe.AudioSegment.from_file')
     def test_split_audio_creates_chunks(self, mock_from_file):
         """Test that audio is split into multiple chunks"""
         # Arrange
@@ -37,7 +41,7 @@ class TestSplitAudio2Min:
         assert all('buffer' in chunk for chunk in chunks)
         assert all('duration' in chunk for chunk in chunks)
 
-    @patch('transcribe.AudioSegment.from_file')
+    @patch('transcribe_pipeline.transcribe.AudioSegment.from_file')
     def test_split_audio_chunk_structure(self, mock_from_file):
         """Test that each chunk has correct structure"""
         # Arrange
@@ -56,7 +60,7 @@ class TestSplitAudio2Min:
             assert isinstance(chunk['buffer'], BytesIO)
             assert chunk['duration'] > 0
 
-    @patch('transcribe.AudioSegment.from_file')
+    @patch('transcribe_pipeline.transcribe.AudioSegment.from_file')
     def test_split_audio_single_chunk(self, mock_from_file):
         """Test audio shorter than chunk duration"""
         # Arrange
@@ -73,7 +77,7 @@ class TestSplitAudio2Min:
         assert len(chunks) == 1
         assert chunks[0]['index'] == 0
 
-    @patch('transcribe.AudioSegment.from_file')
+    @patch('transcribe_pipeline.transcribe.AudioSegment.from_file')
     def test_split_audio_custom_chunk_size(self, mock_from_file):
         """Test with custom chunk size"""
         # Arrange
@@ -93,7 +97,7 @@ class TestSplitAudio2Min:
 class TestTranscribeAudio:
     """Test suite for transcribe_audio function"""
 
-    @patch('transcribe.asyncio.run')
+    @patch('transcribe_pipeline.transcribe.asyncio.run')
     def test_transcribe_audio_calls_async(self, mock_asyncio_run):
         """Test that transcribe_audio calls asyncio.run"""
         # Arrange
@@ -110,7 +114,7 @@ class TestTranscribeAudio:
         assert result == mock_result
         mock_asyncio_run.assert_called_once()
 
-    @patch('transcribe.asyncio.run')
+    @patch('transcribe_pipeline.transcribe.asyncio.run')
     def test_transcribe_audio_returns_dict(self, mock_asyncio_run):
         """Test that function returns correct structure"""
         # Arrange
@@ -135,7 +139,7 @@ class TestTranscribeAudio:
         assert 'segments' in result
         assert isinstance(result['segments'], list)
 
-    @patch('transcribe.asyncio.run')
+    @patch('transcribe_pipeline.transcribe.asyncio.run')
     def test_transcribe_audio_propagates_exception(self, mock_asyncio_run):
         """Test that exceptions are propagated"""
         # Arrange

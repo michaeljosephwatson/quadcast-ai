@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 import json
 import os
 from psycopg2.extensions import connection as psycopg2_connection
-from lambda_handler import (
+from count_episodes.lambda_handler import (
     get_rds_connection,
     count_untranscribed_episodes,
     lambda_handler
@@ -13,7 +13,7 @@ from lambda_handler import (
 class TestGetRdsConnection:
     """Test suite for get_rds_connection function"""
 
-    @patch('lambda_handler.connect')
+    @patch('count_episodes.lambda_handler.connect')
     def test_get_rds_connection_local_env_vars(self, mock_connect):
         """Test successful connection with local environment variables"""
 
@@ -41,8 +41,8 @@ class TestGetRdsConnection:
                 port=5432
             )
 
-    @patch('lambda_handler.get_secret')
-    @patch('lambda_handler.connect')
+    @patch('count_episodes.lambda_handler.get_secret')
+    @patch('count_episodes.lambda_handler.connect')
     def test_get_rds_connection_secrets_manager(self, mock_connect, mock_get_secret):
         """Test connection using AWS Secrets Manager"""
 
@@ -128,8 +128,8 @@ class TestCountUntranscribedEpisodes:
 class TestLambdaHandler:
     """Test suite for lambda_handler function"""
 
-    @patch('lambda_handler.get_rds_connection')
-    @patch('lambda_handler.count_untranscribed_episodes')
+    @patch('count_episodes.lambda_handler.get_rds_connection')
+    @patch('count_episodes.lambda_handler.count_untranscribed_episodes')
     def test_lambda_handler_success(self, mock_count, mock_get_conn):
         """Test successful lambda execution"""
 
@@ -147,8 +147,8 @@ class TestLambdaHandler:
         assert body['count'] == 42
         mock_conn.close.assert_called_once()
 
-    @patch('lambda_handler.get_rds_connection')
-    @patch('lambda_handler.count_untranscribed_episodes')
+    @patch('count_episodes.lambda_handler.get_rds_connection')
+    @patch('count_episodes.lambda_handler.count_untranscribed_episodes')
     def test_lambda_handler_zero_episodes(self, mock_count, mock_get_conn):
         """Test lambda execution when no episodes need transcription"""
 
@@ -166,7 +166,7 @@ class TestLambdaHandler:
         assert body['count'] == 0
         mock_conn.close.assert_called_once()
 
-    @patch('lambda_handler.get_rds_connection')
+    @patch('count_episodes.lambda_handler.get_rds_connection')
     def test_lambda_handler_database_error(self, mock_get_conn):
         """Test lambda execution with database error"""
 
@@ -182,8 +182,8 @@ class TestLambdaHandler:
         assert 'error' in body
         assert 'Failed to count episodes' in body['error']
 
-    @patch('lambda_handler.get_rds_connection')
-    @patch('lambda_handler.count_untranscribed_episodes')
+    @patch('count_episodes.lambda_handler.get_rds_connection')
+    @patch('count_episodes.lambda_handler.count_untranscribed_episodes')
     def test_lambda_handler_closes_connection_on_error(self, mock_count, mock_get_conn):
         """Test that connection is closed even when counting fails"""
 
