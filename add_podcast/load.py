@@ -41,25 +41,47 @@ def upload_language(conn: connection, language: str) -> int:
         return row[0]
 
 
-def upload_podcast(conn: connection, podcast_data: dict) -> None:
-    """Uploads the podcast data to the podcast table"""
+def upload_podcast(conn: connection, podcast_data: dict) -> bool:
+    """
+    Uploads the podcast data to the podcast table.
+
+    Returns:
+        bool: True if podcast was inserted (new), False if it already exists (duplicate).
+    """
+
+    # First, check if podcast already exists
+    check_query = "SELECT podcast_id FROM podcast WHERE podcast_url = %s"
 
     with conn.cursor() as cursor:
-        query = """
+        cursor.execute(check_query, (podcast_data.get('link'),))
+        existing = cursor.fetchone()
+
+        if existing:
+            # Podcast already exists - this is a duplicate
+            return False
+
+        # Podcast doesn't exist - insert it
+        insert_query = """
             INSERT INTO podcast (podcast_name, publish_date, language_id, podcast_url)
-            VALUES (%s, %s, %s, %s)
-            ON CONFLICT DO NOTHING;
+            VALUES (%s, %s, %s, %s);
             """
-        cursor.execute(query, (
+        cursor.execute(insert_query, (
             podcast_data.get('podcast_name'),
             podcast_data.get('publish_date'),
             podcast_data.get('language_id'),
             podcast_data.get('link')
         ))
 
+        return True  # Successfully inserted
 
-def load_data_to_db_from_rss(rss: str) -> None:
-    """Loads the podcast data from the RSS feed into the RDS database"""
+
+def load_data_to_db_from_rss(rss: str) -> dict:
+    """
+    Loads the podcast data from the RSS feed into the RDS database.
+
+    Returns:
+        dict with 'is_duplicate' (bool) and 'status' (str)
+    """
 
     feed = get_data_from_rss(rss)
 
@@ -77,10 +99,15 @@ def load_data_to_db_from_rss(rss: str) -> None:
         values_to_add['language_id'] = language_id
         conn.commit()
 
-        upload_podcast(conn, values_to_add)
+        is_new = upload_podcast(conn, values_to_add)
         conn.commit()
 
-        logger.info("Podcast data uploaded successfully.")
+        if is_new:
+            logger.info("New podcast uploaded successfully.")
+            return {'is_duplicate': False, 'status': 'added'}
+        else:
+            logger.info("Podcast already exists - duplicate detected.")
+            return {'is_duplicate': True, 'status': 'duplicate'}
 
 
 if __name__ == "__main__":
