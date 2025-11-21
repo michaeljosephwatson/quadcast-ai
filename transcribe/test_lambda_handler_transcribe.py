@@ -1,6 +1,10 @@
 """Test suite for lambda_handler.py module"""
 import sys  # noqa: E402
+import os  # noqa: E402
 from unittest.mock import patch, MagicMock  # noqa: E402
+
+# Add transcribe directory to path to ensure we import from the correct lambda_handler
+sys.path.insert(0, os.path.dirname(__file__))
 
 # Mock external dependencies BEFORE any other imports or lambda_handler import
 sys.modules['boto3'] = MagicMock()

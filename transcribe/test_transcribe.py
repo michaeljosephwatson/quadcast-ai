@@ -1,15 +1,19 @@
 """Test suite for transcribe.py module"""
-import pytest
-from unittest.mock import patch, MagicMock
-import sys
-from io import BytesIO
+import pytest  # noqa: E402
+from unittest.mock import patch, MagicMock  # noqa: E402
+import sys  # noqa: E402
+import os  # noqa: E402
+from io import BytesIO  # noqa: E402
+
+# Add transcribe directory to path to ensure we import from the correct modules
+sys.path.insert(0, os.path.dirname(__file__))
 
 # Mock external dependencies before importing transcribe
 sys.modules['pydub'] = MagicMock()
 sys.modules['pydub.AudioSegment'] = MagicMock()
 sys.modules['openai'] = MagicMock()
 
-from transcribe import (
+from transcribe import (  # noqa: E402
     split_audio_2min,
     transcribe_audio
 )
