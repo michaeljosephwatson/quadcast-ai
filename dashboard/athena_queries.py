@@ -81,7 +81,7 @@ if __name__ == "__main__":
 
     try:
         transcript = get_transcript_for_episode(
-            athena_client, podcast_id=7, episode_id=4)
+            athena_client, podcast_id=4, episode_id=10)
         logger.info(f"✅ Transcript fetched: {transcript}")
     except ValueError as e:
         logger.warning(f"⚠️  {e}")
