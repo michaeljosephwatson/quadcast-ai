@@ -1,8 +1,11 @@
 """OpenAI API integration for transcript analysis."""
 import os
 import json
+import logging
 from typing import Dict
 from openai import OpenAI
+
+logger = logging.getLogger(__name__)
 
 
 # Configuration
@@ -81,7 +84,7 @@ def analyze_transcript(transcript: str) -> Dict:
         - topics: List of topic strings
         - summary: Summary string
     """
-    print(f"Analyzing transcript ({len(transcript)} chars)")
+    logger.info(f"Analyzing transcript ({len(transcript)} chars)")
 
     # Build prompt
     prompt = build_analysis_prompt(transcript)
@@ -92,6 +95,6 @@ def analyze_transcript(transcript: str) -> Dict:
     # Parse and validate
     analysis = parse_analysis_response(raw_response)
 
-    print(f"Analysis complete: {len(analysis['topics'])} topics")
+    logger.info(f"Analysis complete: {len(analysis['topics'])} topics")
 
     return analysis
