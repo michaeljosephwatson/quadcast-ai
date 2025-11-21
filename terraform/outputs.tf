@@ -76,3 +76,18 @@ output "athena_results_bucket" {
   description = "S3 bucket for Athena query results"
   value       = aws_s3_bucket.athena_results.bucket
 }
+
+output "analysis_ecr_repository_url" {
+  description = "URL of the Analysis ECR repository"
+  value       = aws_ecr_repository.analysis_ecr.repository_url
+}
+
+output "analysis_lambda_function_name" {
+  description = "Name of the Analysis Lambda function"
+  value       = aws_lambda_function.analysis.function_name
+}
+
+output "analysis_lambda_arn" {
+  description = "ARN of the Analysis Lambda function"
+  value       = aws_lambda_function.analysis.arn
+}
