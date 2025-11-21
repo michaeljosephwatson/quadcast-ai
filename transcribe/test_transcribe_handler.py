@@ -16,7 +16,7 @@ sys.modules['requests'] = MagicMock()
 import pytest  # noqa: E402
 import json  # noqa: E402
 
-from lambda_handler import (  # noqa: E402
+from .lambda_handler import (  # noqa: E402
     lambda_handler,
     sanitize_s3_key,
     download_audio,
