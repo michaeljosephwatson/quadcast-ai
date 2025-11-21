@@ -92,42 +92,11 @@ def transcript_exists(s3_key: str, bucket_name: str = S3_BUCKET) -> bool:
         return False
 
 
-def save_summary_to_s3(podcast_id: int, episode_id: int, summary: str, bucket_name: str = S3_BUCKET):
-    """
-    Save analysis summary to S3.
-
-    Args:
-        podcast_id: Podcast ID
-        episode_id: Episode ID
-        summary: Summary text
-        bucket_name: S3 bucket name
-    """
-    s3 = get_s3_client()
-
-    s3_key = f"summaries/podcast_id={podcast_id}/episode_id={episode_id}/summary.txt"
-
-    try:
-        logger.info(f"Saving summary to s3://{bucket_name}/{s3_key}")
-
-        s3.put_object(
-            Bucket=bucket_name,
-            Key=s3_key,
-            Body=summary.encode('utf-8'),
-            ContentType='text/plain'
-        )
-
-        logger.info(f"Summary saved ({len(summary)} chars)")
-        return s3_key
-
-    except Exception as e:
-        raise Exception(f"Failed to save summary to S3: {str(e)}") from e
-
-
-def build_transcript_key(podcast_id: int, episode_id: int, filename: str = "data.jsonl") -> str:
-    """Build S3 key for transcript file."""
+def build_transcript_key(podcast_id: int, episode_id: int, filename: str = "transcript.txt") -> str:
+    """Build S3 key for transcript file.Returns S3 key path: transcripts/podcast_id={podcast_id}/episode_id={episode_id}/{filename}"""
     return f"transcripts/podcast_id={podcast_id}/episode_id={episode_id}/{filename}"
 
 
 def build_segment_key(podcast_id: int, episode_id: int, filename: str) -> str:
-    """Build S3 key for segment file."""
+    """Build S3 key for segment file.Returns S3 key path: segments/podcast_id={podcast_id}/episode_id={episode_id}/{filename}"""
     return f"segments/podcast_id={podcast_id}/episode_id={episode_id}/{filename}"
