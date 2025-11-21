@@ -4,6 +4,7 @@ import streamlit as st
 import pandas as pd
 from rds_queries import get_rds_connection, get_all_podcasts, get_episodes_with_podcast_info
 from api_calls import add_podcast
+from athena_queries import get_athena_connection, get_transcript_for_episode
 
 # Page configuration
 st.set_page_config(
@@ -19,6 +20,12 @@ st.set_page_config(
 def get_connection():
     """Get cached database connection"""
     return get_rds_connection()
+
+
+@st.cache_resource
+def get_athena_client():
+    """Get cached Athena client connection"""
+    return get_athena_connection()
 
 # Cache the data
 
@@ -207,7 +214,7 @@ if selected_episode is not None:
     with col1:
         if 'published_at' in selected_episode and pd.notna(selected_episode['published_at']):
             st.markdown(
-                f"**📅 Published: **"
+                f"**📅 Published:** "
                 f"{pd.to_datetime(selected_episode['published_at']).strftime('%B %d, %Y')}")
 
     with col2:
@@ -230,6 +237,61 @@ if selected_episode is not None:
             st.error(f"Unable to load audio player: {e}")
             st.markdown(
                 f"**🔗 [Direct Audio Link]({selected_episode['audio_url']})**")
+
+   # Transcript Section
+    if selected_episode['transcribed']:
+        st.markdown("---")
+        st.markdown("#### 📝 Transcript")
+
+        try:
+            athena_client = get_athena_client()
+
+            # Get the actual scalar values
+            podcast_id_raw = selected_episode['podcast_id']
+            episode_id_raw = selected_episode['episode_id']
+
+            # Convert podcast_id (it's a Series) to scalar
+            if isinstance(podcast_id_raw, pd.Series):
+                podcast_id = str(podcast_id_raw.iloc[0])
+            else:
+                podcast_id = str(podcast_id_raw)
+
+            # Episode ID is already a scalar
+            episode_id = str(episode_id_raw)
+
+            with st.spinner("Loading transcript..."):
+                transcript = get_transcript_for_episode(
+                    athena_client,
+                    podcast_id=podcast_id,
+                    episode_id=episode_id
+                )
+
+            # Display transcript in a nice scrollable container
+            st.markdown(
+                f"""
+                <div style="
+                    background-color: #1e1e1e;
+                    padding: 25px;
+                    border-radius: 10px;
+                    max-height: 500px;
+                    overflow-y: auto;
+                    border-left: 4px solid #667eea;
+                    font-family: 'Georgia', serif;
+                    line-height: 1.8;
+                    color: #e0e0e0;
+                ">
+                    <p style="margin: 0; white-space: pre-wrap; word-wrap: break-word;">
+                        {transcript}
+                    </p>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
+        except ValueError as e:
+            st.warning(f"⚠️ {str(e)}")
+        except Exception as e:
+            st.error(f"❌ Error loading transcript: {str(e)}")
 
 else:
     st.info(
