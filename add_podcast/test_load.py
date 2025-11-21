@@ -138,8 +138,8 @@ class TestLoadDataToDbFromRss:
     @patch('load.validate_feed')
     @patch('load.get_data_from_rss')
     @patch('load.get_rds_connection')
-    def test_load_data_to_db_from_rss_valid_rss(self, mock_get_conn, mock_get_data, mock_validate):
-        """Test loading podcast from valid RSS feed"""
+    def test_load_data_to_db_from_rss_valid_rss_new_podcast(self, mock_get_conn, mock_get_data, mock_validate):
+        """Test loading new podcast from valid RSS feed"""
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
         mock_cursor = MagicMock()
@@ -148,7 +148,8 @@ class TestLoadDataToDbFromRss:
         mock_conn.__exit__ = MagicMock(return_value=False)
         mock_cursor.__enter__ = MagicMock(return_value=mock_cursor)
         mock_cursor.__exit__ = MagicMock(return_value=False)
-        mock_cursor.fetchone.return_value = (1,)
+        # fetchone returns (1,) for language, then None for podcast check (not exists)
+        mock_cursor.fetchone.side_effect = [(1,), None]
         mock_get_conn.return_value = mock_conn
         mock_get_data.return_value = {'author': 'Test', 'published': 'Mon, 01 Jan 2024 00:00:00 +0000', 'language': 'en', 'link': 'http://example.com'}
         mock_validate.return_value = {'podcast_name': 'Test', 'publish_date': '2024-01-01', 'language': 'en', 'link': 'http://example.com'}
@@ -156,16 +157,19 @@ class TestLoadDataToDbFromRss:
         rss_url = 'https://example.com/feed.xml'
 
         # Act
-        load_data_to_db_from_rss(rss_url)
+        result = load_data_to_db_from_rss(rss_url)
 
         # Assert
         mock_get_conn.assert_called_once()
+        assert isinstance(result, dict)
+        assert result['is_duplicate'] is False
+        assert result['status'] == 'added'
 
     @patch('load.validate_feed')
     @patch('load.get_data_from_rss')
     @patch('load.get_rds_connection')
-    def test_load_data_to_db_from_rss_returns_none(self, mock_get_conn, mock_get_data, mock_validate):
-        """Test that function returns None"""
+    def test_load_data_to_db_from_rss_returns_dict_with_duplicate(self, mock_get_conn, mock_get_data, mock_validate):
+        """Test that function returns dict indicating duplicate when podcast already exists"""
         # Arrange
         mock_conn = MagicMock(spec=psycopg2_connection)
         mock_cursor = MagicMock()
@@ -174,7 +178,8 @@ class TestLoadDataToDbFromRss:
         mock_conn.__exit__ = MagicMock(return_value=False)
         mock_cursor.__enter__ = MagicMock(return_value=mock_cursor)
         mock_cursor.__exit__ = MagicMock(return_value=False)
-        mock_cursor.fetchone.return_value = (1,)
+        # fetchone returns (1,) on first call (language check), then (1,) on second call (podcast exists)
+        mock_cursor.fetchone.side_effect = [(1,), (1,)]
         mock_get_conn.return_value = mock_conn
         mock_get_data.return_value = {'author': 'Test', 'published': 'Mon, 01 Jan 2024 00:00:00 +0000', 'language': 'en', 'link': 'http://example.com'}
         mock_validate.return_value = {'podcast_name': 'Test', 'publish_date': '2024-01-01', 'language': 'en', 'link': 'http://example.com'}
@@ -184,7 +189,9 @@ class TestLoadDataToDbFromRss:
         result = load_data_to_db_from_rss(rss_url)
 
         # Assert
-        assert result is None
+        assert isinstance(result, dict)
+        assert result['is_duplicate'] is True
+        assert result['status'] == 'duplicate'
 
     @patch('load.validate_feed')
     @patch('load.get_data_from_rss')
