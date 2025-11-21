@@ -92,7 +92,82 @@ def transcript_exists(s3_key: str, bucket_name: str = S3_BUCKET) -> bool:
         return False
 
 
-def build_transcript_key(podcast_id: int, episode_id: int, filename: str = "transcript.txt") -> str:
+def read_segments(s3_key: str, bucket_name: str = S3_BUCKET) -> list:
+    """
+    Read diarized segments from JSONL file in S3.
+
+    Returns:
+        List of segment dicts with keys: start_time, end_time, speaker, text
+    """
+    s3 = get_s3_client()
+
+    try:
+        logger.info(f"Reading segments from s3://{bucket_name}/{s3_key}")
+
+        response = s3.get_object(Bucket=bucket_name, Key=s3_key)
+        content = response['Body'].read().decode('utf-8')
+
+        segments = []
+        for line in content.strip().split('\n'):
+            if line:
+                try:
+                    data = json.loads(line)
+                    segments.append(data)
+                except json.JSONDecodeError as e:
+                    logger.warning(
+                        f"Failed to parse segment line: {line[:100]}")
+
+        logger.info(f"Read {len(segments)} segments")
+        return segments
+
+    except ClientError as e:
+        if e.response['Error']['Code'] == 'NoSuchKey':
+            logger.warning(
+                f"Segments file not found: s3://{bucket_name}/{s3_key}")
+            return []  # Return empty list if segments don't exist
+        raise Exception(f"S3 error: {str(e)}") from e
+
+
+def save_summary_to_s3(podcast_id: int, episode_id: int, summary: str, bucket_name: str = S3_BUCKET) -> str:
+    """
+    Save analysis summary to S3.
+
+    Args:
+        podcast_id: Podcast ID
+        episode_id: Episode ID
+        summary: Summary text
+        bucket_name: S3 bucket name
+
+    Returns:
+        S3 key where summary was saved
+    """
+    s3 = get_s3_client()
+
+    s3_key = f"summaries/podcast_id={podcast_id}/episode_id={episode_id}/summary.txt"
+
+    try:
+        logger.info(f"Saving summary to s3://{bucket_name}/{s3_key}")
+
+        s3.put_object(
+            Bucket=bucket_name,
+            Key=s3_key,
+            Body=summary.encode('utf-8'),
+            ContentType='text/plain'
+        )
+
+        logger.info(f"Summary saved ({len(summary)} chars)")
+        return s3_key
+
+    except Exception as e:
+        raise Exception(f"Failed to save summary to S3: {str(e)}") from e
+
+
+def build_segments_key(podcast_id: int, episode_id: int, filename: str = "data.jsonl") -> str:
+    """Build S3 key for segments file."""
+    return f"segments/podcast_id={podcast_id}/episode_id={episode_id}/{filename}"
+
+
+def build_transcript_key(podcast_id: int, episode_id: int, filename: str = "data.jsonl") -> str:
     """Build S3 key for transcript file.Returns S3 key path: transcripts/podcast_id={podcast_id}/episode_id={episode_id}/{filename}"""
     return f"transcripts/podcast_id={podcast_id}/episode_id={episode_id}/{filename}"
 

@@ -102,23 +102,13 @@ def store_analysis(episode_id: int, analysis: Dict):
 
 
 def get_episode_analysis(episode_id: int) -> Dict:
-    """Retrieve analysis for an episode.Returns dict with 'summary' and 'topics'"""
+    """Retrieve analysis for an episode. Returns dict with 'topics' and 'speakers'"""
     logger.info(f"Retrieving analysis for episode {episode_id}")
 
     conn = get_db_connection()
 
     try:
         with conn.cursor() as cursor:
-            # Get summary
-            cursor.execute("""
-                SELECT summary
-                FROM episode
-                WHERE episode_id = %s
-            """, (episode_id,))
-
-            result = cursor.fetchone()
-            summary = result[0] if result else None
-
             # Get topics
             cursor.execute("""
                 SELECT t.topic_name
@@ -129,12 +119,23 @@ def get_episode_analysis(episode_id: int) -> Dict:
 
             topics = [row[0] for row in cursor.fetchall()]
 
+            # Get speakers
+            cursor.execute("""
+                SELECT s.speaker_name
+                FROM speakers s
+                JOIN episode_speakers es ON s.speaker_id = es.speaker_id
+                WHERE es.episode_id = %s
+            """, (episode_id,))
+
+            speakers = [row[0] for row in cursor.fetchall()]
+
             logger.info(
-                f"Retrieved analysis: {len(topics)} topics, summary={'present' if summary else 'missing'}")
+                f"Retrieved analysis: {len(topics)} topics, {len(speakers)} speakers")
 
             return {
-                'summary': summary,
-                'topics': topics
+                'topics': topics,
+                'speakers': speakers,
+                'summary': None  # Summary is stored in S3, not in database
             }
 
     finally:
@@ -160,3 +161,86 @@ def episode_exists(episode_id: int) -> bool:
 
     finally:
         conn.close()
+
+
+def store_speakers(conn: connection, episode_id: int, speaker_names: List[str]):
+    """
+    Store speakers and link to episode.
+    Handles deduplication by name (case-insensitive).
+    """
+    if not speaker_names:
+        logger.info(f"No speakers to store for episode {episode_id}")
+        return
+
+    logger.info(
+        f"Storing {len(speaker_names)} speakers for episode {episode_id}")
+
+    with conn.cursor() as cursor:
+        for speaker_name in speaker_names:
+            # Check if speaker already exists (case-insensitive)
+            cursor.execute("""
+                SELECT speaker_id 
+                FROM speakers 
+                WHERE LOWER(speaker_name) = LOWER(%s)
+            """, (speaker_name,))
+
+            result = cursor.fetchone()
+
+            if result:
+                # Speaker exists, use existing ID
+                speaker_id = result[0]
+                logger.debug(
+                    f"Speaker '{speaker_name}' already exists with ID {speaker_id}")
+            else:
+                # Insert new speaker
+                cursor.execute("""
+                    INSERT INTO speakers (speaker_name)
+                    VALUES (%s)
+                    RETURNING speaker_id
+                """, (speaker_name,))
+
+                speaker_id = cursor.fetchone()[0]
+                logger.debug(
+                    f"Created new speaker '{speaker_name}' with ID {speaker_id}")
+
+            # Link speaker to episode (avoid duplicates)
+            cursor.execute("""
+                INSERT INTO episode_speakers (episode_id, speaker_id)
+                VALUES (%s, %s)
+                ON CONFLICT DO NOTHING
+            """, (episode_id, speaker_id))
+
+    logger.info(
+        f"Stored {len(speaker_names)} speakers for episode {episode_id}")
+
+
+def store_analysis(episode_id: int, analysis: Dict):
+    """Store complete analysis results in database (topics and speakers)."""
+    logger.info(f"Storing analysis for episode {episode_id}")
+
+    if 'topics' not in analysis:
+        raise ValueError("Analysis dictionary must contain 'topics' key")
+
+    conn = get_db_connection()
+
+    try:
+        # Store topics
+        store_topics(conn, episode_id, analysis['topics'])
+
+        # Store speakers (if any identified)
+        if 'speakers' in analysis and analysis['speakers']:
+            store_speakers(conn, episode_id, analysis['speakers'])
+
+        # Commit transaction
+        conn.commit()
+        logger.info(f"✅ Successfully stored analysis for episode {episode_id}")
+
+    except Exception as e:
+        logger.error(
+            f"Failed to store analysis for episode {episode_id}: {str(e)}")
+        conn.rollback()
+        raise Exception(f"Failed to store analysis: {str(e)}") from e
+
+    finally:
+        conn.close()
+        logger.debug("Database connection closed")

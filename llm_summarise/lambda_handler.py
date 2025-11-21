@@ -1,7 +1,7 @@
 """Main Lambda handler for OpenAI analysis."""
 import json
 import logging
-from s3_client import read_transcript, build_transcript_key, save_summary_to_s3
+from s3_client import read_transcript, build_transcript_key, save_summary_to_s3, read_segments, build_segments_key
 from analyser import analyze_transcript
 from database import store_analysis, episode_exists
 
@@ -44,12 +44,18 @@ def lambda_handler(event, context):
         transcript = read_transcript(transcript_s3_key)
         logger.info(f"Read transcript: {len(transcript)} characters")
 
-        # Analyze with OpenAI
-        analysis = analyze_transcript(transcript)
+        # Read segments for speaker identification (optional - won't fail if missing)
+        segments_s3_key = build_segments_key(podcast_id, episode_id)
+        segments = read_segments(segments_s3_key)
         logger.info(
-            f"Analysis complete: {len(analysis['topics'])} topics found")
+            f"Read {len(segments)} segments for speaker identification")
 
-        # Store topics in database
+        # Analyze with OpenAI (includes speaker identification if segments provided)
+        analysis = analyze_transcript(transcript, segments)
+        logger.info(
+            f"Analysis complete: {len(analysis['topics'])} topics, {len(analysis.get('speakers', []))} speakers")
+
+        # Store topics and speakers in database
         store_analysis(episode_id, analysis)
 
         # Store summary in S3
@@ -64,6 +70,7 @@ def lambda_handler(event, context):
                 'status': 'success',
                 'episode_id': episode_id,
                 'topics_count': len(analysis['topics']),
+                'speakers_count': len(analysis.get('speakers', [])),
                 'summary_s3_key': summary_s3_key
             })
         }
