@@ -35,7 +35,12 @@ resource "aws_iam_role_policy" "step_function_lambda_policy" {
         Action = [
           "lambda:InvokeFunction"
         ]
-        Resource = aws_lambda_function.daily_pipeline.arn
+        Resource = [
+          aws_lambda_function.daily_pipeline.arn,
+          aws_lambda_function.count_episodes.arn,
+          aws_lambda_function.transcribe.arn
+          # aws_lambda_function.llm_summarise.arn  # TODO: Uncomment when llm_summarise Lambda is deployed
+        ]
       }
     ]
   })
@@ -46,13 +51,218 @@ resource "aws_sfn_state_machine" "episode_transcription_workflow" {
   name       = "c20-quadcast-episode-transcription-workflow"
   role_arn   = aws_iam_role.step_function_role.arn
   definition = jsonencode({
-    Comment = "Episode transcription workflow triggered after daily pipeline"
+    Comment = "Complete podcast episode processing workflow: discovery, transcription, and summarization"
     StartAt = "RunDailyPipeline"
     States = {
+      # Step 1: Discover new episodes
       RunDailyPipeline = {
         Type     = "Task"
         Resource = aws_lambda_function.daily_pipeline.arn
-        End      = true
+        Next     = "CountUntranscribedEpisodes"
+        Catch = [{
+          ErrorEquals = ["States.ALL"]
+          Next        = "WorkflowFailed"
+        }]
+      }
+
+      # Step 2: Count how many episodes need transcription
+      CountUntranscribedEpisodes = {
+        Type     = "Task"
+        Resource = aws_lambda_function.count_episodes.arn
+        ResultPath = "$.countResult"
+        Next     = "CheckIfTranscriptionNeeded"
+        Catch = [{
+          ErrorEquals = ["States.ALL"]
+          Next        = "WorkflowFailed"
+        }]
+      }
+
+      # Step 3: Check if there are episodes to transcribe
+      CheckIfTranscriptionNeeded = {
+        Type = "Choice"
+        Choices = [{
+          Variable      = "$.countResult.body"
+          StringMatches = "*\"count\":0*"
+          Next          = "NoWorkToDo"
+        }]
+        Default = "ParseCountResult"
+      }
+
+      # Parse the count from the JSON body
+      ParseCountResult = {
+        Type       = "Pass"
+        Parameters = {
+          "countObj.$" = "States.StringToJson($.countResult.body)"
+        }
+        ResultPath = "$.parsedCount"
+        Next       = "GenerateTranscriptionRange"
+      }
+
+      # Generate array for Map state [0, 1, 2, ..., count-1]
+      GenerateTranscriptionRange = {
+        Type = "Pass"
+        Parameters = {
+          "count.$"  = "$.parsedCount.countObj.count"
+          "range.$"  = "States.ArrayRange(0, $.parsedCount.countObj.count, 1)"
+        }
+        ResultPath = "$.transcription"
+        Next       = "TranscribeEpisodesInParallel"
+      }
+
+      # Step 4: Transcribe all episodes in parallel
+      TranscribeEpisodesInParallel = {
+        Type         = "Map"
+        ItemsPath    = "$.transcription.range"
+        MaxConcurrency = 10
+        ResultPath   = "$.transcriptionResults"
+        Iterator = {
+          StartAt = "TranscribeEpisode"
+          States = {
+            TranscribeEpisode = {
+              Type     = "Task"
+              Resource = aws_lambda_function.transcribe.arn
+              End      = true
+              Retry = [{
+                ErrorEquals     = ["States.ALL"]
+                IntervalSeconds = 2
+                MaxAttempts     = 2
+                BackoffRate     = 2.0
+              }]
+              Catch = [{
+                ErrorEquals = ["States.ALL"]
+                ResultPath  = "$.error"
+                Next        = "TranscriptionFailed"
+              }]
+            }
+            TranscriptionFailed = {
+              Type = "Pass"
+              Result = {
+                status = "failed"
+              }
+              End = true
+            }
+          }
+        }
+        Next = "WorkflowComplete"
+        Catch = [{
+          ErrorEquals = ["States.ALL"]
+          Next        = "WorkflowFailed"
+        }]
+      }
+
+      # TODO: Re-enable summarization steps when llm_summarise Lambda is deployed
+      # # Step 5: Count episodes again to see how many need summarization
+      # CountTranscribedEpisodes = {
+      #   Type     = "Task"
+      #   Resource = aws_lambda_function.count_episodes.arn
+      #   ResultPath = "$.summarizationCountResult"
+      #   Next     = "CheckIfSummarizationNeeded"
+      #   Catch = [{
+      #     ErrorEquals = ["States.ALL"]
+      #     Next        = "WorkflowFailed"
+      #   }]
+      # }
+
+      # # Step 6: Check if there are transcripts to summarize
+      # CheckIfSummarizationNeeded = {
+      #   Type = "Choice"
+      #   Choices = [{
+      #     Variable      = "$.summarizationCountResult.body"
+      #     StringMatches = "*\"count\":0*"
+      #     Next          = "WorkflowComplete"
+      #   }]
+      #   Default = "ParseSummarizationCount"
+      # }
+
+      # # Parse summarization count
+      # ParseSummarizationCount = {
+      #   Type       = "Pass"
+      #   Parameters = {
+      #     "count.$" = "States.StringToJson($.summarizationCountResult.body).count"
+      #   }
+      #   ResultPath = "$.parsedSummarizationCount"
+      #   Next       = "GenerateSummarizationRange"
+      # }
+
+      # # Generate array for summarization Map state
+      # GenerateSummarizationRange = {
+      #   Type = "Pass"
+      #   Parameters = {
+      #     "count.$"  = "$.parsedSummarizationCount.count"
+      #     "range.$"  = "States.ArrayRange(0, $.parsedSummarizationCount.count, 1)"
+      #   }
+      #   ResultPath = "$.summarization"
+      #   Next       = "SummarizeEpisodesInParallel"
+      # }
+
+      # # Step 7: Summarize all episodes in parallel
+      # SummarizeEpisodesInParallel = {
+      #   Type         = "Map"
+      #   ItemsPath    = "$.summarization.range"
+      #   MaxConcurrency = 10
+      #   ResultPath   = "$.summarizationResults"
+      #   Iterator = {
+      #     StartAt = "SummarizeEpisode"
+      #     States = {
+      #       SummarizeEpisode = {
+      #         Type     = "Task"
+      #         Resource = aws_lambda_function.llm_summarise.arn
+      #         End      = true
+      #         Retry = [{
+      #           ErrorEquals     = ["States.ALL"]
+      #           IntervalSeconds = 2
+      #           MaxAttempts     = 2
+      #           BackoffRate     = 2.0
+      #         }]
+      #         Catch = [{
+      #           ErrorEquals = ["States.ALL"]
+      #           ResultPath  = "$.error"
+      #           Next        = "SummarizationFailed"
+      #         }]
+      #       }
+      #       SummarizationFailed = {
+      #         Type = "Pass"
+      #         Result = {
+      #           status = "failed"
+      #         }
+      #         End = true
+      #       }
+      #     }
+      #   }
+      #   Next = "WorkflowComplete"
+      #   Catch = [{
+      #     ErrorEquals = ["States.ALL"]
+      #     Next        = "WorkflowFailed"
+      #   }]
+      # }
+
+      # Success states
+      NoWorkToDo = {
+        Type = "Pass"
+        Result = {
+          status  = "success"
+          message = "No episodes to process"
+        }
+        End = true
+      }
+
+      WorkflowComplete = {
+        Type = "Pass"
+        Result = {
+          status  = "success"
+          message = "All episodes processed successfully"
+        }
+        End = true
+      }
+
+      # Failure state
+      WorkflowFailed = {
+        Type = "Pass"
+        Result = {
+          status  = "failed"
+          message = "Workflow encountered an error"
+        }
+        End = true
       }
     }
   })
