@@ -250,7 +250,7 @@ if selected_episode is not None:
             podcast_id_raw = selected_episode['podcast_id']
             episode_id_raw = selected_episode['episode_id']
 
-            # Convert podcast_id series to str
+            # Convert podcast_id (it's a Series) to scalar
             if isinstance(podcast_id_raw, pd.Series):
                 podcast_id = str(podcast_id_raw.iloc[0])
             else:
@@ -266,9 +266,27 @@ if selected_episode is not None:
                     episode_id=episode_id
                 )
 
-            # Display transcript in expandable section
-            with st.expander("📖 View Full Transcript", expanded=False):
-                st.markdown(transcript)
+            # Display transcript in a nice scrollable container
+            st.markdown(
+                f"""
+                <div style="
+                    background-color: #1e1e1e;
+                    padding: 25px;
+                    border-radius: 10px;
+                    max-height: 500px;
+                    overflow-y: auto;
+                    border-left: 4px solid #667eea;
+                    font-family: 'Georgia', serif;
+                    line-height: 1.8;
+                    color: #e0e0e0;
+                ">
+                    <p style="margin: 0; white-space: pre-wrap; word-wrap: break-word;">
+                        {transcript}
+                    </p>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
 
         except ValueError as e:
             st.warning(f"⚠️ {str(e)}")
