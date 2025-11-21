@@ -91,6 +91,10 @@ resource "aws_glue_crawler" "quadcast_transcripts" {
     path = "s3://${aws_s3_bucket.quadcast_data.bucket}/segments/"
   }
 
+  s3_target {
+    path = "s3://${aws_s3_bucket.quadcast_data.bucket}/summaries/"
+  }
+
   schema_change_policy {
     delete_behavior = "LOG"
     update_behavior = "UPDATE_IN_DATABASE"
