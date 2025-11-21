@@ -45,3 +45,13 @@ def transcript_exists(s3_key: str, bucket_name: str = S3_BUCKET) -> bool:
         return True
     except ClientError:
         return False
+
+
+def build_transcript_key(podcast_id: int, episode_id: int, filename: str = "transcript.txt") -> str:
+    """Build S3 key for transcript file.Returns S3 key path: transcripts/podcast_id={podcast_id}/episode_id={episode_id}/{filename}"""
+    return f"transcripts/podcast_id={podcast_id}/episode_id={episode_id}/{filename}"
+
+
+def build_segment_key(podcast_id: int, episode_id: int, filename: str) -> str:
+    """Build S3 key for segment file.Returns S3 key path: segments/podcast_id={podcast_id}/episode_id={episode_id}/{filename}"""
+    return f"segments/podcast_id={podcast_id}/episode_id={episode_id}/{filename}"
