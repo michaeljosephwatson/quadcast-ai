@@ -20,7 +20,8 @@ RDS_PORT = int(os.getenv('RDS_PORT', 5432))
 
 def get_db_connection() -> connection:
     """Create database connection."""
-    logger.info(f"Connecting to database: {RDS_HOST}:{RDS_PORT}/{RDS_DB_NAME}")
+    logger.info(
+        f"Connecting to database: {RDS_HOST}:{RDS_PORT}/{RDS_DB_NAME} as {RDS_USERNAME}")
 
     conn = psycopg2.connect(
         host=RDS_HOST,
@@ -40,17 +41,29 @@ def store_topics(conn: connection, episode_id: int, topics: List[str]):
 
     with conn.cursor() as cursor:
         for topic_name in topics:
+            # Try to insert topic; if it already exists, fetch its topic_id
             cursor.execute("""
                 INSERT INTO topics (topic_name)
                 VALUES (%s)
-                ON CONFLICT (topic_name) DO UPDATE
-                SET topic_name = EXCLUDED.topic_name
+                ON CONFLICT (topic_name) DO NOTHING
                 RETURNING topic_id
             """, (topic_name,))
 
-            topic_id = cursor.fetchone()[0]
+            result = cursor.fetchone()
+            if result is not None:
+                # New topic was inserted
+                topic_id = result[0]
+            else:
+                # Topic already exists, fetch it
+                cursor.execute(
+                    "SELECT topic_id FROM topics WHERE topic_name = %s",
+                    (topic_name,)
+                )
+                topic_id = cursor.fetchone()[0]
+
             logger.debug(f"Topic '{topic_name}' has ID {topic_id}")
 
+            # Link topic to episode
             cursor.execute("""
                 INSERT INTO episode_topics (episode_id, topic_id)
                 VALUES (%s, %s)
@@ -63,6 +76,9 @@ def store_topics(conn: connection, episode_id: int, topics: List[str]):
 def store_analysis(episode_id: int, analysis: Dict):
     """Store complete analysis results in database (topics only)."""
     logger.info(f"Storing analysis for episode {episode_id}")
+
+    if 'topics' not in analysis:
+        raise ValueError("Analysis dictionary must contain 'topics' key")
 
     conn = get_db_connection()
 

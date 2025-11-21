@@ -5,9 +5,8 @@ from s3_client import read_transcript, build_transcript_key, save_summary_to_s3
 from analyser import analyze_transcript
 from database import store_analysis, episode_exists
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 
 def lambda_handler(event, context):

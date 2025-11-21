@@ -19,13 +19,7 @@ def get_s3_client():
 
 
 def read_transcript_jsonl(s3_key: str, bucket_name: str = S3_BUCKET) -> str:
-    """
-    Read transcript from JSONL file in S3.
-    Extracts 'text' field from each line and concatenates.
-
-    Returns:
-        Full transcript as string
-    """
+    """Read transcript from JSONL file in S3.Extracts 'text' field from each line and concatenates. Returns full transcript as string"""
     s3 = get_s3_client()
 
     try:
@@ -38,10 +32,16 @@ def read_transcript_jsonl(s3_key: str, bucket_name: str = S3_BUCKET) -> str:
         transcript_parts = []
         for line in content.strip().split('\n'):
             if line:
-                data = json.loads(line)
-                # Extract text field (adjust field name if different)
-                text = data.get('transcript_text', '')
-                transcript_parts.append(text)
+                try:
+                    data = json.loads(line)
+                    text = data.get('transcript_text', '')
+                    if not text:
+                        logger.warning(
+                            f"Line missing 'transcript_text': {line[:100]}")
+                    transcript_parts.append(text)
+                except json.JSONDecodeError as e:
+                    logger.error(f"Failed to parse JSON line: {line[:100]}")
+                    raise Exception(f"Invalid JSONL format: {str(e)}") from e
 
         full_transcript = ' '.join(transcript_parts)
         logger.info(
