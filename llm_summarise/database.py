@@ -1,9 +1,13 @@
 """Database operations for storing analysis results."""
 import os
 import logging
+from dotenv import load_dotenv
 import psycopg2
 from psycopg2.extensions import connection
 from typing import Dict, List
+
+# Load environment variables
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 
@@ -28,20 +32,6 @@ def get_db_connection() -> connection:
 
     logger.info("Database connection established")
     return conn
-
-
-def update_episode_summary(conn: connection, episode_id: int, summary: str):
-    """Update episode with summary."""
-    logger.info(f"Updating summary for episode {episode_id}")
-
-    with conn.cursor() as cursor:
-        cursor.execute("""
-            UPDATE episode
-            SET summary = %s
-            WHERE episode_id = %s
-        """, (summary, episode_id))
-
-    logger.info(f"Summary updated for episode {episode_id}")
 
 
 def store_topics(conn: connection, episode_id: int, topics: List[str]):
@@ -71,16 +61,13 @@ def store_topics(conn: connection, episode_id: int, topics: List[str]):
 
 
 def store_analysis(episode_id: int, analysis: Dict):
-    """Store complete analysis results in database."""
+    """Store complete analysis results in database (topics only)."""
     logger.info(f"Storing analysis for episode {episode_id}")
 
     conn = get_db_connection()
 
     try:
-        # Update episode summary
-        update_episode_summary(conn, episode_id, analysis['summary'])
-
-        # Store topics
+        # Only store topics (no summary)
         store_topics(conn, episode_id, analysis['topics'])
 
         # Commit transaction
