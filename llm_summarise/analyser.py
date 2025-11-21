@@ -20,7 +20,8 @@ def get_openai_client():
 
 def extract_speaker_samples(segments: List[Dict], max_chars_per_speaker: int = 500) -> Dict[str, str]:
     """Extract representative text samples from each speaker."""
-    logger.info(f"Extracting speaker samples from {len(segments)} segments (max {max_chars_per_speaker} chars per speaker)")
+    logger.info(
+        f"Extracting speaker samples from {len(segments)} segments (max {max_chars_per_speaker} chars per speaker)")
     speaker_samples = {}
 
     for segment in segments:
@@ -48,7 +49,8 @@ def extract_speaker_samples(segments: List[Dict], max_chars_per_speaker: int = 5
 
 def build_analysis_prompt(transcript: str, speaker_samples: Dict[str, str] = None) -> str:
     """Build prompt for OpenAI analysis with optional speaker samples."""
-    logger.info(f"Building analysis prompt (transcript: {len(transcript)} chars, speaker_samples: {bool(speaker_samples)})")
+    logger.info(
+        f"Building analysis prompt (transcript: {len(transcript)} chars, speaker_samples: {bool(speaker_samples)})")
     # Truncate transcript to avoid token limits (~10k chars = ~2500 tokens)
     truncated = transcript[:10000]
 
@@ -93,7 +95,8 @@ If no speaker names are identifiable, return empty speakers array: "speakers": [
 
 def call_openai_api(prompt: str) -> Dict:
     """Calls OpenAI API and returns parsed JSON response."""
-    logger.info(f"Calling OpenAI API with {OPENAI_MODEL} model (prompt: {len(prompt)} chars)")
+    logger.info(
+        f"Calling OpenAI API with {OPENAI_MODEL} model (prompt: {len(prompt)} chars)")
     client = get_openai_client()
 
     try:
@@ -127,34 +130,44 @@ def call_openai_api(prompt: str) -> Dict:
 
 def parse_analysis_response(response: Dict) -> Dict:
     """Parses and validates OpenAI response into structured format."""
-    logger.info(f"Parsing response with {len(response.get('topics', []))} topics, {len(response.get('speakers', []))} speakers")
+    logger.info(
+        f"Parsing response with {len(response.get('topics', []))} topics, {len(response.get('speakers', []))} speakers")
     speakers = response.get('speakers', [])
 
-    # Ensure speakers is a list of dicts with 'name' key
+    # Ensure speakers is a list of dicts with valid 'name' string
     validated_speakers = []
     for speaker in speakers:
-        if isinstance(speaker, dict) and 'name' in speaker and speaker['name']:
-            validated_speakers.append(speaker['name'])
-            logger.debug(f"Validated speaker: {speaker['name']}")
+        if isinstance(speaker, dict) and 'name' in speaker:
+            name = speaker['name']
+            # Validate name is a non-empty string
+            if isinstance(name, str) and name.strip():
+                validated_speakers.append(name.strip())
+                logger.debug(f"Validated speaker: {name}")
+            else:
+                logger.warning(
+                    f"Skipping invalid speaker name (not a string): {name}")
 
     result = {
         'topics': response.get('topics', []),
         'summary': response.get('summary', ''),
         'speakers': validated_speakers
     }
-    logger.info(f"Parsed {len(result['topics'])} topics, {len(result['speakers'])} speakers")
+    logger.info(
+        f"Parsed {len(result['topics'])} topics, {len(result['speakers'])} speakers")
     return result
 
 
 def analyze_transcript(transcript: str, segments: List[Dict] = None) -> Dict:
     """Analyzes transcript using OpenAI API and returns topics, summary, and speakers."""
-    logger.info(f"Starting analysis: {len(transcript)} chars, {len(segments or [])} segments")
+    logger.info(
+        f"Starting analysis: {len(transcript)} chars, {len(segments or [])} segments")
 
     # Extract speaker samples if segments provided
     speaker_samples = None
     if segments:
         speaker_samples = extract_speaker_samples(segments)
-        logger.info(f"Using {len(speaker_samples)} speaker samples for identification")
+        logger.info(
+            f"Using {len(speaker_samples)} speaker samples for identification")
 
     # Build prompt
     logger.debug("Building analysis prompt")
@@ -168,5 +181,6 @@ def analyze_transcript(transcript: str, segments: List[Dict] = None) -> Dict:
     logger.debug("Parsing response")
     analysis = parse_analysis_response(raw_response)
 
-    logger.info(f"Analysis complete: {len(analysis['topics'])} topics, {len(analysis['speakers'])} speakers")
+    logger.info(
+        f"Analysis complete: {len(analysis['topics'])} topics, {len(analysis['speakers'])} speakers")
     return analysis
