@@ -2,7 +2,6 @@
 import pytest
 from unittest.mock import MagicMock, patch
 from database import (
-    update_episode_summary,
     store_topics,
     store_analysis,
     get_episode_analysis
@@ -23,18 +22,6 @@ def mock_connection():
     conn.cursor.return_value.__enter__.return_value = cursor
     conn.cursor.return_value.__exit__.return_value = None
     return conn, cursor
-
-
-def test_update_episode_summary(mock_connection):
-    """Should update episode summary."""
-    conn, cursor = mock_connection
-
-    update_episode_summary(conn, episode_id=123, summary="Test summary")
-
-    cursor.execute.assert_called_once()
-    call_args = cursor.execute.call_args[0]
-    assert "UPDATE episode" in call_args[0]
-    assert call_args[1] == ("Test summary", 123)
 
 
 def test_store_topics_new_topics(mock_connection):
