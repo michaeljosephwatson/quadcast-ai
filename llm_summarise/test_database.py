@@ -25,7 +25,7 @@ def mock_connection():
 
 
 def test_store_topics_new_topics(mock_connection):
-    """Should insert new topics and link to episode."""
+    """Tests inserting new topics and linking to episode."""
     conn, cursor = mock_connection
 
     # Mock topic_id returns
@@ -86,18 +86,19 @@ def test_get_episode_analysis_success(mock_get_conn):
     mock_cursor = MagicMock()
     mock_conn.cursor.return_value.__enter__.return_value = mock_cursor
 
-    # Mock summary query
-    mock_cursor.fetchone.return_value = ("Test summary",)
-
-    # Mock topics query
-    mock_cursor.fetchall.return_value = [("AI",), ("ML",), ("Ethics",)]
+    # Mock fetchall for topics and speakers (called twice)
+    mock_cursor.fetchall.side_effect = [
+        [("AI",), ("ML",), ("Ethics",)],  # Topics
+        [("Speaker 1",), ("Speaker 2",)]   # Speakers
+    ]
 
     mock_get_conn.return_value = mock_conn
 
     result = get_episode_analysis(episode_id=123)
 
-    assert result['summary'] == "Test summary"
+    assert result['summary'] is None
     assert result['topics'] == ["AI", "ML", "Ethics"]
+    assert result['speakers'] == ["Speaker 1", "Speaker 2"]
     mock_conn.close.assert_called_once()
 
 
