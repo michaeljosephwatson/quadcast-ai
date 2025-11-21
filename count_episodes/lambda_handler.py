@@ -1,4 +1,5 @@
 """Lambda function to count untranscribed episodes in the database."""
+
 import os
 import json
 import logging
@@ -41,7 +42,6 @@ def get_rds_connection() -> connection:
             port=int(secret['RDS_PORT'])
         )
     else:
-        # Local testing with direct env vars
         conn = connect(
             host=os.getenv("RDS_HOST"),
             database=os.getenv("RDS_DB_NAME"),
@@ -55,6 +55,7 @@ def get_rds_connection() -> connection:
 
 def count_untranscribed_episodes(conn: connection) -> int:
     """Count episodes that need transcription."""
+
     with conn.cursor() as cursor:
         cursor.execute("""
             SELECT COUNT(*)
@@ -72,6 +73,7 @@ def lambda_handler(event, context):
     Returns:
         dict: Response with count of untranscribed episodes
     """
+
     logger.info("Starting count_episodes Lambda")
 
     try:
@@ -84,7 +86,7 @@ def lambda_handler(event, context):
         # Close connection
         conn.close()
 
-        logger.info(f"Found {count} untranscribed episodes")
+        logger.info("Found %s untranscribed episodes", count)
 
         return {
             'statusCode': 200,
@@ -94,7 +96,7 @@ def lambda_handler(event, context):
         }
 
     except Exception as e:
-        logger.error(f"Error counting episodes: {str(e)}", exc_info=True)
+        logger.error("Error counting episodes: %s", str(e), exc_info=True)
 
         if 'conn' in locals():
             conn.close()
