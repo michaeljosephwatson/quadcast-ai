@@ -193,7 +193,7 @@ class TestValidateFeed:
     def test_validate_feed_valid(self):
         """Test with a valid feed dictionary"""
         feed = {
-            "author": "My Podcast",
+            "title": "My Podcast",
             "published": "Mon, 01 Jan 2024 12:00:00 +0000",
             "language": "en-us",
             "link": "https://example.com/feed"
@@ -207,7 +207,7 @@ class TestValidateFeed:
     def test_validate_feed_with_spaces(self):
         """Test that feed data is properly cleaned"""
         feed = {
-            "author": "  My Podcast  ",
+            "title": "  My Podcast  ",
             "published": "Mon, 01 Jan 2024 12:00:00 +0000",
             "language": "  EN-US  ",
             "link": "https://example.com"
@@ -216,8 +216,8 @@ class TestValidateFeed:
         assert result["podcast_name"] == "My Podcast"
         assert result["language"] == "en-us"
 
-    def test_validate_feed_missing_author(self):
-        """Test that missing author raises ValueError"""
+    def test_validate_feed_missing_title(self):
+        """Test that missing title raises ValueError"""
         feed = {
             "published": "Mon, 01 Jan 2024 12:00:00 +0000",
             "language": "en-us",
@@ -229,7 +229,7 @@ class TestValidateFeed:
     def test_validate_feed_missing_published(self):
         """Test that missing published raises ValueError"""
         feed = {
-            "author": "My Podcast",
+            "title": "My Podcast",
             "language": "en-us",
             "link": "https://example.com"
         }
@@ -239,7 +239,7 @@ class TestValidateFeed:
     def test_validate_feed_missing_language(self):
         """Test that missing language raises ValueError"""
         feed = {
-            "author": "My Podcast",
+            "title": "My Podcast",
             "published": "Mon, 01 Jan 2024 12:00:00 +0000",
             "link": "https://example.com"
         }
@@ -249,17 +249,17 @@ class TestValidateFeed:
     def test_validate_feed_missing_link(self):
         """Test that missing link is handled (not required)"""
         feed = {
-            "author": "My Podcast",
+            "title": "My Podcast",
             "published": "Mon, 01 Jan 2024 12:00:00 +0000",
             "language": "en-us"
         }
         result = validate_feed(feed)
         assert result["link"] is None
 
-    def test_validate_feed_invalid_author(self):
-        """Test that invalid author raises ValueError"""
+    def test_validate_feed_invalid_title(self):
+        """Test that invalid title raises ValueError"""
         feed = {
-            "author": "",
+            "title": "",
             "published": "Mon, 01 Jan 2024 12:00:00 +0000",
             "language": "en-us",
             "link": "https://example.com"
@@ -270,7 +270,7 @@ class TestValidateFeed:
     def test_validate_feed_invalid_published_format(self):
         """Test that invalid publish date format raises ValueError"""
         feed = {
-            "author": "My Podcast",
+            "title": "My Podcast",
             "published": "2024-01-01",
             "language": "en-us",
             "link": "https://example.com"
@@ -281,7 +281,7 @@ class TestValidateFeed:
     def test_validate_feed_invalid_language(self):
         """Test that invalid language raises ValueError"""
         feed = {
-            "author": "My Podcast",
+            "title": "My Podcast",
             "published": "Mon, 01 Jan 2024 12:00:00 +0000",
             "language": "",
             "link": "https://example.com"
@@ -292,7 +292,7 @@ class TestValidateFeed:
     def test_validate_feed_extra_fields(self):
         """Test that extra fields in feed are ignored"""
         feed = {
-            "author": "My Podcast",
+            "title": "My Podcast",
             "published": "Mon, 01 Jan 2024 12:00:00 +0000",
             "language": "en-us",
             "link": "https://example.com",
@@ -305,9 +305,9 @@ class TestValidateFeed:
         assert len(result) == 4
 
     def test_validate_feed_with_special_characters(self):
-        """Test feed with special characters in author"""
+        """Test feed with special characters in title"""
         feed = {
-            "author": "Podcast & Show #1",
+            "title": "Podcast & Show #1",
             "published": "Mon, 01 Jan 2024 12:00:00 +0000",
             "language": "en-us",
             "link": "https://example.com"
@@ -318,7 +318,7 @@ class TestValidateFeed:
     def test_validate_feed_complex_language_code(self):
         """Test feed with complex language code"""
         feed = {
-            "author": "My Podcast",
+            "title": "My Podcast",
             "published": "Mon, 01 Jan 2024 12:00:00 +0000",
             "language": "zh-CN",
             "link": "https://example.com"

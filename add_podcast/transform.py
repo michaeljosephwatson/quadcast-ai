@@ -68,7 +68,7 @@ def get_rss_link(feed: dict) -> str:
 def validate_feed(feed: dict) -> dict:
     """Validates the feed data to ensure required fields are present."""
 
-    podcast_name = validate_podcast_name(feed.get("author"))
+    podcast_name = validate_podcast_name(feed.get("title"))
     publish_date = validate_publish_date(feed.get("published"))
     language = validate_language(feed.get("language"))
     link = get_rss_link(feed)
