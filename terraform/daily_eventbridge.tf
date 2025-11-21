@@ -45,7 +45,7 @@ resource "aws_iam_role_policy" "eventbridge_step_function_policy" {
 resource "aws_cloudwatch_event_rule" "episode_transcription_schedule" {
   name                = "c20-quadcast-episode-transcription-schedule"
   description         = "Trigger episode transcription Step Function on schedule"
-  schedule_expression = "cron(0 0 * * ? *)" #Runs everyday at midnight
+  schedule_expression = "cron(0 0 * * ? *)" #Runs every day at midnight
 
   tags = {
     Name        = "c20-quadcast-episode-transcription-schedule"

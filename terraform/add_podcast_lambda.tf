@@ -102,6 +102,39 @@ resource "aws_iam_role_policy_attachment" "lambda_secrets_access" {
   policy_arn = aws_iam_policy.lambda_secrets_access.arn
 }
 
+
+# IAM Policy for Step Function Invocation
+resource "aws_iam_policy" "lambda_stepfunctions_execution" {
+  name        = "c20-quadcast-lambda-stepfunctions-execution"
+  description = "Allow Lambda to invoke the episode transcription Step Function"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "states:StartExecution"
+        ]
+        Resource = aws_sfn_state_machine.episode_transcription_workflow.arn
+      }
+    ]
+  })
+
+  tags = {
+    Name        = "c20-quadcast-lambda-stepfunctions-execution"
+    Project     = "QuadCast"
+    Environment = "dev"
+  }
+}
+
+
+resource "aws_iam_role_policy_attachment" "lambda_stepfunctions_execution" {
+  role       = aws_iam_role.add_podcast_lambda.name
+  policy_arn = aws_iam_policy.lambda_stepfunctions_execution.arn
+}
+
+
 # CloudWatch Log Group for Lambda
 resource "aws_cloudwatch_log_group" "add_podcast_lambda" {
   name              = "/aws/lambda/c20-quadcast-add-podcast"
@@ -137,7 +170,8 @@ resource "aws_lambda_function" "add_podcast" {
     aws_cloudwatch_log_group.add_podcast_lambda,
     aws_iam_role_policy_attachment.lambda_vpc_execution,
     aws_iam_role_policy_attachment.lambda_basic_execution,
-    aws_iam_role_policy_attachment.lambda_secrets_access
+    aws_iam_role_policy_attachment.lambda_secrets_access,
+    aws_iam_role_policy_attachment.lambda_stepfunctions_execution  # ADD THIS LINE
   ]
 
   tags = {
