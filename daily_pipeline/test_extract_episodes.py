@@ -323,8 +323,8 @@ class TestGetNewEpisodesSince:
 
             assert result == []
 
-    def test_returns_latest_20_when_since_date_is_none(self):
-        """Test that latest 20 episodes are returned when since_date is None"""
+    def test_returns_latest_5_when_since_date_is_none(self):
+        """Test that latest 5 episodes are returned when since_date is None"""
 
         with patch('extract_episodes.feedparser.parse') as mock_parse:
             mock_feed = MagicMock()
@@ -338,7 +338,7 @@ class TestGetNewEpisodesSince:
             result = get_new_episodes_since(
                 "https://example.com/feed.rss", None)
 
-            assert len(result) == 20
+            assert len(result) == 5
             assert result[0]['title'] == 'Episode 0'
 
     def test_invalid_url_format(self):
