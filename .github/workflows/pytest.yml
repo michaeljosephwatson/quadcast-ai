@@ -36,5 +36,10 @@ jobs:
           pip install -r "$req_file"
         done
 
+    - name: Clean up Python cache
+      run: |
+        find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+        find . -type f -name "*.pyc" -delete
+
     - name: Run tests
-      run: pytest
+      run: pytest --tb=short -p no:cacheprovider
