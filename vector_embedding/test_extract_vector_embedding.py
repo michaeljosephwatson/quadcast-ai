@@ -4,7 +4,7 @@ import logging
 from unittest.mock import patch, MagicMock
 from botocore.exceptions import ClientError
 
-from extract import (
+from vector_embedding.extract import (
     get_s3_client,
     build_transcript_key,
     read_transcript_jsonl,
@@ -16,7 +16,7 @@ from extract import (
 class TestGetS3Client:
     """Test suite for get_s3_client function"""
 
-    @patch('extract.boto3.client')
+    @patch('vector_embedding.extract.boto3.client')
     def test_get_s3_client_returns_client(self, mock_boto3_client):
         """Test that get_s3_client returns a boto3 S3 client"""
         # Arrange
@@ -31,7 +31,7 @@ class TestGetS3Client:
         mock_boto3_client.assert_called_once_with(
             's3', region_name='eu-west-2')
 
-    @patch('extract.boto3.client')
+    @patch('vector_embedding.extract.boto3.client')
     def test_get_s3_client_uses_default_region(self, mock_boto3_client):
         """Test that get_s3_client uses correct default region"""
         # Arrange
@@ -45,8 +45,8 @@ class TestGetS3Client:
         call_args = mock_boto3_client.call_args
         assert call_args[1]['region_name'] == 'eu-west-2'
 
-    @patch('extract.AWS_REGION', 'us-east-1')
-    @patch('extract.boto3.client')
+    @patch('vector_embedding.extract.AWS_REGION', 'us-east-1')
+    @patch('vector_embedding.extract.boto3.client')
     def test_get_s3_client_uses_env_region(self, mock_boto3_client):
         """Test that get_s3_client respects AWS_REGION environment variable"""
         # Arrange
@@ -107,7 +107,7 @@ class TestBuildTranscriptKey:
 class TestReadTranscriptJsonl:
     """Test suite for read_transcript_jsonl function"""
 
-    @patch('extract.get_s3_client')
+    @patch('vector_embedding.extract.get_s3_client')
     def test_read_single_line_jsonl(self, mock_get_client, caplog):
         """Test reading single-line JSONL file"""
         # Arrange
@@ -129,7 +129,7 @@ class TestReadTranscriptJsonl:
             Key='test/path.jsonl'
         )
 
-    @patch('extract.get_s3_client')
+    @patch('vector_embedding.extract.get_s3_client')
     def test_read_multiline_jsonl_concatenates(self, mock_get_client):
         """Test reading multi-line JSONL concatenates all segments"""
         # Arrange
@@ -151,7 +151,7 @@ class TestReadTranscriptJsonl:
         # Assert
         assert result == "Hello world This is a test Final segment"
 
-    @patch('extract.get_s3_client')
+    @patch('vector_embedding.extract.get_s3_client')
     def test_read_jsonl_handles_empty_lines(self, mock_get_client):
         """Test that empty lines are skipped"""
         # Arrange
@@ -173,7 +173,7 @@ class TestReadTranscriptJsonl:
         # Assert
         assert result == "First line Second line"
 
-    @patch('extract.get_s3_client')
+    @patch('vector_embedding.extract.get_s3_client')
     def test_read_jsonl_file_not_found_error(self, mock_get_client):
         """Test FileNotFoundError is raised for NoSuchKey"""
         # Arrange
@@ -188,7 +188,7 @@ class TestReadTranscriptJsonl:
         with pytest.raises(FileNotFoundError, match="Not found"):
             read_transcript_jsonl('nonexistent.jsonl')
 
-    @patch('extract.get_s3_client')
+    @patch('vector_embedding.extract.get_s3_client')
     def test_read_jsonl_other_s3_errors(self, mock_get_client):
         """Test that other S3 errors are raised as Exception"""
         # Arrange
@@ -203,7 +203,7 @@ class TestReadTranscriptJsonl:
         with pytest.raises(Exception, match="S3 error"):
             read_transcript_jsonl('test.jsonl')
 
-    @patch('extract.get_s3_client')
+    @patch('vector_embedding.extract.get_s3_client')
     def test_read_jsonl_invalid_json(self, mock_get_client):
         """Test that malformed JSON raises Exception"""
         # Arrange
@@ -222,7 +222,7 @@ class TestReadTranscriptJsonl:
         with pytest.raises(Exception, match="Invalid JSONL format at line 2"):
             read_transcript_jsonl('test.jsonl')
 
-    @patch('extract.get_s3_client')
+    @patch('vector_embedding.extract.get_s3_client')
     def test_read_jsonl_missing_transcript_text_field(self, mock_get_client, caplog):
         """Test handling missing transcript_text field"""
         # Arrange
@@ -245,7 +245,7 @@ class TestReadTranscriptJsonl:
         assert result == "Valid text  More valid text"
         assert "missing 'transcript_text'" in caplog.text
 
-    @patch('extract.get_s3_client')
+    @patch('vector_embedding.extract.get_s3_client')
     def test_read_jsonl_no_transcript_text_found(self, mock_get_client, caplog):
         """Test warning logged when line has no transcript_text"""
         # Arrange
@@ -264,7 +264,7 @@ class TestReadTranscriptJsonl:
         assert result == ''  # Empty string since no valid transcript_text found
         assert "missing 'transcript_text'" in caplog.text
 
-    @patch('extract.get_s3_client')
+    @patch('vector_embedding.extract.get_s3_client')
     def test_read_jsonl_custom_bucket(self, mock_get_client):
         """Test reading from custom bucket"""
         # Arrange
@@ -285,7 +285,7 @@ class TestReadTranscriptJsonl:
             Key='test/path.jsonl'
         )
 
-    @patch('extract.get_s3_client')
+    @patch('vector_embedding.extract.get_s3_client')
     def test_read_jsonl_logs_extraction_info(self, mock_get_client, caplog):
         """Test that extraction information is logged"""
         # Arrange
@@ -310,8 +310,8 @@ class TestReadTranscriptJsonl:
 class TestReadTranscriptForEmbedding:
     """Test suite for read_transcript_for_embedding function"""
 
-    @patch('extract.read_transcript_jsonl')
-    @patch('extract.build_transcript_key')
+    @patch('vector_embedding.extract.read_transcript_jsonl')
+    @patch('vector_embedding.extract.build_transcript_key')
     def test_read_transcript_for_embedding_success(self, mock_build_key, mock_read_jsonl, caplog):
         """Test successfully reading transcript for embedding"""
         # Arrange
@@ -331,8 +331,8 @@ class TestReadTranscriptForEmbedding:
         )
         assert "Extracting transcript for podcast_id=5, episode_id=123" in caplog.text
 
-    @patch('extract.read_transcript_jsonl')
-    @patch('extract.build_transcript_key')
+    @patch('vector_embedding.extract.read_transcript_jsonl')
+    @patch('vector_embedding.extract.build_transcript_key')
     def test_read_transcript_for_embedding_propagates_filenotfound(self, mock_build_key, mock_read_jsonl):
         """Test FileNotFoundError is propagated"""
         # Arrange
@@ -343,8 +343,8 @@ class TestReadTranscriptForEmbedding:
         with pytest.raises(FileNotFoundError):
             read_transcript_for_embedding(podcast_id=5, episode_id=123)
 
-    @patch('extract.read_transcript_jsonl')
-    @patch('extract.build_transcript_key')
+    @patch('vector_embedding.extract.read_transcript_jsonl')
+    @patch('vector_embedding.extract.build_transcript_key')
     def test_read_transcript_for_embedding_propagates_exceptions(self, mock_build_key, mock_read_jsonl):
         """Test other exceptions are propagated"""
         # Arrange
@@ -355,8 +355,8 @@ class TestReadTranscriptForEmbedding:
         with pytest.raises(Exception, match="S3 error"):
             read_transcript_for_embedding(podcast_id=5, episode_id=123)
 
-    @patch('extract.read_transcript_jsonl')
-    @patch('extract.build_transcript_key')
+    @patch('vector_embedding.extract.read_transcript_jsonl')
+    @patch('vector_embedding.extract.build_transcript_key')
     def test_read_transcript_for_embedding_long_transcript(self, mock_build_key, mock_read_jsonl):
         """Test handling very long transcripts"""
         # Arrange
@@ -371,8 +371,8 @@ class TestReadTranscriptForEmbedding:
         assert result == long_transcript
         assert len(result) > 20000
 
-    @patch('extract.read_transcript_jsonl')
-    @patch('extract.build_transcript_key')
+    @patch('vector_embedding.extract.read_transcript_jsonl')
+    @patch('vector_embedding.extract.build_transcript_key')
     def test_read_transcript_for_embedding_logs_success(self, mock_build_key, mock_read_jsonl, caplog):
         """Test successful extraction is logged"""
         # Arrange
