@@ -231,10 +231,25 @@ resource "aws_sfn_state_machine" "episode_transcription_workflow" {
             }
           }
         }
-        Next = "WorkflowComplete"
+        Next = "RunGlueCrawler"
         Catch = [{
           ErrorEquals = ["States.ALL"]
           Next        = "WorkflowFailed"
+        }]
+      }
+
+      # Step 6: Run Glue Crawler to update schema
+      RunGlueCrawler = {
+        Type     = "Task"
+        Resource = "arn:aws:states:::aws-sdk:glue:startCrawler"
+        Parameters = {
+          Name = aws_glue_crawler.quadcast_transcripts.name
+        }
+        Next = "WorkflowComplete"
+        Catch = [{
+          ErrorEquals = ["States.ALL"]
+          ResultPath  = "$.crawlerError"
+          Next        = "WorkflowComplete"
         }]
       }
 
