@@ -55,6 +55,7 @@ def read_transcript_jsonl(s3_key: str, bucket_name: str = S3_BUCKET) -> str:
         text = data.get('transcript_text', '')
         if not text:
             logger.warning(f"Line {line_num} missing 'transcript_text'")
+            continue
 
         transcript_parts.append(text)
 
