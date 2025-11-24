@@ -1,10 +1,7 @@
 """Test suite for extract.py module in vector_embedding pipeline."""
 import pytest
-import json
-import os
 import logging
-from unittest.mock import patch, MagicMock, Mock
-from io import BytesIO
+from unittest.mock import patch, MagicMock
 from botocore.exceptions import ClientError
 
 from extract import (
@@ -31,7 +28,8 @@ class TestGetS3Client:
 
         # Assert
         assert result == mock_client
-        mock_boto3_client.assert_called_once_with('s3', region_name='eu-west-2')
+        mock_boto3_client.assert_called_once_with(
+            's3', region_name='eu-west-2')
 
     @patch('extract.boto3.client')
     def test_get_s3_client_uses_default_region(self, mock_boto3_client):
@@ -183,7 +181,8 @@ class TestReadTranscriptJsonl:
         mock_get_client.return_value = mock_s3
 
         error_response = {'Error': {'Code': 'NoSuchKey'}}
-        mock_s3.get_object.side_effect = ClientError(error_response, 'GetObject')
+        mock_s3.get_object.side_effect = ClientError(
+            error_response, 'GetObject')
 
         # Act & Assert
         with pytest.raises(FileNotFoundError, match="Not found"):
@@ -197,7 +196,8 @@ class TestReadTranscriptJsonl:
         mock_get_client.return_value = mock_s3
 
         error_response = {'Error': {'Code': 'AccessDenied'}}
-        mock_s3.get_object.side_effect = ClientError(error_response, 'GetObject')
+        mock_s3.get_object.side_effect = ClientError(
+            error_response, 'GetObject')
 
         # Act & Assert
         with pytest.raises(Exception, match="S3 error"):
@@ -320,7 +320,8 @@ class TestReadTranscriptForEmbedding:
 
         # Act
         with caplog.at_level(logging.INFO):
-            result = read_transcript_for_embedding(podcast_id=5, episode_id=123)
+            result = read_transcript_for_embedding(
+                podcast_id=5, episode_id=123)
 
         # Assert
         assert result == "This is a full transcript"
@@ -488,7 +489,8 @@ class TestValidateTranscript:
     def test_validate_transcript_with_leading_trailing_whitespace(self):
         """Test that leading/trailing whitespace is stripped for length calculation"""
         # Arrange
-        transcript = "  " + ("x" * 100) + "  "  # 104 chars with whitespace, 100 without
+        # 104 chars with whitespace, 100 without
+        transcript = "  " + ("x" * 100) + "  "
 
         # Act
         result = validate_transcript(transcript, min_length=100)
