@@ -69,20 +69,7 @@ def create_topics_by_podcast_stacked(df: pd.DataFrame):
         ]
     )
 
-    # Text labels
-    text = alt.Chart(top_topics_df).mark_text(
-        color='white',
-        fontWeight='bold',
-        fontSize=12,
-        baseline='middle'
-    ).encode(
-        x=alt.X('podcast_name:N'),
-        y=alt.Y('episode_count:Q',
-                stack='zero',
-                bandPosition=0.5)
-    )
-
-    chart = (bars + text).properties(
+    chart = bars.properties(
         title='Top 3 Topics per Podcast',
         width=800,
         height=500
