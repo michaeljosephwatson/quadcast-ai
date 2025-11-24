@@ -1,8 +1,10 @@
 """Analytics Page for QuadCast Dashboard"""
 import streamlit as st
 import pandas as pd
-from rds_queries import get_rds_connection, get_num_episodes_per_podcast, get_topics_per_podcast, get_published_episodes_over_time
-from visualisations import create_episodes_per_podcast_bar, create_topics_by_podcast_stacked, create_published_episodes_over_time_line
+from rds_queries import (get_rds_connection, get_num_episodes_per_podcast,
+                         get_topics_per_podcast, get_published_episodes_over_time)
+from visualisations import (create_episodes_per_podcast_bar,
+                            create_topics_by_podcast_stacked, create_published_episodes_over_time_line)
 
 # Page configuration
 st.set_page_config(

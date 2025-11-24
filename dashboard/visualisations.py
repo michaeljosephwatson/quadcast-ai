@@ -1,7 +1,6 @@
 """Script for creating visualisations for the QuadCast Dashboard"""
 import altair as alt
 import pandas as pd
-from rds_queries import get_rds_connection, get_num_episodes_per_podcast, get_topics_per_podcast, get_published_episodes_over_time
 
 
 def create_episodes_per_podcast_bar(df: pd.DataFrame):
@@ -150,8 +149,4 @@ def create_published_episodes_over_time_line(df: pd.DataFrame):
 
 
 if __name__ == "__main__":
-    conn = get_rds_connection()
-    published_episodes_over_time_df = get_published_episodes_over_time(conn)
-    chart = create_published_episodes_over_time_line(
-        published_episodes_over_time_df)
-    chart.save('published_episodes_over_time_chart.html')
+    ...
