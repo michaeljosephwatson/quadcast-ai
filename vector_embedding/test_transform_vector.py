@@ -75,6 +75,7 @@ def test_chunk_text_has_overlap(mock_get_tokenizer):
             assert chunks[i+1]['chunk_index'] == i + 1
 
 
+@patch('vector_embedding.transform.get_tokenizer')
 def test_chunk_text_empty_input(mock_get_tokenizer):
     """Test chunking with empty text raises error."""
     mock_encoding = Mock()
