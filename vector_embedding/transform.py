@@ -1,11 +1,16 @@
 """Text chunking and embedding transformation for RAG pipeline."""
 import os
 import logging
+import tempfile
 from typing import List, Dict
 import tiktoken
 from openai import OpenAI
 
 logger = logging.getLogger(__name__)
+
+# Set tiktoken cache directory to temp location for testing/CI environments
+if not os.getenv('TIKTOKEN_CACHE_DIR'):
+    os.environ['TIKTOKEN_CACHE_DIR'] = tempfile.gettempdir()
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 EMBEDDING_MODEL = 'text-embedding-3-small'
