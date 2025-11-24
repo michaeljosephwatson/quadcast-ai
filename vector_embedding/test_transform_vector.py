@@ -1,7 +1,7 @@
 """Unit tests for transform module."""
 import pytest
 from unittest.mock import Mock, patch, MagicMock
-from transform import (
+from vector_embedding.transform import (
     chunk_text,
     embed_text,
     embed_chunks,
@@ -71,7 +71,7 @@ def test_chunk_text_empty_input():
     assert len(chunks) == 1  # Will create one empty chunk
 
 
-@patch('transform.get_openai_client')
+@patch('vector_embedding.transform.get_openai_client')
 def test_embed_text_success(mock_get_client):
     """Test successful text embedding."""
     # Mock OpenAI response
@@ -89,7 +89,7 @@ def test_embed_text_success(mock_get_client):
     mock_client.embeddings.create.assert_called_once()
 
 
-@patch('transform.get_openai_client')
+@patch('vector_embedding.transform.get_openai_client')
 def test_embed_text_failure(mock_get_client):
     """Test embedding failure handling."""
     mock_client = Mock()
@@ -102,7 +102,7 @@ def test_embed_text_failure(mock_get_client):
     assert "Failed to generate embedding" in str(exc_info.value)
 
 
-@patch('transform.embed_text')
+@patch('vector_embedding.transform.embed_text')
 def test_embed_chunks_success(mock_embed):
     """Test successful chunk embedding."""
     mock_embed.return_value = [0.1] * 1536
@@ -120,7 +120,7 @@ def test_embed_chunks_success(mock_embed):
     assert mock_embed.call_count == 2
 
 
-@patch('transform.embed_text')
+@patch('vector_embedding.transform.embed_text')
 def test_embed_chunks_partial_failure(mock_embed):
     """Test chunk embedding with failure on second chunk."""
     mock_embed.side_effect = [[0.1] * 1536, Exception("API Error")]
@@ -134,8 +134,8 @@ def test_embed_chunks_partial_failure(mock_embed):
         embed_chunks(chunks)
 
 
-@patch('transform.embed_chunks')
-@patch('transform.chunk_text')
+@patch('vector_embedding.transform.embed_chunks')
+@patch('vector_embedding.transform.chunk_text')
 def test_transform_transcript_success(mock_chunk, mock_embed):
     """Test complete transcript transformation."""
     mock_chunk.return_value = [
