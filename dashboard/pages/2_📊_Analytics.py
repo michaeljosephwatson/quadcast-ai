@@ -36,36 +36,36 @@ st.markdown("### 📈 Overview")
 
 
 # Tabs for different sections
-tab1, tab2, tab3 = st.tabs(["Overview", "Podcasts", "Episodes"])
+tab1, tab2 = st.tabs(["Podcasts", "Episodes"])
+
 
 with tab1:
-    st.markdown("#### Overview Section")
-
-with tab2:
     st.markdown("#### Podcasts Analytics")
 
     # Get data
     episodes_per_podcast = get_num_episodes_per_podcast(conn)
 
-    # Summary metrics at the top
-    st.markdown("##### 📊 Summary Statistics")
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3, col4, col5 = st.columns(5)
 
+    total_podcasts = len(episodes_per_podcast)
     total_episodes = episodes_per_podcast['episode_count'].sum()
     avg_episodes = episodes_per_podcast['episode_count'].mean()
     max_episodes = episodes_per_podcast['episode_count'].max()
     min_episodes = episodes_per_podcast['episode_count'].min()
 
     with col1:
-        st.metric("Total Episodes", int(total_episodes))
+        st.metric("Total Podcasts", int(total_podcasts))
 
     with col2:
-        st.metric("Avg per Podcast", f"{avg_episodes:.1f}")
+        st.metric("Total Episodes", int(total_episodes))
 
     with col3:
-        st.metric("Most Episodes", int(max_episodes))
+        st.metric("Avg per Podcast", f"{avg_episodes:.1f}")
 
     with col4:
+        st.metric("Most Episodes", int(max_episodes))
+
+    with col5:
         st.metric("Least Episodes", int(min_episodes))
 
     st.divider()
@@ -76,7 +76,7 @@ with tab2:
     st.altair_chart(chart, use_container_width=True)
 
 
-with tab3:
+with tab2:
     st.markdown("#### Episodes Section")
 
 

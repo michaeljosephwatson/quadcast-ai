@@ -78,6 +78,23 @@ def get_num_episodes_per_podcast(conn: connection) -> pd.DataFrame:
     return pd.read_sql(query, conn)
 
 
+def get_topics_per_podcast(conn: connection) -> pd.DataFrame:
+    """Get topics and their frequency per podcast"""
+    query = """
+        SELECT 
+            p.podcast_name,
+            INITCAP(LOWER(t.topic_name)) as topic_name,
+            COUNT(DISTINCT e.episode_id) as episode_count
+        FROM podcast p
+        JOIN episode e ON p.podcast_id = e.podcast_id
+        JOIN episode_topics et ON e.episode_id = et.episode_id
+        JOIN topics t ON et.topic_id = t.topic_id
+        GROUP BY p.podcast_name, INITCAP(LOWER(t.topic_name))
+        ORDER BY p.podcast_name, episode_count DESC;
+    """
+    return pd.read_sql(query, conn)
+
+
 if __name__ == "__main__":
     # For quick testing
     conn = get_rds_connection()
@@ -85,3 +102,4 @@ if __name__ == "__main__":
     print("Number of Episodes:", get_number_of_episodes(conn))
     print("Number of Transcripts:", get_number_of_transcripts(conn))
     print("Episodes per Podcast:", get_num_episodes_per_podcast(conn))
+    print("Topics per Podcast:", get_topics_per_podcast(conn))
