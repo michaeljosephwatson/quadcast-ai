@@ -141,7 +141,3 @@ def create_published_episodes_over_time_line(df: pd.DataFrame):
     )
 
     return chart
-
-
-if __name__ == "__main__":
-    ...
