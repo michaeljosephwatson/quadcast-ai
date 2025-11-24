@@ -95,6 +95,21 @@ def get_topics_per_podcast(conn: connection) -> pd.DataFrame:
     return pd.read_sql(query, conn)
 
 
+def get_published_episodes_over_time(conn: connection) -> pd.DataFrame:
+    """Get published episodes over time"""
+    query = """
+        SELECT
+            p.podcast_name,
+            e.published_at,
+            e.episode_title
+        FROM podcast p
+        JOIN episode e ON p.podcast_id = e.podcast_id
+        WHERE e.published_at IS NOT NULL
+        ORDER BY p.podcast_name, e.published_at;
+    """
+    return pd.read_sql(query, conn)
+
+
 if __name__ == "__main__":
     # For quick testing
     conn = get_rds_connection()
@@ -103,3 +118,5 @@ if __name__ == "__main__":
     print("Number of Transcripts:", get_number_of_transcripts(conn))
     print("Episodes per Podcast:", get_num_episodes_per_podcast(conn))
     print("Topics per Podcast:", get_topics_per_podcast(conn))
+    print("Published Episodes Over Time:",
+          get_published_episodes_over_time(conn))

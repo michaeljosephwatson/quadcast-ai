@@ -86,3 +86,11 @@ with tab2:
 
 st.divider()
 st.caption("QuadCast Analytics | Built with Streamlit")
+
+# tables:
+# speakers per episode
+# how often a podcast uploads new episodes
+# topics covered in episodes/podcasts
+# most active podcasts (by episode count)
+# average episode length per podcast
+# number of podcasts/episodes over time
