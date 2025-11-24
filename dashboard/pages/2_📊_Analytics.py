@@ -1,5 +1,7 @@
 """Analytics Page for QuadCast Dashboard"""
 import streamlit as st
+import pandas as pd
+from rds_queries import get_rds_connection, get_num_episodes_per_podcast
 
 # Page configuration
 st.set_page_config(
@@ -7,6 +9,15 @@ st.set_page_config(
     page_icon="📊",
     layout="wide"
 )
+
+# Cache the database connection
+
+
+@st.cache_resource
+def get_connection():
+    """Get cached database connection"""
+    return get_rds_connection()
+
 
 # Title
 st.title("📊 Analytics")

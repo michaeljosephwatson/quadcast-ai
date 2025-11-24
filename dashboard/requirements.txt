@@ -7,3 +7,4 @@ pytest-mock
 urllib3<2
 requests
 boto3
+altair[all]
