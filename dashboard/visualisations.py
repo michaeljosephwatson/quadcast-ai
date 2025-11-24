@@ -1,7 +1,7 @@
 """Script for creating visualisations for the QuadCast Dashboard"""
 import altair as alt
 import pandas as pd
-from rds_queries import get_rds_connection, get_num_episodes_per_podcast, get_topics_per_podcast
+from rds_queries import get_rds_connection, get_num_episodes_per_podcast, get_topics_per_podcast, get_published_episodes_over_time
 
 
 def create_episodes_per_podcast_bar(df: pd.DataFrame):
@@ -99,8 +99,59 @@ def create_topics_by_podcast_stacked(df: pd.DataFrame):
     return chart
 
 
+def create_published_episodes_over_time_line(df: pd.DataFrame):
+    """Create line chart for published episodes for all podcasts in the past month"""
+    # Filter to only past month
+    one_month_ago = pd.Timestamp.now() - pd.DateOffset(months=1)
+    df['published_at'] = pd.to_datetime(df['published_at'])
+    recent_df = df[df['published_at'] >= one_month_ago].copy()
+    recent_df = recent_df.sort_values('published_at')
+
+    # Calculate cumulative episodes per podcast
+    recent_df['cumulative_episodes'] = recent_df.groupby(
+        'podcast_name').cumcount() + 1
+
+    chart = alt.Chart(recent_df).mark_line(point=True, strokeWidth=2).encode(
+        x=alt.X('published_at:T',
+                title='Published Date',
+                axis=alt.Axis(
+                    format='%b %d',
+                    labelAngle=-45,
+                    tickCount='week'
+                )),
+        y=alt.Y('cumulative_episodes:Q',
+                title='Cumulative Episodes Published',
+                scale=alt.Scale(zero=True)),
+        color=alt.Color('podcast_name:N',
+                        title='Podcast',
+                        scale=alt.Scale(scheme='category10')),
+        tooltip=[
+            alt.Tooltip('podcast_name:N', title='Podcast'),
+            alt.Tooltip('published_at:T', title='Published',
+                        format='%b %d, %Y'),
+            alt.Tooltip('cumulative_episodes:Q', title='Total Episodes')
+        ]
+    ).properties(
+        title='Published Episodes Over Time (Past Month)',
+        width=700,
+        height=400
+    ).configure_axis(
+        labelFontSize=12,
+        titleFontSize=14
+    ).configure_title(
+        fontSize=16,
+        anchor='start'
+    ).configure_legend(
+        titleFontSize=12,
+        labelFontSize=11
+    )
+
+    return chart
+
+
 if __name__ == "__main__":
     conn = get_rds_connection()
-    topics_df = get_topics_per_podcast(conn)
-    chart = create_topics_by_podcast_stacked(topics_df)
-    chart.save('topics_per_podcast_chart.html')
+    published_episodes_over_time_df = get_published_episodes_over_time(conn)
+    chart = create_published_episodes_over_time_line(
+        published_episodes_over_time_df)
+    chart.save('published_episodes_over_time_chart.html')
