@@ -1,4 +1,7 @@
 boto3
+botocore
 openai
 tiktoken
 pytest
+psycopg2-binary
+python-dotenv
