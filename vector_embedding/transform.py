@@ -4,7 +4,7 @@ import logging
 import tempfile
 from typing import List, Dict
 import tiktoken
-from openai import OpenAI
+from openai import OpenAI, OpenAIError, APIError, RateLimitError
 
 logger = logging.getLogger(__name__)
 
@@ -29,11 +29,6 @@ def get_tokenizer(model: str = EMBEDDING_MODEL):
     return encoding
 
 
-def count_tokens(text: str, encoding) -> int:
-    """Count number of tokens in text."""
-    return len(encoding.encode(text))
-
-
 def chunk_text(text: str, chunk_size: int = CHUNK_SIZE, overlap: int = CHUNK_OVERLAP) -> List[Dict]:
     """Split text into overlapping chunks of specified token size."""
     encoding = get_tokenizer()
@@ -46,31 +41,26 @@ def chunk_text(text: str, chunk_size: int = CHUNK_SIZE, overlap: int = CHUNK_OVE
     logger.info(
         f"Chunking text: {len(tokens)} tokens into {chunk_size}-token chunks with {overlap}-token overlap")
 
+    # Raise error for empty input instead of creating empty chunk
     if not tokens:
-        # Handle empty input - create one empty chunk
+        raise ValueError(
+            "Cannot chunk empty transcript - transcript must contain text")
+
+    while start_idx < len(tokens):
+        end_idx = start_idx + chunk_size
+        chunk_tokens = tokens[start_idx:end_idx]
+        chunk_text = encoding.decode(chunk_tokens)
+
         chunks.append({
-            'chunk_index': 0,
-            'chunk_text': '',
-            'token_count': 0,
-            'start_token': 0,
-            'end_token': 0
+            'chunk_index': chunk_index,
+            'chunk_text': chunk_text,
+            'token_count': len(chunk_tokens),
+            'start_token': start_idx,
+            'end_token': end_idx
         })
-    else:
-        while start_idx < len(tokens):
-            end_idx = start_idx + chunk_size
-            chunk_tokens = tokens[start_idx:end_idx]
-            chunk_text = encoding.decode(chunk_tokens)
 
-            chunks.append({
-                'chunk_index': chunk_index,
-                'chunk_text': chunk_text,
-                'token_count': len(chunk_tokens),
-                'start_token': start_idx,
-                'end_token': end_idx
-            })
-
-            chunk_index += 1
-            start_idx += (chunk_size - overlap)
+        chunk_index += 1
+        start_idx += (chunk_size - overlap)
 
     logger.info(f"Created {len(chunks)} chunks")
     return chunks
@@ -78,6 +68,13 @@ def chunk_text(text: str, chunk_size: int = CHUNK_SIZE, overlap: int = CHUNK_OVE
 
 def embed_text(text: str, model: str = EMBEDDING_MODEL) -> List[float]:
     """Generate embedding vector for text using OpenAI API."""
+    # Input validation
+    if not isinstance(text, str):
+        raise TypeError(f"text must be str, got {type(text)}")
+
+    if not text or not text.strip():
+        raise ValueError("text cannot be empty")
+
     client = get_openai_client()
 
     try:
@@ -86,17 +83,17 @@ def embed_text(text: str, model: str = EMBEDDING_MODEL) -> List[float]:
             input=text
         )
         embedding = response.data[0].embedding
-        logger.debug(f"Generated embedding: {len(embedding)} dimensions")
+        logger.debug("Generated embedding: %s dimensions", len(embedding))
         return embedding
 
     except Exception as e:
-        logger.error(f"OpenAI embedding error: {str(e)}")
-        raise Exception(f"Failed to generate embedding: {str(e)}") from e
+        logger.error("OpenAI embedding error: %s", str(e))
+        raise Exception("Failed to generate embedding: %s" % str(e)) from e
 
 
 def embed_chunks(chunks: List[Dict], model: str = EMBEDDING_MODEL) -> List[Dict]:
     """Generate embeddings for all chunks."""
-    logger.info(f"Generating embeddings for {len(chunks)} chunks")
+    logger.info("Generating embeddings for %s chunks", len(chunks))
 
     embedded_chunks = []
 
@@ -112,19 +109,21 @@ def embed_chunks(chunks: List[Dict], model: str = EMBEDDING_MODEL) -> List[Dict]
             }
 
             embedded_chunks.append(embedded_chunk)
-            logger.debug(f"Embedded chunk {i+1}/{len(chunks)}")
-
+            logger.debug("Embedded chunk %s/%s", i+1, len(chunks))
+        except (OpenAIError, APIError, RateLimitError) as e:
+            logger.error("OpenAI API error on chunk %s: %s", i, str(e))
+            raise
         except Exception as e:
-            logger.error(f"Failed to embed chunk {i}: {str(e)}")
+            logger.error("Failed to embed chunk %s: %s", i, str(e))
             raise
 
-    logger.info(f"Successfully embedded {len(embedded_chunks)} chunks")
+    logger.info("Successfully embedded %s chunks", len(embedded_chunks))
     return embedded_chunks
 
 
 def transform_transcript(transcript: str) -> List[Dict]:
     """Transform transcript into embedded chunks ready for storage."""
-    logger.info(f"Transforming transcript: {len(transcript)} characters")
+    logger.info("Transforming transcript: %s characters", len(transcript))
 
     # Step 1: Chunk the text
     chunks = chunk_text(transcript)
@@ -133,7 +132,7 @@ def transform_transcript(transcript: str) -> List[Dict]:
     embedded_chunks = embed_chunks(chunks)
 
     logger.info(
-        f"Transformation complete: {len(embedded_chunks)} embedded chunks")
+        "Transformation complete: %s embedded chunks", len(embedded_chunks))
 
     return embedded_chunks
 
@@ -146,13 +145,13 @@ def validate_embeddings(embedded_chunks: List[Dict], expected_dimensions: int = 
 
     for chunk in embedded_chunks:
         if 'embedding' not in chunk:
-            logger.error(f"Chunk {chunk['chunk_index']} missing embedding")
+            logger.error("Chunk %s missing embedding", chunk['chunk_index'])
             return False
 
         if len(chunk['embedding']) != expected_dimensions:
             logger.error(
-                f"Chunk {chunk['chunk_index']} has wrong dimensions: {len(chunk['embedding'])}")
+                "Chunk %s has wrong dimensions: %s", chunk['chunk_index'], len(chunk['embedding']))
             return False
 
-    logger.info(f"All {len(embedded_chunks)} chunks validated successfully")
+    logger.info("All %s chunks validated successfully", len(embedded_chunks))
     return True

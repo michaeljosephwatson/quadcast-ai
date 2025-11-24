@@ -6,8 +6,7 @@ from vector_embedding.transform import (
     embed_text,
     embed_chunks,
     transform_transcript,
-    validate_embeddings,
-    count_tokens
+    validate_embeddings
 )
 
 
@@ -20,20 +19,6 @@ This allows for better context preservation when performing semantic search.
 The embedding process will convert each text chunk into a high-dimensional vector.
 These vectors capture the semantic meaning of the text content.
 """
-
-
-@patch('vector_embedding.transform.get_tokenizer')
-def test_count_tokens(mock_get_tokenizer):
-    """Test token counting."""
-    # Mock the tokenizer to avoid tiktoken cache issues
-    mock_encoding = Mock()
-    mock_encoding.encode.return_value = [1, 2, 3, 4, 5]
-    mock_get_tokenizer.return_value = mock_encoding
-
-    text = "Hello world"
-    token_count = count_tokens(text, mock_encoding)
-    assert token_count > 0
-    assert isinstance(token_count, int)
 
 
 @patch('vector_embedding.transform.get_tokenizer')
@@ -90,17 +75,14 @@ def test_chunk_text_has_overlap(mock_get_tokenizer):
             assert chunks[i+1]['chunk_index'] == i + 1
 
 
-@patch('vector_embedding.transform.get_tokenizer')
 def test_chunk_text_empty_input(mock_get_tokenizer):
-    """Test chunking with empty text."""
-    # Mock the tokenizer
+    """Test chunking with empty text raises error."""
     mock_encoding = Mock()
-    mock_encoding.encode.return_value = []  # Empty tokens
-    mock_encoding.decode.return_value = ""
+    mock_encoding.encode.return_value = []
     mock_get_tokenizer.return_value = mock_encoding
 
-    chunks = chunk_text("", chunk_size=50, overlap=25)
-    assert len(chunks) == 1  # Will create one empty chunk
+    with pytest.raises(ValueError, match="Cannot chunk empty transcript"):
+        chunk_text("", chunk_size=50, overlap=25)
 
 
 @patch('vector_embedding.transform.get_openai_client')
