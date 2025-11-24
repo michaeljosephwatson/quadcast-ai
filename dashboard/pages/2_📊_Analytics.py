@@ -1,8 +1,8 @@
 """Analytics Page for QuadCast Dashboard"""
 import streamlit as st
 import pandas as pd
-from rds_queries import get_rds_connection, get_num_episodes_per_podcast, get_topics_per_podcast
-from visualisations import create_episodes_per_podcast_bar, create_topics_by_podcast_stacked
+from rds_queries import get_rds_connection, get_num_episodes_per_podcast, get_topics_per_podcast, get_published_episodes_over_time
+from visualisations import create_episodes_per_podcast_bar, create_topics_by_podcast_stacked, create_published_episodes_over_time_line
 
 # Page configuration
 st.set_page_config(
@@ -81,16 +81,17 @@ with tab1:
     topics_chart = create_topics_by_podcast_stacked(topics_df)
     st.altair_chart(topics_chart, use_container_width=True)
 
+    st.divider()
+
+    # Published episodes over time
+    st.markdown("##### 📅 Published Episodes Over Time (Past Month)")
+    published_df = get_published_episodes_over_time(conn)
+    published_chart = create_published_episodes_over_time_line(
+        published_df)
+    st.altair_chart(published_chart, use_container_width=True)
+
 with tab2:
     st.markdown("#### Episodes Section")
 
 st.divider()
 st.caption("QuadCast Analytics | Built with Streamlit")
-
-# tables:
-# speakers per episode
-# how often a podcast uploads new episodes
-# topics covered in episodes/podcasts
-# most active podcasts (by episode count)
-# average episode length per podcast
-# number of podcasts/episodes over time
