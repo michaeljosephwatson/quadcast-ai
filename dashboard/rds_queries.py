@@ -67,9 +67,21 @@ def get_number_of_transcripts(conn: connection, podcast_name=None) -> int:
         return len(df[(df['podcast_name'] == podcast_name) & (df['transcribed'] == True)])
 
 
+def get_num_episodes_per_podcast(conn: connection) -> pd.DataFrame:
+    """Returns a DataFrame with the number of episodes per podcast"""
+    query = """
+        SELECT p.podcast_name, COUNT(e.episode_id) AS episode_count
+        FROM podcast p
+        LEFT JOIN episode e ON p.podcast_id = e.podcast_id
+        GROUP BY p.podcast_name;
+    """
+    return pd.read_sql(query, conn)
+
+
 if __name__ == "__main__":
     # For quick testing
     conn = get_rds_connection()
     print("Number of Podcasts:", get_number_of_podcasts(conn))
     print("Number of Episodes:", get_number_of_episodes(conn))
     print("Number of Transcripts:", get_number_of_transcripts(conn))
+    print("Episodes per Podcast:", get_num_episodes_per_podcast(conn))
