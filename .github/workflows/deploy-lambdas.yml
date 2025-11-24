@@ -5,21 +5,9 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'add_podcast/**'
-      - 'count_episodes/**'
-      - 'daily_pipeline/**'
-      - 'llm_summarise/**'
-      - 'transcribe_pipeline/**'
   pull_request:
     branches:
       - main
-    paths:
-      - 'add_podcast/**'
-      - 'count_episodes/**'
-      - 'daily_pipeline/**'
-      - 'llm_summarise/**'
-      - 'transcribe_pipeline/**'
 
 jobs:
   deploy-all-lambdas:
