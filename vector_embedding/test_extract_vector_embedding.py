@@ -2,6 +2,7 @@
 import pytest
 import json
 import os
+import logging
 from unittest.mock import patch, MagicMock, Mock
 from io import BytesIO
 from botocore.exceptions import ClientError
@@ -245,8 +246,8 @@ class TestReadTranscriptJsonl:
         assert "missing 'transcript_text'" in caplog.text
 
     @patch('extract.get_s3_client')
-    def test_read_jsonl_no_transcript_text_found(self, mock_get_client):
-        """Test Exception when no transcript text found"""
+    def test_read_jsonl_no_transcript_text_found(self, mock_get_client, caplog):
+        """Test warning logged when line has no transcript_text"""
         # Arrange
         mock_s3 = MagicMock()
         mock_get_client.return_value = mock_s3
@@ -256,9 +257,12 @@ class TestReadTranscriptJsonl:
         mock_body.read.return_value = jsonl_content.encode('utf-8')
         mock_s3.get_object.return_value = {'Body': mock_body}
 
-        # Act & Assert
-        with pytest.raises(Exception, match="No transcript text found"):
-            read_transcript_jsonl('test.jsonl')
+        # Act
+        result = read_transcript_jsonl('test.jsonl')
+
+        # Assert
+        assert result == ''  # Empty string since no valid transcript_text found
+        assert "missing 'transcript_text'" in caplog.text
 
     @patch('extract.get_s3_client')
     def test_read_jsonl_custom_bucket(self, mock_get_client):
@@ -294,7 +298,8 @@ class TestReadTranscriptJsonl:
         mock_s3.get_object.return_value = {'Body': mock_body}
 
         # Act
-        read_transcript_jsonl('test/path.jsonl')
+        with caplog.at_level(logging.INFO):
+            read_transcript_jsonl('test/path.jsonl')
 
         # Assert
         assert "Reading transcript from s3://" in caplog.text
@@ -314,7 +319,8 @@ class TestReadTranscriptForEmbedding:
         mock_read_jsonl.return_value = "This is a full transcript"
 
         # Act
-        result = read_transcript_for_embedding(podcast_id=5, episode_id=123)
+        with caplog.at_level(logging.INFO):
+            result = read_transcript_for_embedding(podcast_id=5, episode_id=123)
 
         # Assert
         assert result == "This is a full transcript"
@@ -373,7 +379,8 @@ class TestReadTranscriptForEmbedding:
         mock_read_jsonl.return_value = "Test transcript"
 
         # Act
-        read_transcript_for_embedding(podcast_id=5, episode_id=123)
+        with caplog.at_level(logging.INFO):
+            read_transcript_for_embedding(podcast_id=5, episode_id=123)
 
         # Assert
         assert "Successfully extracted transcript" in caplog.text
@@ -385,7 +392,7 @@ class TestValidateTranscript:
     def test_validate_transcript_valid(self):
         """Test validating a good transcript"""
         # Arrange
-        transcript = "This is a valid transcript with enough characters to pass validation"
+        transcript = "This is a valid transcript with enough characters to pass validation. " * 2
 
         # Act
         result = validate_transcript(transcript)
