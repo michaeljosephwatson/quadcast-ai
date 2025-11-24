@@ -57,11 +57,11 @@ def lambda_handler(event, context):
         print("Storing analysis in database")
         store_analysis(episode_id, analysis)
 
-        # Store summary in S3
-        print("Saving summary to S3")
+        # Store analysis in S3
+        print("Saving analysis to S3")
         summary_s3_key = save_summary_to_s3(
-            podcast_id, episode_id, analysis['summary'])
-        print(f"Summary saved to S3: {summary_s3_key}")
+            podcast_id, episode_id, analysis)
+        print(f"Analysis saved to S3: {summary_s3_key}")
 
         # Return success response
         return {

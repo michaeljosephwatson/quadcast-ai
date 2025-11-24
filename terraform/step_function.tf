@@ -22,7 +22,7 @@ resource "aws_iam_role" "step_function_role" {
   }
 }
 
-# IAM Policy to allow Step Function to invoke Lambda
+# IAM Policy to allow Step Function to invoke Lambda and Glue
 resource "aws_iam_role_policy" "step_function_lambda_policy" {
   name = "c20-quadcast-episode-transcription-step-function-lambda-policy"
   role = aws_iam_role.step_function_role.id
@@ -38,8 +38,18 @@ resource "aws_iam_role_policy" "step_function_lambda_policy" {
         Resource = [
           aws_lambda_function.daily_pipeline.arn,
           aws_lambda_function.count_episodes.arn,
-          aws_lambda_function.transcribe.arn
-          # aws_lambda_function.llm_summarise.arn  # TODO: Uncomment when llm_summarise Lambda is deployed
+          aws_lambda_function.transcribe.arn,
+          aws_lambda_function.analysis.arn
+        ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "glue:StartCrawler",
+          "glue:GetCrawler"
+        ]
+        Resource = [
+          aws_glue_crawler.quadcast_transcripts.arn
         ]
       }
     ]
@@ -143,10 +153,103 @@ resource "aws_sfn_state_machine" "episode_transcription_workflow" {
             }
           }
         }
-        Next = "WorkflowComplete"
+        Next = "SummarizeTranscribedEpisodes"
         Catch = [{
           ErrorEquals = ["States.ALL"]
           Next        = "WorkflowFailed"
+        }]
+      }
+
+      # Step 5: Summarize all transcribed episodes in parallel
+      SummarizeTranscribedEpisodes = {
+        Type         = "Map"
+        ItemsPath    = "$.transcriptionResults"
+        MaxConcurrency = 10
+        ResultPath   = "$.summarizationResults"
+        Iterator = {
+          StartAt = "ParseTranscriptionBody"
+          States = {
+            # Parse the JSON body from transcription result first
+            ParseTranscriptionBody = {
+              Type       = "Pass"
+              Parameters = {
+                "transcriptionData.$" = "States.StringToJson($.body)"
+              }
+              ResultPath = "$.parsed"
+              Next       = "CheckTranscriptionSuccess"
+            }
+
+            # Only summarize if transcription status is "success"
+            CheckTranscriptionSuccess = {
+              Type = "Choice"
+              Choices = [{
+                Variable     = "$.parsed.transcriptionData.status"
+                StringEquals = "success"
+                Next         = "SummarizeEpisode"
+              }]
+              Default = "SkipSummarization"
+            }
+
+            # Call llm_summarise with episode_id and podcast_id
+            SummarizeEpisode = {
+              Type     = "Task"
+              Resource = aws_lambda_function.analysis.arn
+              Parameters = {
+                "episode_id.$"        = "$.parsed.transcriptionData.episode_id"
+                "podcast_id.$"        = "$.parsed.transcriptionData.podcast_id"
+                "transcript_s3_key.$" = "$.parsed.transcriptionData.transcript_s3_key"
+              }
+              End = true
+              Retry = [{
+                ErrorEquals     = ["States.ALL"]
+                IntervalSeconds = 2
+                MaxAttempts     = 2
+                BackoffRate     = 2.0
+              }]
+              Catch = [{
+                ErrorEquals = ["States.ALL"]
+                ResultPath  = "$.error"
+                Next        = "SummarizationFailed"
+              }]
+            }
+
+            SkipSummarization = {
+              Type = "Pass"
+              Result = {
+                status = "skipped"
+                message = "Transcription failed, skipping summarization"
+              }
+              End = true
+            }
+
+            SummarizationFailed = {
+              Type = "Pass"
+              Result = {
+                status = "failed"
+              }
+              End = true
+            }
+          }
+        }
+        Next = "RunGlueCrawler"
+        Catch = [{
+          ErrorEquals = ["States.ALL"]
+          Next        = "WorkflowFailed"
+        }]
+      }
+
+      # Step 6: Run Glue Crawler to update schema
+      RunGlueCrawler = {
+        Type     = "Task"
+        Resource = "arn:aws:states:::aws-sdk:glue:startCrawler"
+        Parameters = {
+          Name = aws_glue_crawler.quadcast_transcripts.name
+        }
+        Next = "WorkflowComplete"
+        Catch = [{
+          ErrorEquals = ["States.ALL"]
+          ResultPath  = "$.crawlerError"
+          Next        = "WorkflowComplete"
         }]
       }
 

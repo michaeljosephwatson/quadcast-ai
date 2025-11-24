@@ -121,28 +121,37 @@ def read_segments(s3_key: str, bucket_name: str = S3_BUCKET) -> list:
         raise Exception(f"S3 error: {str(e)}") from e
 
 
-def save_summary_to_s3(podcast_id: int, episode_id: int, summary: str, bucket_name: str = S3_BUCKET) -> str:
-    """Saves analysis summary to S3 and returns the S3 key."""
-    logger.info(f"Saving summary for podcast {podcast_id}, episode {episode_id}")
+def save_summary_to_s3(podcast_id: int, episode_id: int, analysis: dict, bucket_name: str = S3_BUCKET) -> str:
+    """Saves analysis data to S3 as JSONL and returns the S3 key."""
+    logger.info(f"Saving analysis for podcast {podcast_id}, episode {episode_id}")
     s3 = get_s3_client()
 
-    s3_key = f"summaries/podcast_id={podcast_id}/episode_id={episode_id}/summary.txt"
+    s3_key = f"summaries/podcast_id={podcast_id}/episode_id={episode_id}/data.jsonl"
 
     try:
+        # Create JSONL format - single line with complete analysis
+        # Note: podcast_id and episode_id are in the S3 path (partitions), not in the data
+        jsonl_data = {
+            'summary': analysis.get('summary', ''),
+            'topics': analysis.get('topics', []),
+            'speakers': analysis.get('speakers', [])
+        }
+        jsonl_content = json.dumps(jsonl_data) + '\n'
+
         logger.debug(f"Uploading to s3://{bucket_name}/{s3_key}")
         s3.put_object(
             Bucket=bucket_name,
             Key=s3_key,
-            Body=summary.encode('utf-8'),
-            ContentType='text/plain'
+            Body=jsonl_content.encode('utf-8'),
+            ContentType='application/x-ndjson'
         )
 
-        logger.info(f"Summary saved ({len(summary)} chars)")
+        logger.info(f"Analysis saved ({len(jsonl_content)} bytes, {len(analysis.get('topics', []))} topics, {len(analysis.get('speakers', []))} speakers)")
         return s3_key
 
     except Exception as e:
-        logger.error(f"Failed to save summary to S3: {str(e)}")
-        raise Exception(f"Failed to save summary to S3: {str(e)}") from e
+        logger.error(f"Failed to save analysis to S3: {str(e)}")
+        raise Exception(f"Failed to save analysis to S3: {str(e)}") from e
 
 
 def build_segments_key(podcast_id: int, episode_id: int, filename: str = "data.jsonl") -> str:

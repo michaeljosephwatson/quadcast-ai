@@ -159,6 +159,7 @@ def lambda_handler(event, context):
             'body': json.dumps({
                 'status': 'success',
                 'episode_id': episode_id,
+                'podcast_id': podcast_id,
                 'transcript_s3_key': transcript_s3_key,
                 'segments_s3_key': segments_s3_key
             })
