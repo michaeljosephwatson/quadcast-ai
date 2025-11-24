@@ -5,9 +5,6 @@ from typing import List, Dict
 import psycopg2
 from psycopg2.extensions import connection
 from psycopg2.extras import execute_values
-from dotenv import load_dotenv
-
-load_dotenv()
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +49,7 @@ def clear_existing_embeddings(conn: connection, episode_id: int):
     """Remove any existing embeddings for this episode."""
     with conn.cursor() as cursor:
         cursor.execute(
-            "DELETE FROM episode_embedding WHERE episode_id = %s",  # Singular
+            "DELETE FROM episode_embedding WHERE episode_id = %s",
             (episode_id,)
         )
 

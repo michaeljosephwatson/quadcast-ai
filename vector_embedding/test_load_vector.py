@@ -1,7 +1,6 @@
 """Unit tests for load.py module."""
 import pytest
-import os
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import patch, MagicMock
 from psycopg2.extensions import connection
 import psycopg2
 
@@ -91,7 +90,8 @@ class TestGetDbConnection:
     def test_get_db_connection_failure(self, mock_connect):
         """Test connection failure is raised"""
         # Arrange
-        mock_connect.side_effect = psycopg2.OperationalError("Connection failed")
+        mock_connect.side_effect = psycopg2.OperationalError(
+            "Connection failed")
 
         # Act & Assert
         with pytest.raises(psycopg2.OperationalError):
@@ -139,7 +139,8 @@ class TestEpisodeExists:
         mock_conn = MagicMock(spec=connection)
         mock_cursor = MagicMock()
         mock_conn.cursor.return_value.__enter__.return_value = mock_cursor
-        mock_cursor.execute.side_effect = psycopg2.DatabaseError("Query failed")
+        mock_cursor.execute.side_effect = psycopg2.DatabaseError(
+            "Query failed")
 
         # Act & Assert
         with pytest.raises(psycopg2.DatabaseError):
@@ -219,7 +220,8 @@ class TestClearExistingEmbeddings:
         mock_conn = MagicMock(spec=connection)
         mock_cursor = MagicMock()
         mock_conn.cursor.return_value.__enter__.return_value = mock_cursor
-        mock_cursor.execute.side_effect = psycopg2.DatabaseError("Delete failed")
+        mock_cursor.execute.side_effect = psycopg2.DatabaseError(
+            "Delete failed")
 
         # Act & Assert
         with pytest.raises(psycopg2.DatabaseError):
@@ -308,7 +310,8 @@ class TestInsertEmbeddings:
         mock_conn = MagicMock(spec=connection)
         mock_cursor = MagicMock()
         mock_conn.cursor.return_value.__enter__.return_value = mock_cursor
-        mock_execute_values.side_effect = psycopg2.DatabaseError("Insert failed")
+        mock_execute_values.side_effect = psycopg2.DatabaseError(
+            "Insert failed")
 
         embedded_chunks = [
             {
