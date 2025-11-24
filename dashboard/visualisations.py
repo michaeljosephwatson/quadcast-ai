@@ -38,9 +38,11 @@ def create_episodes_per_podcast_bar(df: pd.DataFrame):
 def create_topics_by_podcast_stacked(df: pd.DataFrame):
     """Create stacked bar chart for top 3 topics per podcast"""
     # Get top 3 topics per podcast
-    top_topics_df = df.groupby('podcast_name').apply(
-        lambda x: x.nlargest(3, 'episode_count')
-    ).reset_index(drop=True)
+    top_topics_df = (
+        df.sort_values(['podcast_name', 'episode_count'],
+                       ascending=[True, False])
+        .groupby('podcast_name', as_index=False).head(3)
+    )
 
     # Get all unique topics and sort them for consistent coloring
     all_topics = sorted(top_topics_df['topic_name'].unique())
@@ -104,6 +106,12 @@ def create_published_episodes_over_time_line(df: pd.DataFrame):
     one_month_ago = pd.Timestamp.now() - pd.DateOffset(months=1)
     df['published_at'] = pd.to_datetime(df['published_at'])
     recent_df = df[df['published_at'] >= one_month_ago].copy()
+    if recent_df.empty:
+        # Return a message chart if no episodes in the past month
+        return alt.Chart(pd.DataFrame({'message': ['No episodes published in the past month']})).mark_text(
+            text='No episodes published in the past month',
+            size=16
+        ).encode()
     recent_df = recent_df.sort_values('published_at')
 
     # Calculate cumulative episodes per podcast
