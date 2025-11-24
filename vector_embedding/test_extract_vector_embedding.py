@@ -224,14 +224,14 @@ class TestReadTranscriptJsonl:
 
     @patch('vector_embedding.extract.get_s3_client')
     def test_read_jsonl_missing_transcript_text_field(self, mock_get_client, caplog):
-        """Test handling missing transcript_text field"""
+        """Test handling missing transcript_text field - skips empty lines"""
         # Arrange
         mock_s3 = MagicMock()
         mock_get_client.return_value = mock_s3
 
         jsonl_content = (
             '{"transcript_text": "Valid text"}\n'
-            '{"other_field": "no transcript_text here"}\n'  # Missing field
+            '{"other_field": "no transcript_text here"}\n'  # Missing field - will be skipped
             '{"transcript_text": "More valid text"}\n'
         )
         mock_body = MagicMock()
@@ -242,12 +242,13 @@ class TestReadTranscriptJsonl:
         result = read_transcript_jsonl('test.jsonl')
 
         # Assert
-        assert result == "Valid text  More valid text"
+        # Missing transcript_text line is skipped, so only valid texts are joined
+        assert result == "Valid text More valid text"
         assert "missing 'transcript_text'" in caplog.text
 
     @patch('vector_embedding.extract.get_s3_client')
-    def test_read_jsonl_no_transcript_text_found(self, mock_get_client, caplog):
-        """Test warning logged when line has no transcript_text"""
+    def test_read_jsonl_no_transcript_text_found(self, mock_get_client):
+        """Test Exception raised when no transcript text found in any line"""
         # Arrange
         mock_s3 = MagicMock()
         mock_get_client.return_value = mock_s3
@@ -257,12 +258,9 @@ class TestReadTranscriptJsonl:
         mock_body.read.return_value = jsonl_content.encode('utf-8')
         mock_s3.get_object.return_value = {'Body': mock_body}
 
-        # Act
-        result = read_transcript_jsonl('test.jsonl')
-
-        # Assert
-        assert result == ''  # Empty string since no valid transcript_text found
-        assert "missing 'transcript_text'" in caplog.text
+        # Act & Assert
+        with pytest.raises(Exception, match="No transcript text found"):
+            read_transcript_jsonl('test.jsonl')
 
     @patch('vector_embedding.extract.get_s3_client')
     def test_read_jsonl_custom_bucket(self, mock_get_client):
