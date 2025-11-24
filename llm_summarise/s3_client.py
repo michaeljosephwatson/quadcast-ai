@@ -130,9 +130,8 @@ def save_summary_to_s3(podcast_id: int, episode_id: int, analysis: dict, bucket_
 
     try:
         # Create JSONL format - single line with complete analysis
+        # Note: podcast_id and episode_id are in the S3 path (partitions), not in the data
         jsonl_data = {
-            'podcast_id': podcast_id,
-            'episode_id': episode_id,
             'summary': analysis.get('summary', ''),
             'topics': analysis.get('topics', []),
             'speakers': analysis.get('speakers', [])

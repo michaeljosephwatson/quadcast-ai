@@ -105,8 +105,7 @@ def test_save_summary_to_s3_success(mock_s3):
     # Parse JSONL
     data = json.loads(content.strip())
 
-    assert data['podcast_id'] == podcast_id
-    assert data['episode_id'] == episode_id
+    # Note: podcast_id and episode_id are in S3 path, not in data
     assert data['summary'] == analysis['summary']
     assert data['topics'] == analysis['topics']
     assert data['speakers'] == analysis['speakers']
