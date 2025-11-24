@@ -33,7 +33,7 @@ def read_transcript_jsonl(s3_key: str, bucket_name: str = S3_BUCKET) -> str:
     except ClientError as e:
         if e.response['Error']['Code'] == 'NoSuchKey':
             raise FileNotFoundError(
-                f"Transcript not found: s3://{bucket_name}/{s3_key}") from e
+                f"Not found: s3://{bucket_name}/{s3_key}") from e
         raise Exception(f"S3 error: {str(e)}") from e
 
     content = response['Body'].read().decode('utf-8')
@@ -93,7 +93,7 @@ def validate_transcript(transcript: str, min_length: int = 100) -> bool:
 
     if len(transcript.strip()) < min_length:
         logger.warning(
-            f"Transcript too short: {len(transcript)} chars (min: {min_length})")
+            f"Transcript too short: {len(transcript.strip())} chars (min: {min_length})")
         return False
 
     return True
