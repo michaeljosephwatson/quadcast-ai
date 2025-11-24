@@ -1,8 +1,9 @@
 """Tests for S3 client."""
+import json
 import boto3
 from moto import mock_aws
 import pytest
-from s3_client import read_transcript, transcript_exists
+from s3_client import read_transcript, transcript_exists, save_summary_to_s3
 
 
 BUCKET = 'test-bucket'
@@ -80,3 +81,74 @@ def test_read_large_transcript(mock_s3):
     transcript = read_transcript(large_key, BUCKET)
     assert len(transcript) > 10000
     assert transcript == large_text
+
+
+def test_save_summary_to_s3_success(mock_s3):
+    """Should save analysis to S3 as JSONL successfully."""
+    podcast_id = 1
+    episode_id = 123
+    analysis = {
+        'summary': 'This is a test summary.',
+        'topics': ['Technology', 'AI'],
+        'speakers': ['John Smith', 'Jane Doe']
+    }
+
+    s3_key = save_summary_to_s3(podcast_id, episode_id, analysis, BUCKET)
+
+    # Verify S3 key format
+    assert s3_key == f"summaries/podcast_id={podcast_id}/episode_id={episode_id}/data.jsonl"
+
+    # Read back from S3 and verify content
+    response = mock_s3.get_object(Bucket=BUCKET, Key=s3_key)
+    content = response['Body'].read().decode('utf-8')
+
+    # Parse JSONL
+    data = json.loads(content.strip())
+
+    assert data['podcast_id'] == podcast_id
+    assert data['episode_id'] == episode_id
+    assert data['summary'] == analysis['summary']
+    assert data['topics'] == analysis['topics']
+    assert data['speakers'] == analysis['speakers']
+
+
+def test_save_summary_to_s3_with_empty_lists(mock_s3):
+    """Should handle analysis with empty topics/speakers."""
+    podcast_id = 2
+    episode_id = 456
+    analysis = {
+        'summary': 'Test summary with no topics or speakers.',
+        'topics': [],
+        'speakers': []
+    }
+
+    s3_key = save_summary_to_s3(podcast_id, episode_id, analysis, BUCKET)
+
+    # Read back and verify
+    response = mock_s3.get_object(Bucket=BUCKET, Key=s3_key)
+    content = response['Body'].read().decode('utf-8')
+    data = json.loads(content.strip())
+
+    assert data['topics'] == []
+    assert data['speakers'] == []
+    assert data['summary'] == analysis['summary']
+
+
+def test_save_summary_to_s3_missing_fields(mock_s3):
+    """Should handle analysis with missing optional fields."""
+    podcast_id = 3
+    episode_id = 789
+    analysis = {
+        'summary': 'Minimal analysis data.'
+    }
+
+    s3_key = save_summary_to_s3(podcast_id, episode_id, analysis, BUCKET)
+
+    # Read back and verify defaults
+    response = mock_s3.get_object(Bucket=BUCKET, Key=s3_key)
+    content = response['Body'].read().decode('utf-8')
+    data = json.loads(content.strip())
+
+    assert data['summary'] == analysis['summary']
+    assert data['topics'] == []
+    assert data['speakers'] == []
