@@ -1,5 +1,4 @@
 import os
-import pandas as pd
 from psycopg2 import connect
 from psycopg2.extensions import connection
 from psycopg2.extras import RealDictCursor
@@ -114,4 +113,17 @@ def find_similar_episodes_by_episode_id(conn: connection, episode_id: int, top_k
 if __name__ == "__main__":
     # Example usage
     conn = get_rds_connection()
-    print(episode_has_embeddings(conn, 10))
+
+    # Test if episode has embeddings
+    has_embeddings = episode_has_embeddings(conn, 10)
+    print(f"Episode 10 has embeddings: {has_embeddings}")
+
+    # If it has embeddings, find similar episodes
+    if has_embeddings:
+        similar = find_similar_episodes_by_episode_id(conn, 10, top_k=5)
+        print(f"\nFound {len(similar)} similar episodes:")
+        for ep in similar:
+            print(
+                f"  - {ep['episode_title']} (Score: {ep['similarity_score']:.3f})")
+
+    conn.close()
