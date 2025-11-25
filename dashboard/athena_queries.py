@@ -144,15 +144,6 @@ if __name__ == "__main__":
     athena_client = get_athena_connection()
     logger.info("✅ Athena client created")
 
-    # try:
-    #     transcript = get_transcript_for_episode(
-    #         athena_client, podcast_id=4, episode_id=10)
-    #     logger.info(f"✅ Transcript fetched: {transcript}")
-    # except ValueError as e:
-    #     logger.warning(f"⚠️  {e}")
-    # except Exception as e:
-    #     logger.error(f"❌ Error: {e}")
-
     try:
         summary_data = get_summary_for_episode(
             athena_client, podcast_id='4', episode_id='10')
