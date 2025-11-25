@@ -78,7 +78,6 @@ def is_message_about_similar_eps(user_message: str) -> bool:
 
 def fetch_similar_episodes(conn, episode_id: int, top_k: int = 5) -> str:
     """Fetch and format similar episodes."""
-    from rds_embedding_queries import find_similar_episodes_by_episode_id
 
     try:
         similar_eps = find_similar_episodes_by_episode_id(
@@ -169,6 +168,34 @@ def call_openai_chat(messages: list) -> str:
         return response.choices[0].message.content
     except Exception as e:
         return f"Sorry, I encountered an error: {str(e)}"
+
+
+def get_episode_response(user_message: str, episode_context: dict, conn, episode_id: int,
+                         chat_history: list = None) -> str:
+    """Get chatbot response using RAG"""
+    # Get query embedding
+    query_embedding = get_query_embedding(user_message)
+
+    # Build context from database
+    context = build_episode_context(
+        conn, episode_id, query_embedding, user_message)
+
+    # Extract context components
+    current_episode_context = context['chunks']
+    similar_episodes_context = context['similar_episodes']
+
+    # Build system prompt
+    system_prompt = build_system_prompt(
+        episode_context,
+        current_episode_context,
+        similar_episodes_context
+    )
+
+    # Prepare messages for API
+    messages = prepare_messages(system_prompt, user_message, chat_history)
+
+    # Get response from OpenAI
+    return call_openai_chat(messages)
 
 
 if __name__ == "__main__":
