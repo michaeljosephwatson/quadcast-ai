@@ -15,6 +15,7 @@ LAMBDA_DIRS=(
   "daily_pipeline"
   "llm_summarise"
   "transcribe_pipeline"
+  "vector_embedding"
 )
 
 # Track success/failure
