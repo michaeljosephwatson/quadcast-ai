@@ -5,6 +5,7 @@ import pandas as pd
 from rds_queries import get_rds_connection, get_all_podcasts, get_episodes_with_podcast_info
 from api_calls import add_podcast
 from athena_queries import get_athena_connection, get_transcript_for_episode, get_summary_for_episode
+from chatbot import get_episode_response
 
 # Page configuration
 st.set_page_config(
@@ -81,6 +82,18 @@ def add_podcast_modal() -> None:
 
 
 conn = get_connection()
+
+# Initialize session state for chat history
+if 'chat_history' not in st.session_state:
+    st.session_state.chat_history = []
+if 'current_episode_id' not in st.session_state:
+    st.session_state.current_episode_id = None
+if 'current_summary' not in st.session_state:
+    st.session_state.current_summary = 'No summary available'
+if 'current_topics' not in st.session_state:
+    st.session_state.current_topics = []
+if 'current_speakers' not in st.session_state:
+    st.session_state.current_speakers = []
 
 # Create main layout with left sidebar, main content, and right sidebar
 left_sidebar = st.sidebar
@@ -171,6 +184,15 @@ with left_sidebar:
 
         selected_episode = episode_map[selected_episode_display]
 
+        # Reset chat history if episode changes
+        episode_id_raw = selected_episode['episode_id']
+        if st.session_state.current_episode_id != episode_id_raw:
+            st.session_state.current_episode_id = episode_id_raw
+            st.session_state.chat_history = []
+            st.session_state.current_summary = 'No summary available'
+            st.session_state.current_topics = []
+            st.session_state.current_speakers = []
+
         # Show count of filtered episodes
         if transcript_filter != "All Episodes":
             st.info(
@@ -244,6 +266,31 @@ with main_col:
                         episode_id=episode_id
                     )
 
+                # Store in session state for chatbot access
+                st.session_state.current_summary = summary_data['summary']
+
+                # Parse and store topics
+                if summary_data['topics']:
+                    topics_str = summary_data['topics'].strip(
+                        "[]").replace("'", "").replace('"', '')
+                    topics_list = [topic.strip()
+                                   for topic in topics_str.split(',')]
+                    st.session_state.current_topics = topics_list
+                else:
+                    topics_list = []
+                    st.session_state.current_topics = []
+
+                # Parse and store speakers
+                if summary_data['speakers']:
+                    speakers_str = summary_data['speakers'].strip(
+                        "[]").replace("'", "").replace('"', '')
+                    speakers_list = [speaker.strip()
+                                     for speaker in speakers_str.split(',')]
+                    st.session_state.current_speakers = speakers_list
+                else:
+                    speakers_list = []
+                    st.session_state.current_speakers = []
+
                 # Display Episode Summary heading
                 st.markdown("#### 📋 Episode Summary")
 
@@ -256,27 +303,15 @@ with main_col:
                 col1, col2 = st.columns(2)
 
                 with col1:
-                    if summary_data['topics']:
+                    if topics_list:
                         st.markdown("**🏷️ Topics:**")
-                        # Parse topics
-                        topics_str = summary_data['topics'].strip(
-                            "[]").replace("'", "").replace('"', '')
-                        topics_list = [topic.strip()
-                                       for topic in topics_str.split(',')]
-
                         # Create badges for topics with green color
                         for topic in topics_list:
                             st.badge(topic, color="green")
 
                 with col2:
-                    if summary_data['speakers']:
+                    if speakers_list:
                         st.markdown("**🎤 Speakers:**")
-                        # Parse speakers
-                        speakers_str = summary_data['speakers'].strip(
-                            "[]").replace("'", "").replace('"', '')
-                        speakers_list = [speaker.strip()
-                                         for speaker in speakers_str.split(',')]
-
                         # Create badges for speakers with blue color
                         for speaker in speakers_list:
                             st.badge(speaker, color="blue")
@@ -382,9 +417,66 @@ with main_col:
 with right_sidebar:
     st.subheader("💬 Chat")
 
-    # Chat input
-    prompt = st.chat_input("Ask about this episode...")
+    # Only show chatbot if an episode is selected and has transcript
+    if selected_episode is not None and selected_episode['transcribed']:
+        # Display chat history
+        for message in st.session_state.chat_history:
+            with st.chat_message(message["role"]):
+                st.write(message["content"])
 
-    if prompt:
-        st.chat_message("user").write(prompt)
-        st.chat_message("assistant").write("🤖 Chatbot coming soon!")
+        # Chat input
+        prompt = st.chat_input("Ask about this episode...")
+
+        if prompt:
+            # Add user message to chat history
+            st.session_state.chat_history.append(
+                {"role": "user", "content": prompt}
+            )
+
+            # Display user message
+            with st.chat_message("user"):
+                st.write(prompt)
+
+            # Prepare episode context from session state
+            episode_context = {
+                'title': episode_title,
+                'podcast_name': selected_podcast_name,
+                'summary': st.session_state.current_summary,
+                'topics': st.session_state.current_topics,
+                'speakers': st.session_state.current_speakers
+            }
+
+            # Get chatbot response
+            with st.chat_message("assistant"):
+                with st.spinner("Thinking..."):
+                    try:
+                        response = get_episode_response(
+                            user_message=prompt,
+                            episode_context=episode_context,
+                            conn=conn,
+                            episode_id=int(episode_id_raw),
+                            chat_history=st.session_state.chat_history[:-1]
+                        )
+                        st.write(response)
+
+                        # Add assistant response to chat history
+                        st.session_state.chat_history.append(
+                            {"role": "assistant", "content": response}
+                        )
+                    except Exception as e:
+                        error_msg = f"❌ Error: {str(e)}"
+                        st.error(error_msg)
+                        st.session_state.chat_history.append(
+                            {"role": "assistant", "content": error_msg}
+                        )
+
+        # Add a clear chat button
+        if st.session_state.chat_history:
+            if st.button("🗑️ Clear Chat", use_container_width=True):
+                st.session_state.chat_history = []
+                st.rerun()
+    else:
+        if selected_episode is None:
+            st.info("Select an episode to start chatting")
+        else:
+            st.info("💡 Chatbot is only available for episodes with transcripts")
