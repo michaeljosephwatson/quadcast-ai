@@ -1,6 +1,7 @@
 """Module for semantic search queries using vector embeddings"""
 import logging
 import os
+import re
 from typing import Optional
 import pandas as pd
 from psycopg2.extensions import connection
@@ -23,6 +24,30 @@ def get_tokenizer(model: str = EMBEDDING_MODEL):
     """Get tiktoken tokenizer for the embedding model"""
     encoding = tiktoken.encoding_for_model(model)
     return encoding
+
+
+def trim_to_sentence_boundaries(text: str) -> str:
+    """
+    Trim text to start at a sentence boundary instead of mid-sentence.
+    Only trims the start if text begins mid-sentence, preserves most of the content.
+    """
+    # Check if text starts with a lowercase letter or mid-sentence indicator
+    if len(text) > 0 and text[0].islower():
+        # Find the first sentence boundary before our position
+        # Look for previous sentence ending within first 100 chars
+        search_window = text[:min(100, len(text))]
+        last_boundary = -1
+
+        for match in re.finditer(r'[.!?]\s+', search_window):
+            last_boundary = match.end()
+
+        if last_boundary > 0:
+            # Start from the sentence boundary
+            trimmed = text[last_boundary:].strip()
+            return trimmed if trimmed else text
+
+    # Return original text if it starts with capital letter or no boundary found
+    return text
 
 
 def embed_query(query: str, model: str = EMBEDDING_MODEL) -> list:
@@ -95,6 +120,10 @@ def search_episodes_by_embedding(
             conn,
             params=(embedding_str, embedding_str, similarity_threshold, limit)
         )
+
+        # Trim chunk_text to sentence boundaries
+        if not df.empty and 'chunk_text' in df.columns:
+            df['chunk_text'] = df['chunk_text'].apply(trim_to_sentence_boundaries)
 
         logger.info("Found %s results", len(df))
         return df
