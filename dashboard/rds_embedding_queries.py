@@ -58,6 +58,30 @@ def episode_has_embeddings(conn: connection, episode_id: int) -> bool:
         return cursor.fetchone()[0]
 
 
+def find_similar_chunks_in_episode(conn: connection, episode_id: int, query_embedding: list, top_k: int = 5) -> list:
+    """Find k similar chunks within a specific episode"""
+    # Convert embedding to string format for pgvector
+    embedding_str = '[' + ','.join(map(str, query_embedding)) + ']'
+
+    query = """
+        SELECT 
+            ee.embedding_id,
+            ee.episode_id,
+            ee.chunk_index,
+            ee.chunk_text,
+            1 - (ee.transcript_embedding <=> %s::vector) AS similarity_score
+        FROM episode_embedding ee
+        WHERE ee.episode_id = %s
+        ORDER BY ee.transcript_embedding <=> %s::vector
+        LIMIT %s;
+    """
+
+    with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+        cursor.execute(
+            query, (embedding_str, episode_id, embedding_str, top_k))
+        return cursor.fetchall()
+
+
 if __name__ == "__main__":
     # Example usage
     conn = get_rds_connection()
