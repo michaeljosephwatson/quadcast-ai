@@ -20,7 +20,7 @@ def get_rds_connection() -> connection:
 
 
 def get_similar_episodes(conn: connection, query_embedding: list, top_k: int = 5) -> list:
-    """Returns the top K most similar episodes based on the provided embedding"""
+    """Returns the top K most similar episodes based on the provided embedding, used for search functionality"""
     # Convert embedding to string format for pgvector
     embedding_str = '[' + ','.join(map(str, query_embedding)) + ']'
     query = """
@@ -79,6 +79,35 @@ def find_similar_chunks_in_episode(conn: connection, episode_id: int, query_embe
     with conn.cursor(cursor_factory=RealDictCursor) as cursor:
         cursor.execute(
             query, (embedding_str, episode_id, embedding_str, top_k))
+        return cursor.fetchall()
+
+
+def find_similar_episodes_by_episode_id(conn: connection, episode_id: int, top_k: int = 5) -> list:
+    """Find k episodes similar to a given episode, used for recommending similar episodes"""
+    query = """
+        WITH target_embedding AS (
+            SELECT transcript_embedding
+            FROM episode_embedding
+            WHERE episode_id = %s
+            LIMIT 1
+        )
+        SELECT DISTINCT ON (e.episode_id)
+            e.episode_id,
+            e.episode_title,
+            e.published_at,
+            p.podcast_id,
+            p.podcast_name,
+            1 - (ee.transcript_embedding <=> (SELECT transcript_embedding FROM target_embedding)) AS similarity_score
+        FROM episode_embedding ee
+        JOIN episode e ON ee.episode_id = e.episode_id
+        JOIN podcast p ON e.podcast_id = p.podcast_id
+        WHERE e.episode_id != %s
+        ORDER BY e.episode_id, similarity_score DESC
+        LIMIT %s;
+    """
+
+    with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+        cursor.execute(query, (episode_id, episode_id, top_k))
         return cursor.fetchall()
 
 
