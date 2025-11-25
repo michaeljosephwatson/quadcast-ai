@@ -1,6 +1,6 @@
-boto3
-openai
-tiktoken
-pytest
-psycopg2-binary
-python-dotenv
+boto3==1.35.76
+openai==1.57.2
+tiktoken==0.8.0
+pytest==8.3.3
+psycopg2-binary==2.9.10
+python-dotenv==1.0.1
