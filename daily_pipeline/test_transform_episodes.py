@@ -141,7 +141,8 @@ class TestExtractAudioUrlFromLinks:
         """Test that enclosure link is correctly identified"""
         links = [
             {'rel': 'alternate', 'href': 'https://example.com/page'},
-            {'rel': 'enclosure', 'href': 'https://example.com/audio.mp3', 'type': 'audio/mpeg'},
+            {'rel': 'enclosure', 'href': 'https://example.com/audio.mp3',
+                'type': 'audio/mpeg'},
         ]
         result = extract_audio_url_from_links(links)
         assert result == 'https://example.com/audio.mp3'
