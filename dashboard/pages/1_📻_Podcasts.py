@@ -4,7 +4,7 @@ import streamlit as st
 import pandas as pd
 from rds_queries import get_rds_connection, get_all_podcasts, get_episodes_with_podcast_info
 from api_calls import add_podcast
-from athena_queries import get_athena_connection, get_transcript_for_episode
+from athena_queries import get_athena_connection, get_transcript_for_episode, get_summary_for_episode
 
 # Page configuration
 st.set_page_config(
@@ -208,6 +208,73 @@ if selected_episode is not None:
         selected_episode['episode_title']) else "Untitled Episode"
     st.markdown(f"### {episode_title}")
 
+    # Summary Section
+    if selected_episode['transcribed']:
+        try:
+            athena_client = get_athena_client()
+
+            # Get the actual scalar values
+            podcast_id_raw = selected_episode['podcast_id']
+            episode_id_raw = selected_episode['episode_id']
+
+            # Convert podcast_id (it's a Series) to scalar
+            if isinstance(podcast_id_raw, pd.Series):
+                podcast_id = str(podcast_id_raw.iloc[0])
+            else:
+                podcast_id = str(podcast_id_raw)
+
+            # Episode ID is already a scalar
+            episode_id = str(episode_id_raw)
+
+            with st.spinner("Loading summary..."):
+                summary_data = get_summary_for_episode(
+                    athena_client,
+                    podcast_id=podcast_id,
+                    episode_id=episode_id
+                )
+
+            # Display Episode Summary heading
+            st.markdown("#### 📋 Episode Summary")
+
+            # Display summary as simple text
+            st.write(summary_data['summary'])
+
+            st.markdown("")
+
+            # Display topics and speakers in a tag-like format
+            col1, col2 = st.columns(2)
+
+            with col1:
+                if summary_data['topics']:
+                    st.markdown("**🏷️ Topics:**")
+                    # Parse topics
+                    topics_str = summary_data['topics'].strip(
+                        "[]").replace("'", "").replace('"', '')
+                    topics_list = [topic.strip()
+                                   for topic in topics_str.split(',')]
+
+                    # Create badges for topics with green color
+                    for topic in topics_list:
+                        st.badge(topic, color="green")
+
+            with col2:
+                if summary_data['speakers']:
+                    st.markdown("**🎤 Speakers:**")
+                    # Parse speakers
+                    speakers_str = summary_data['speakers'].strip(
+                        "[]").replace("'", "").replace('"', '')
+                    speakers_list = [speaker.strip()
+                                     for speaker in speakers_str.split(',')]
+
+                    # Create badges for speakers with blue color
+                    for speaker in speakers_list:
+                        st.badge(speaker, color="blue")
+
+        except ValueError as e:
+            pass  # Silently skip if no summary available
+        except Exception as e:
+            st.error(f"❌ Error loading summary: {str(e)}")
+
     # Episode metadata
     col1, col2 = st.columns(2)
 
@@ -238,7 +305,7 @@ if selected_episode is not None:
             st.markdown(
                 f"**🔗 [Direct Audio Link]({selected_episode['audio_url']})**")
 
-   # Transcript Section
+    # Transcript Section
     if selected_episode['transcribed']:
         st.markdown("---")
         st.markdown("#### 📝 Transcript")
