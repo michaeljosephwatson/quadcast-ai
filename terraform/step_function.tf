@@ -39,7 +39,8 @@ resource "aws_iam_role_policy" "step_function_lambda_policy" {
           aws_lambda_function.daily_pipeline.arn,
           aws_lambda_function.count_episodes.arn,
           aws_lambda_function.transcribe.arn,
-          aws_lambda_function.analysis.arn
+          aws_lambda_function.analysis.arn,
+          aws_lambda_function.vector_embedding.arn
         ]
       },
       {
@@ -153,84 +154,165 @@ resource "aws_sfn_state_machine" "episode_transcription_workflow" {
             }
           }
         }
-        Next = "SummarizeTranscribedEpisodes"
+        Next = "ProcessTranscriptions"
         Catch = [{
           ErrorEquals = ["States.ALL"]
           Next        = "WorkflowFailed"
         }]
       }
 
-      # Step 5: Summarize all transcribed episodes in parallel
-      SummarizeTranscribedEpisodes = {
-        Type         = "Map"
-        ItemsPath    = "$.transcriptionResults"
-        MaxConcurrency = 10
-        ResultPath   = "$.summarizationResults"
-        Iterator = {
-          StartAt = "ParseTranscriptionBody"
-          States = {
-            # Parse the JSON body from transcription result first
-            ParseTranscriptionBody = {
-              Type       = "Pass"
-              Parameters = {
-                "transcriptionData.$" = "States.StringToJson($.body)"
-              }
-              ResultPath = "$.parsed"
-              Next       = "CheckTranscriptionSuccess"
-            }
+      # Step 5: Process transcriptions (summarize and vector embedding in parallel)
+      ProcessTranscriptions = {
+        Type = "Parallel"
+        Branches = [
+          {
+            StartAt = "SummarizeTranscribedEpisodes"
+            States = {
+              SummarizeTranscribedEpisodes = {
+                Type         = "Map"
+                ItemsPath    = "$.transcriptionResults"
+                MaxConcurrency = 10
+                ResultPath   = "$.summarizationResults"
+                Iterator = {
+                  StartAt = "ParseTranscriptionBodyForSummary"
+                  States = {
+                    ParseTranscriptionBodyForSummary = {
+                      Type       = "Pass"
+                      Parameters = {
+                        "transcriptionData.$" = "States.StringToJson($.body)"
+                      }
+                      ResultPath = "$.parsed"
+                      Next       = "CheckTranscriptionSuccessForSummary"
+                    }
 
-            # Only summarize if transcription status is "success"
-            CheckTranscriptionSuccess = {
-              Type = "Choice"
-              Choices = [{
-                Variable     = "$.parsed.transcriptionData.status"
-                StringEquals = "success"
-                Next         = "SummarizeEpisode"
-              }]
-              Default = "SkipSummarization"
-            }
+                    CheckTranscriptionSuccessForSummary = {
+                      Type = "Choice"
+                      Choices = [{
+                        Variable     = "$.parsed.transcriptionData.status"
+                        StringEquals = "success"
+                        Next         = "SummarizeEpisode"
+                      }]
+                      Default = "SkipSummarization"
+                    }
 
-            # Call llm_summarise with episode_id and podcast_id
-            SummarizeEpisode = {
-              Type     = "Task"
-              Resource = aws_lambda_function.analysis.arn
-              Parameters = {
-                "episode_id.$"        = "$.parsed.transcriptionData.episode_id"
-                "podcast_id.$"        = "$.parsed.transcriptionData.podcast_id"
-                "transcript_s3_key.$" = "$.parsed.transcriptionData.transcript_s3_key"
-              }
-              End = true
-              Retry = [{
-                ErrorEquals     = ["States.ALL"]
-                IntervalSeconds = 2
-                MaxAttempts     = 2
-                BackoffRate     = 2.0
-              }]
-              Catch = [{
-                ErrorEquals = ["States.ALL"]
-                ResultPath  = "$.error"
-                Next        = "SummarizationFailed"
-              }]
-            }
+                    SummarizeEpisode = {
+                      Type     = "Task"
+                      Resource = aws_lambda_function.analysis.arn
+                      Parameters = {
+                        "episode_id.$"        = "$.parsed.transcriptionData.episode_id"
+                        "podcast_id.$"        = "$.parsed.transcriptionData.podcast_id"
+                        "transcript_s3_key.$" = "$.parsed.transcriptionData.transcript_s3_key"
+                      }
+                      End = true
+                      Retry = [{
+                        ErrorEquals     = ["States.ALL"]
+                        IntervalSeconds = 2
+                        MaxAttempts     = 2
+                        BackoffRate     = 2.0
+                      }]
+                      Catch = [{
+                        ErrorEquals = ["States.ALL"]
+                        ResultPath  = "$.error"
+                        Next        = "SummarizationFailed"
+                      }]
+                    }
 
-            SkipSummarization = {
-              Type = "Pass"
-              Result = {
-                status = "skipped"
-                message = "Transcription failed, skipping summarization"
-              }
-              End = true
-            }
+                    SkipSummarization = {
+                      Type = "Pass"
+                      Result = {
+                        status  = "skipped"
+                        message = "Transcription failed, skipping summarization"
+                      }
+                      End = true
+                    }
 
-            SummarizationFailed = {
-              Type = "Pass"
-              Result = {
-                status = "failed"
+                    SummarizationFailed = {
+                      Type = "Pass"
+                      Result = {
+                        status = "failed"
+                      }
+                      End = true
+                    }
+                  }
+                }
+                End = true
               }
-              End = true
+            }
+          },
+          {
+            StartAt = "VectorEmbedTranscribedEpisodes"
+            States = {
+              VectorEmbedTranscribedEpisodes = {
+                Type         = "Map"
+                ItemsPath    = "$.transcriptionResults"
+                MaxConcurrency = 10
+                ResultPath   = "$.vectorEmbeddingResults"
+                Iterator = {
+                  StartAt = "ParseTranscriptionBodyForVector"
+                  States = {
+                    ParseTranscriptionBodyForVector = {
+                      Type       = "Pass"
+                      Parameters = {
+                        "transcriptionData.$" = "States.StringToJson($.body)"
+                      }
+                      ResultPath = "$.parsed"
+                      Next       = "CheckTranscriptionSuccessForVector"
+                    }
+
+                    CheckTranscriptionSuccessForVector = {
+                      Type = "Choice"
+                      Choices = [{
+                        Variable     = "$.parsed.transcriptionData.status"
+                        StringEquals = "success"
+                        Next         = "VectorEmbedEpisode"
+                      }]
+                      Default = "SkipVectorEmbedding"
+                    }
+
+                    VectorEmbedEpisode = {
+                      Type     = "Task"
+                      Resource = aws_lambda_function.vector_embedding.arn
+                      Parameters = {
+                        "episode_id.$" = "$.parsed.transcriptionData.episode_id"
+                        "podcast_id.$" = "$.parsed.transcriptionData.podcast_id"
+                      }
+                      End = true
+                      Retry = [{
+                        ErrorEquals     = ["States.ALL"]
+                        IntervalSeconds = 2
+                        MaxAttempts     = 2
+                        BackoffRate     = 2.0
+                      }]
+                      Catch = [{
+                        ErrorEquals = ["States.ALL"]
+                        ResultPath  = "$.error"
+                        Next        = "VectorEmbeddingFailed"
+                      }]
+                    }
+
+                    SkipVectorEmbedding = {
+                      Type = "Pass"
+                      Result = {
+                        status  = "skipped"
+                        message = "Transcription failed, skipping vector embedding"
+                      }
+                      End = true
+                    }
+
+                    VectorEmbeddingFailed = {
+                      Type = "Pass"
+                      Result = {
+                        status = "failed"
+                      }
+                      End = true
+                    }
+                  }
+                }
+                End = true
+              }
             }
           }
-        }
+        ]
         Next = "RunGlueCrawler"
         Catch = [{
           ErrorEquals = ["States.ALL"]
