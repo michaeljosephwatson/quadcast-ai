@@ -417,7 +417,7 @@ with right_sidebar:
 
     @st.fragment
     def chatbot_section():
-        st.subheader("💬 Chat")
+        st.subheader("💬 Chatbot")
 
         # If no episode selected or no transcript → stop
         if selected_episode is None:
@@ -428,23 +428,20 @@ with right_sidebar:
             st.info("💡 Chatbot is only available for episodes with transcripts")
             return
 
-        chat_box = st.container()
+        # Create a container with fixed height for chat messages
+        chat_container = st.container(height=600)
 
-        # Render chat history
-        with chat_box:
+        with chat_container:
+            # Render chat history
             for msg in st.session_state.chat_history:
                 with st.chat_message(msg["role"]):
                     st.write(msg["content"])
 
-        # Input field
+        # Input field (outside scrollable area)
         prompt = st.chat_input("Ask about this episode...")
 
         if prompt:
-            # Instant user message display
-            with chat_box:
-                with st.chat_message("user"):
-                    st.write(prompt)
-
+            # Add user message to history
             st.session_state.chat_history.append(
                 {"role": "user", "content": prompt}
             )
@@ -458,31 +455,53 @@ with right_sidebar:
                 "speakers": st.session_state.current_speakers,
             }
 
+            # Create a placeholder for the assistant's response
+            st.session_state.chat_history.append(
+                {"role": "assistant", "content": ""}
+            )
+
+            # Rerun to show user message immediately
+            st.rerun(scope="fragment")
+
+        # Check if we need to generate a response (last message is empty assistant message)
+        if (st.session_state.chat_history and
+            st.session_state.chat_history[-1]["role"] == "assistant" and
+                st.session_state.chat_history[-1]["content"] == ""):
+
+            # Get the user's last message
+            user_message = st.session_state.chat_history[-2]["content"]
+
+            episode_context = {
+                "title": episode_title,
+                "podcast_name": selected_podcast_name,
+                "summary": st.session_state.current_summary,
+                "topics": st.session_state.current_topics,
+                "speakers": st.session_state.current_speakers,
+            }
+
             # Generate assistant response
-            with chat_box:
-                with st.chat_message("assistant"):
-                    with st.spinner("Thinking..."):
-                        try:
-                            reply = get_episode_response(
-                                user_message=prompt,
-                                episode_context=episode_context,
-                                conn=conn,
-                                episode_id=int(selected_episode["episode_id"]),
-                                chat_history=st.session_state.chat_history[:-1]
-                            )
-                        except Exception as e:
-                            reply = f"❌ Error: {e}"
+            with st.spinner("Thinking..."):
+                try:
+                    reply = get_episode_response(
+                        user_message=user_message,
+                        episode_context=episode_context,
+                        conn=conn,
+                        episode_id=int(selected_episode["episode_id"]),
+                        chat_history=st.session_state.chat_history[:-2]
+                    )
+                except Exception as e:
+                    reply = f"❌ Error: {e}"
 
-                        st.write(reply)
-                        st.session_state.chat_history.append(
-                            {"role": "assistant", "content": reply}
-                        )
+                # Update the last message with the actual response
+                st.session_state.chat_history[-1]["content"] = reply
 
-        # Clear chat
+            # Rerun to show the response
+            st.rerun(scope="fragment")
+
+        # Clear chat button
         if st.session_state.chat_history:
             if st.button("🗑️ Clear Chat", use_container_width=True):
                 st.session_state.chat_history = []
-                # rerun the fragment
                 st.rerun(scope="fragment")
 
     # Call the fragment
