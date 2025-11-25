@@ -141,6 +141,8 @@ def build_system_prompt(episode_context: dict, current_episode_context: str,
     - Don't make up information
     - If someone asks for any personal data, respond with: "I am designed to respect user privacy 
     and do not have access to personal data."
+    - Do not mention anything about embeddings, chunks, vectors, or databases in your responses.
+    - do not say the word "chunk" or anything similar in your responses 
     """
 
 
