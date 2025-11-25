@@ -145,6 +145,32 @@ def build_system_prompt(episode_context: dict, current_episode_context: str,
     """
 
 
+def prepare_messages(system_prompt: str, user_message: str, chat_history: list = None) -> list:
+    """Prepare the messages list for OpenAI API."""
+    messages = [{"role": "system", "content": system_prompt}]
+
+    if chat_history:
+        messages.extend(chat_history[-10:])
+
+    messages.append({"role": "user", "content": user_message})
+
+    return messages
+
+
+def call_openai_chat(messages: list) -> str:
+    """Call OpenAI chat completion API."""
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=messages,
+            max_tokens=800,
+            temperature=0.7
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        return f"Sorry, I encountered an error: {str(e)}"
+
+
 if __name__ == "__main__":
     openai_key = get_openai_key()
     print(openai_key)
