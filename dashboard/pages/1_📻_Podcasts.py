@@ -413,70 +413,77 @@ with main_col:
     st.divider()
     st.caption("QuadCast Dashboard | Built with Streamlit")
 
-# Right sidebar for chatbot
 with right_sidebar:
-    st.subheader("💬 Chat")
 
-    # Only show chatbot if an episode is selected and has transcript
-    if selected_episode is not None and selected_episode['transcribed']:
-        # Display chat history
-        for message in st.session_state.chat_history:
-            with st.chat_message(message["role"]):
-                st.write(message["content"])
+    @st.fragment
+    def chatbot_section():
+        st.subheader("💬 Chat")
 
-        # Chat input
+        # If no episode selected or no transcript → stop
+        if selected_episode is None:
+            st.info("Select an episode to start chatting")
+            return
+
+        if not selected_episode["transcribed"]:
+            st.info("💡 Chatbot is only available for episodes with transcripts")
+            return
+
+        chat_box = st.container()
+
+        # Render chat history
+        with chat_box:
+            for msg in st.session_state.chat_history:
+                with st.chat_message(msg["role"]):
+                    st.write(msg["content"])
+
+        # Input field
         prompt = st.chat_input("Ask about this episode...")
 
         if prompt:
-            # Add user message to chat history
+            # Instant user message display
+            with chat_box:
+                with st.chat_message("user"):
+                    st.write(prompt)
+
             st.session_state.chat_history.append(
                 {"role": "user", "content": prompt}
             )
 
-            # Display user message
-            with st.chat_message("user"):
-                st.write(prompt)
-
-            # Prepare episode context from session state
+            # Context for the chatbot
             episode_context = {
-                'title': episode_title,
-                'podcast_name': selected_podcast_name,
-                'summary': st.session_state.current_summary,
-                'topics': st.session_state.current_topics,
-                'speakers': st.session_state.current_speakers
+                "title": episode_title,
+                "podcast_name": selected_podcast_name,
+                "summary": st.session_state.current_summary,
+                "topics": st.session_state.current_topics,
+                "speakers": st.session_state.current_speakers,
             }
 
-            # Get chatbot response
-            with st.chat_message("assistant"):
-                with st.spinner("Thinking..."):
-                    try:
-                        response = get_episode_response(
-                            user_message=prompt,
-                            episode_context=episode_context,
-                            conn=conn,
-                            episode_id=int(episode_id_raw),
-                            chat_history=st.session_state.chat_history[:-1]
-                        )
-                        st.write(response)
+            # Generate assistant response
+            with chat_box:
+                with st.chat_message("assistant"):
+                    with st.spinner("Thinking..."):
+                        try:
+                            reply = get_episode_response(
+                                user_message=prompt,
+                                episode_context=episode_context,
+                                conn=conn,
+                                episode_id=int(selected_episode["episode_id"]),
+                                chat_history=st.session_state.chat_history[:-1]
+                            )
+                        except Exception as e:
+                            reply = f"❌ Error: {e}"
 
-                        # Add assistant response to chat history
+                        st.write(reply)
                         st.session_state.chat_history.append(
-                            {"role": "assistant", "content": response}
-                        )
-                    except Exception as e:
-                        error_msg = f"❌ Error: {str(e)}"
-                        st.error(error_msg)
-                        st.session_state.chat_history.append(
-                            {"role": "assistant", "content": error_msg}
+                            {"role": "assistant", "content": reply}
                         )
 
-        # Add a clear chat button
+        # Clear chat
         if st.session_state.chat_history:
             if st.button("🗑️ Clear Chat", use_container_width=True):
                 st.session_state.chat_history = []
-                st.rerun()
-    else:
-        if selected_episode is None:
-            st.info("Select an episode to start chatting")
-        else:
-            st.info("💡 Chatbot is only available for episodes with transcripts")
+                # rerun the fragment
+                st.rerun(scope="fragment")
+
+    # Call the fragment
+    chatbot_section()
