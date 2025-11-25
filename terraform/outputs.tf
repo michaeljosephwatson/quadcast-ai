@@ -91,3 +91,18 @@ output "analysis_lambda_arn" {
   description = "ARN of the Analysis Lambda function"
   value       = aws_lambda_function.analysis.arn
 }
+
+output "vector_embedding_ecr_repository_url" {
+  description = "URL of the Vector Embedding ECR repository"
+  value       = aws_ecr_repository.vector_embedding.repository_url
+}
+
+output "vector_embedding_lambda_function_name" {
+  description = "Name of the Vector Embedding Lambda function"
+  value       = aws_lambda_function.vector_embedding.function_name
+}
+
+output "vector_embedding_lambda_arn" {
+  description = "ARN of the Vector Embedding Lambda function"
+  value       = aws_lambda_function.vector_embedding.arn
+}
