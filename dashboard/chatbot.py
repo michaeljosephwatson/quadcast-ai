@@ -113,6 +113,38 @@ def build_episode_context(conn, episode_id: int, query_embedding: list, user_mes
     }
 
 
+def build_system_prompt(episode_context: dict, current_episode_context: str,
+                        similar_episodes_context: str) -> str:
+    """Construct the system prompt for the chatbot."""
+    return f"""
+    You are a helpful podcast assistant. Answer questions about the current 
+    episode and help users discover related content.
+
+    **Current Episode:**
+    - Title: {episode_context.get('title', 'Unknown')}
+    - Podcast: {episode_context.get('podcast_name', 'Unknown')}
+    - Summary: {episode_context.get('summary', 'No summary available')}
+    - Topics: {', '.join(episode_context.get('topics', []))}
+    - Speakers: {', '.join(episode_context.get('speakers', []))}
+
+    **Relevant Context:**
+    {current_episode_context if current_episode_context else "No detailed transcript available for this episode."}
+
+    {similar_episodes_context}
+
+    **Guidelines:**
+    - Answer questions about THIS episode using the context provided
+    - If asked about similar episodes, use the similar episodes list above
+    - REJECT questions unrelated to podcasts (math, coding, general knowledge, etc.) by saying: "I 
+    can only help with questions about this podcast episode and related content."
+    - If the context doesn't have the answer, say: "I don't see that information in this episode."
+    - Be conversational and cite chunk numbers when referencing specific parts
+    - Don't make up information
+    - If someone asks for any personal data, respond with: "I am designed to respect user privacy 
+    and do not have access to personal data."
+    """
+
+
 if __name__ == "__main__":
     openai_key = get_openai_key()
     print(openai_key)
