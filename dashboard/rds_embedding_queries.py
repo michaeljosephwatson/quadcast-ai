@@ -41,3 +41,24 @@ def get_similar_episodes(conn: connection, query_embedding: list, top_k: int = 5
     with conn.cursor(cursor_factory=RealDictCursor) as cursor:
         cursor.execute(query, (embedding_str, top_k))
         return cursor.fetchall()
+
+
+def episode_has_embeddings(conn: connection, episode_id: int) -> bool:
+    """Check if an episode has embeddings"""
+    query = """
+        SELECT EXISTS(
+            SELECT 1 
+            FROM episode_embedding 
+            WHERE episode_id = %s
+        );
+    """
+
+    with conn.cursor() as cursor:
+        cursor.execute(query, (episode_id,))
+        return cursor.fetchone()[0]
+
+
+if __name__ == "__main__":
+    # Example usage
+    conn = get_rds_connection()
+    print(episode_has_embeddings(conn, 10))
