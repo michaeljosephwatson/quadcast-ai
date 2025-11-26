@@ -141,3 +141,112 @@ def create_published_episodes_over_time_line(df: pd.DataFrame):
     )
 
     return chart
+
+
+def create_topics_frequency_bar(df: pd.DataFrame):
+    """Create horizontal bar chart for topic frequency (top 5)"""
+    # Limit to top 5
+    top_df = df.head(5)
+
+    chart = alt.Chart(top_df).mark_bar().encode(
+        y=alt.Y('topic_name:N',
+                title='Topic',
+                sort='-x'),
+        x=alt.X('episode_count:Q',
+                title='Episodes'),
+        color=alt.Color('episode_count:Q',
+                        scale=alt.Scale(scheme='blues'),
+                        legend=None),
+        tooltip=[
+            alt.Tooltip('topic_name:N', title='Topic'),
+            alt.Tooltip('episode_count:Q', title='Episodes')
+        ]
+    ).properties(
+        title='Top 5 Topics',
+        width=700,
+        height=300
+    ).configure_axis(
+        labelFontSize=12,
+        titleFontSize=14
+    ).configure_title(
+        fontSize=16,
+        anchor='start'
+    )
+
+    return chart
+
+
+def create_speakers_frequency_bar(df: pd.DataFrame):
+    """Create horizontal bar chart for speaker frequency (top 5)"""
+    # Limit to top 5
+    top_df = df.head(5)
+
+    chart = alt.Chart(top_df).mark_bar().encode(
+        y=alt.Y('speaker_name:N',
+                title='Speaker',
+                sort='-x'),
+        x=alt.X('episode_count:Q',
+                title='Episodes'),
+        color=alt.Color('episode_count:Q',
+                        scale=alt.Scale(scheme='oranges'),
+                        legend=None),
+        tooltip=[
+            alt.Tooltip('speaker_name:N', title='Speaker'),
+            alt.Tooltip('episode_count:Q', title='Episodes')
+        ]
+    ).properties(
+        title='Top 5 Speakers',
+        width=700,
+        height=300
+    ).configure_axis(
+        labelFontSize=12,
+        titleFontSize=14
+    ).configure_title(
+        fontSize=16,
+        anchor='start'
+    )
+
+    return chart
+
+
+def create_episode_transcript_length_line(df: pd.DataFrame, word_counts_dict: dict):
+    """Create line chart showing transcript word count per episode over time"""
+    df['published_at'] = pd.to_datetime(df['published_at'])
+    df = df.sort_values('published_at')
+
+    # Add word counts to dataframe
+    df['word_count'] = df['episode_id'].astype(str).map(word_counts_dict)
+    df = df.dropna(subset=['word_count'])
+
+    if df.empty:
+        return alt.Chart(pd.DataFrame({'message': ['No transcript data available']})).mark_text(
+            text='No transcript data available',
+            size=14
+        ).encode()
+
+    chart = alt.Chart(df).mark_line(point=True, strokeWidth=2).encode(
+        x=alt.X('published_at:T',
+                title='Published Date',
+                axis=alt.Axis(format='%b %d, %Y', labelAngle=-45)),
+        y=alt.Y('word_count:Q',
+                title='Transcript Word Count',
+                scale=alt.Scale(zero=False)),
+        color=alt.value('#2ca02c'),
+        tooltip=[
+            alt.Tooltip('episode_title:N', title='Episode'),
+            alt.Tooltip('published_at:T', title='Published', format='%b %d, %Y'),
+            alt.Tooltip('word_count:Q', title='Words', format=',')
+        ]
+    ).properties(
+        title='Transcript Length Over Time',
+        width=800,
+        height=400
+    ).configure_axis(
+        labelFontSize=12,
+        titleFontSize=14
+    ).configure_title(
+        fontSize=16,
+        anchor='start'
+    )
+
+    return chart
