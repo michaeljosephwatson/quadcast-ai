@@ -234,6 +234,15 @@ resource "aws_api_gateway_integration_response" "trigger_workflow" {
   http_method       = aws_api_gateway_method.trigger_workflow.http_method
   status_code       = "200"
   depends_on        = [aws_api_gateway_integration.trigger_workflow]
+
+  response_templates = {
+    "application/json" = <<-EOT
+{
+  "status": "success",
+  "message": "Step Function workflow triggered"
+}
+EOT
+  }
 }
 
 # Method Response
