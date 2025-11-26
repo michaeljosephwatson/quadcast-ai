@@ -9,3 +9,4 @@ requests
 boto3
 altair[all]
 openai
+tiktoken
