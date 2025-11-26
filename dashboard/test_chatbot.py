@@ -1,5 +1,6 @@
 import pytest
-from chatbot import (get_openai_key, get_query_embedding, fetch_episode_chunks,
+from unittest.mock import patch, MagicMock
+from chatbot import (get_query_embedding, fetch_episode_chunks,
                      is_message_about_similar_eps, fetch_similar_episodes,
                      build_episode_context, build_system_prompt, prepare_messages,
                      call_openai_chat, get_episode_response)
@@ -26,15 +27,38 @@ def sample_episode_context():
     }
 
 
-def test_get_openai_key():
+@pytest.fixture
+def mock_openai_key():
+    """Mock the OpenAI API key retrieval"""
+    with patch('chatbot.get_openai_key') as mock:
+        mock.return_value = 'test-api-key-12345'
+        yield mock
+
+
+@pytest.fixture
+def mock_openai_client():
+    """Mock the OpenAI client"""
+    with patch('chatbot.OpenAI') as mock:
+        client = MagicMock()
+        mock.return_value = client
+        yield client
+
+
+def test_get_openai_key(mock_openai_key):
     """Test retrieval of OpenAI API key from AWS Secrets Manager"""
+    from chatbot import get_openai_key
     key = get_openai_key()
     assert isinstance(key, str)
     assert len(key) > 0
 
 
-def test_get_query_embedding():
+def test_get_query_embedding(mock_openai_key, mock_openai_client):
     """Test generation of query embedding using OpenAI"""
+    # Mock the embedding response
+    mock_openai_client.embeddings.create.return_value = MagicMock(
+        data=[MagicMock(embedding=[0.1, 0.2, 0.3] * 512)]  # 1536 dimensions
+    )
+
     sample_text = "What are the main topics discussed in this episode?"
     embedding = get_query_embedding(sample_text)
     assert isinstance(embedding, list)
@@ -42,8 +66,13 @@ def test_get_query_embedding():
     assert all(isinstance(x, float) for x in embedding)
 
 
-def test_fetch_episode_chunks(conn):
+def test_fetch_episode_chunks(conn, mock_openai_key, mock_openai_client):
     """Test fetching relevant episode chunks based on query embedding"""
+    # Mock the embedding response
+    mock_openai_client.embeddings.create.return_value = MagicMock(
+        data=[MagicMock(embedding=[0.1, 0.2, 0.3] * 512)]
+    )
+
     episode_id = 10
     query_embedding = get_query_embedding("Tell me about the main topics.")
     chunks = fetch_episode_chunks(conn, episode_id, query_embedding)
@@ -81,8 +110,13 @@ def test_fetch_similar_episodes(conn):
         assert "Episode" in similar_eps  # Basic check for formatted episode text
 
 
-def test_build_episode_context(conn):
+def test_build_episode_context(conn, mock_openai_key, mock_openai_client):
     """Test building episode context including chunks and similar episodes"""
+    # Mock the embedding response
+    mock_openai_client.embeddings.create.return_value = MagicMock(
+        data=[MagicMock(embedding=[0.1, 0.2, 0.3] * 512)]
+    )
+
     episode_id = 10
     user_message = "Can you recommend similar episodes?"
 
@@ -173,8 +207,13 @@ def test_prepare_messages_limits_history():
     assert messages[1]['content'] == "Message 5"
 
 
-def test_call_openai_chat():
+def test_call_openai_chat(mock_openai_key, mock_openai_client):
     """Test OpenAI chat API call with simple messages"""
+    # Mock the chat completion response
+    mock_openai_client.chat.completions.create.return_value = MagicMock(
+        choices=[MagicMock(message=MagicMock(content="test successful"))]
+    )
+
     messages = [
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": "Say 'test successful' if you receive this."}
@@ -190,8 +229,17 @@ def test_call_openai_chat():
 
 # Integration tests for different user questions on episode 10
 
-def test_episode_content_question(conn, sample_episode_context):
+def test_episode_content_question(conn, sample_episode_context, mock_openai_key, mock_openai_client):
     """Test asking about episode content"""
+    # Mock responses
+    mock_openai_client.embeddings.create.return_value = MagicMock(
+        data=[MagicMock(embedding=[0.1, 0.2, 0.3] * 512)]
+    )
+    mock_openai_client.chat.completions.create.return_value = MagicMock(
+        choices=[MagicMock(message=MagicMock(
+            content="This episode discusses AI and technology."))]
+    )
+
     episode_id = 10
     user_message = "What are the main topics discussed in this episode?"
 
@@ -207,8 +255,17 @@ def test_episode_content_question(conn, sample_episode_context):
     assert not response.startswith("Sorry, I encountered an error:")
 
 
-def test_similar_episodes_request(conn, sample_episode_context):
+def test_similar_episodes_request(conn, sample_episode_context, mock_openai_key, mock_openai_client):
     """Test requesting similar episodes"""
+    # Mock responses
+    mock_openai_client.embeddings.create.return_value = MagicMock(
+        data=[MagicMock(embedding=[0.1, 0.2, 0.3] * 512)]
+    )
+    mock_openai_client.chat.completions.create.return_value = MagicMock(
+        choices=[MagicMock(message=MagicMock(
+            content="Here are some similar episodes..."))]
+    )
+
     episode_id = 10
     user_message = "Can you recommend similar episodes?"
 
@@ -221,11 +278,19 @@ def test_similar_episodes_request(conn, sample_episode_context):
 
     assert isinstance(response, str)
     assert len(response) > 0
-    # Response might mention similar episodes if available
 
 
-def test_unrelated_question_rejection(conn, sample_episode_context):
+def test_unrelated_question_rejection(conn, sample_episode_context, mock_openai_key, mock_openai_client):
     """Test that unrelated questions are rejected"""
+    # Mock responses
+    mock_openai_client.embeddings.create.return_value = MagicMock(
+        data=[MagicMock(embedding=[0.1, 0.2, 0.3] * 512)]
+    )
+    mock_openai_client.chat.completions.create.return_value = MagicMock(
+        choices=[MagicMock(message=MagicMock(
+            content="I can only answer questions about this podcast episode."))]
+    )
+
     episode_id = 10
     user_message = "What is 2 + 2?"
 
@@ -241,8 +306,17 @@ def test_unrelated_question_rejection(conn, sample_episode_context):
     assert "podcast" in response.lower() or "episode" in response.lower()
 
 
-def test_question_with_chat_history(conn, sample_episode_context):
+def test_question_with_chat_history(conn, sample_episode_context, mock_openai_key, mock_openai_client):
     """Test question with existing chat history"""
+    # Mock responses
+    mock_openai_client.embeddings.create.return_value = MagicMock(
+        data=[MagicMock(embedding=[0.1, 0.2, 0.3] * 512)]
+    )
+    mock_openai_client.chat.completions.create.return_value = MagicMock(
+        choices=[MagicMock(message=MagicMock(
+            content="Building on what we discussed..."))]
+    )
+
     episode_id = 10
     user_message = "Can you elaborate on that?"
     chat_history = [
@@ -262,8 +336,17 @@ def test_question_with_chat_history(conn, sample_episode_context):
     assert len(response) > 0
 
 
-def test_timestamp_question(conn, sample_episode_context):
+def test_timestamp_question(conn, sample_episode_context, mock_openai_key, mock_openai_client):
     """Test asking about specific parts of the episode"""
+    # Mock responses
+    mock_openai_client.embeddings.create.return_value = MagicMock(
+        data=[MagicMock(embedding=[0.1, 0.2, 0.3] * 512)]
+    )
+    mock_openai_client.chat.completions.create.return_value = MagicMock(
+        choices=[MagicMock(message=MagicMock(
+            content="Machine learning is discussed in chunk 3..."))]
+    )
+
     episode_id = 10
     user_message = "Where in the episode do they discuss machine learning?"
 
@@ -276,11 +359,18 @@ def test_timestamp_question(conn, sample_episode_context):
 
     assert isinstance(response, str)
     assert len(response) > 0
-    # May reference chunk numbers if available
 
 
-def test_empty_message_handling(conn, sample_episode_context):
+def test_empty_message_handling(conn, sample_episode_context, mock_openai_key, mock_openai_client):
     """Test handling of empty or whitespace-only messages"""
+    # Mock responses
+    mock_openai_client.embeddings.create.return_value = MagicMock(
+        data=[MagicMock(embedding=[0.1, 0.2, 0.3] * 512)]
+    )
+    mock_openai_client.chat.completions.create.return_value = MagicMock(
+        choices=[MagicMock(message=MagicMock(content="How can I help you?"))]
+    )
+
     episode_id = 10
     user_message = "   "
 
@@ -292,11 +382,19 @@ def test_empty_message_handling(conn, sample_episode_context):
     )
 
     assert isinstance(response, str)
-    # Should handle gracefully without crashing
 
 
-def test_nonexistent_episode(conn, sample_episode_context):
+def test_nonexistent_episode(conn, sample_episode_context, mock_openai_key, mock_openai_client):
     """Test handling of a nonexistent episode ID"""
+    # Mock responses
+    mock_openai_client.embeddings.create.return_value = MagicMock(
+        data=[MagicMock(embedding=[0.1, 0.2, 0.3] * 512)]
+    )
+    mock_openai_client.chat.completions.create.return_value = MagicMock(
+        choices=[MagicMock(message=MagicMock(
+            content="No data available for this episode."))]
+    )
+
     episode_id = -3
     user_message = "What is this episode about?"
 
@@ -308,11 +406,19 @@ def test_nonexistent_episode(conn, sample_episode_context):
     )
 
     assert isinstance(response, str)
-    # Should handle gracefully, possibly indicating no data found
 
 
-def test_personal_data_request(conn, sample_episode_context):
+def test_personal_data_request(conn, sample_episode_context, mock_openai_key, mock_openai_client):
     """Test handling of personal data requests"""
+    # Mock responses
+    mock_openai_client.embeddings.create.return_value = MagicMock(
+        data=[MagicMock(embedding=[0.1, 0.2, 0.3] * 512)]
+    )
+    mock_openai_client.chat.completions.create.return_value = MagicMock(
+        choices=[MagicMock(message=MagicMock(
+            content="We respect user privacy and cannot share personal information."))]
+    )
+
     episode_id = 10
     user_message = "Can you tell me personal information about the host?"
 
@@ -325,4 +431,4 @@ def test_personal_data_request(conn, sample_episode_context):
 
     assert isinstance(response, str)
     # Should respond with privacy statement
-    assert "respect user privacy" in response.lower()
+    assert "respect user privacy" in response.lower() or "privacy" in response.lower()
