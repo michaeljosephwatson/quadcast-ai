@@ -1,0 +1,1 @@
+aws ecs update-service --cluster c20-quadcast-cluster --service c20-quadcast-streamlit-service --force-new-deployment --region eu-west-2
