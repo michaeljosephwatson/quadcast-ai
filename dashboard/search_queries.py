@@ -2,7 +2,6 @@
 import logging
 import os
 import re
-from typing import Optional
 import pandas as pd
 from psycopg2.extensions import connection
 from openai import OpenAI
@@ -63,12 +62,14 @@ def embed_query(query: str, model: str = EMBEDDING_MODEL) -> list:
             input=query
         )
         embedding = response.data[0].embedding
-        logger.debug("Generated query embedding: %s dimensions", len(embedding))
+        logger.debug("Generated query embedding: %s dimensions",
+                     len(embedding))
         return embedding
 
     except Exception as e:
         logger.error("OpenAI embedding error: %s", str(e))
-        raise Exception("Failed to generate embedding for query: %s" % str(e)) from e
+        raise Exception(
+            "Failed to generate embedding for query: %s" % str(e)) from e
 
 
 def search_episodes_by_embedding(
@@ -123,7 +124,8 @@ def search_episodes_by_embedding(
 
         # Trim chunk_text to sentence boundaries
         if not df.empty and 'chunk_text' in df.columns:
-            df['chunk_text'] = df['chunk_text'].apply(trim_to_sentence_boundaries)
+            df['chunk_text'] = df['chunk_text'].apply(
+                trim_to_sentence_boundaries)
 
         logger.info("Found %s results", len(df))
         return df
