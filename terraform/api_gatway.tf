@@ -49,7 +49,8 @@ resource "aws_api_gateway_deployment" "quadcast_api" {
   rest_api_id = aws_api_gateway_rest_api.quadcast_api.id
 
   depends_on = [
-    aws_api_gateway_integration.add_podcast_lambda
+    aws_api_gateway_integration.add_podcast_lambda,
+    aws_api_gateway_integration.trigger_workflow
   ]
 
   triggers = {
@@ -57,6 +58,9 @@ resource "aws_api_gateway_deployment" "quadcast_api" {
       aws_api_gateway_resource.podcast.id,
       aws_api_gateway_method.add_podcast.id,
       aws_api_gateway_integration.add_podcast_lambda.id,
+      aws_api_gateway_resource.workflow.id,
+      aws_api_gateway_method.trigger_workflow.id,
+      aws_api_gateway_integration.trigger_workflow.id,
     ]))
   }
 
@@ -143,6 +147,101 @@ resource "aws_api_gateway_stage" "dev" {
   }
 
   depends_on = [aws_api_gateway_account.main]
+}
+
+# /workflow resource
+resource "aws_api_gateway_resource" "workflow" {
+  rest_api_id = aws_api_gateway_rest_api.quadcast_api.id
+  parent_id   = aws_api_gateway_rest_api.quadcast_api.root_resource_id
+  path_part   = "workflow"
+}
+
+# POST method for /workflow to trigger Step Function
+resource "aws_api_gateway_method" "trigger_workflow" {
+  rest_api_id   = aws_api_gateway_rest_api.quadcast_api.id
+  resource_id   = aws_api_gateway_resource.workflow.id
+  http_method   = "POST"
+  authorization = "NONE"
+}
+
+# IAM Role for API Gateway to invoke Step Functions
+resource "aws_iam_role" "api_gateway_stepfunctions" {
+  name = "c20-quadcast-api-gateway-stepfunctions-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "apigateway.amazonaws.com"
+        }
+      }
+    ]
+  })
+
+  tags = {
+    Name        = "c20-quadcast-api-gateway-stepfunctions-role"
+    Project     = "QuadCast"
+    Environment = "dev"
+  }
+}
+
+# IAM Policy for API Gateway to invoke Step Functions
+resource "aws_iam_role_policy" "api_gateway_stepfunctions_policy" {
+  name = "c20-quadcast-api-gateway-stepfunctions-policy"
+  role = aws_iam_role.api_gateway_stepfunctions.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "states:StartExecution"
+        ]
+        Resource = [
+          aws_sfn_state_machine.episode_transcription_workflow.arn
+        ]
+      }
+    ]
+  })
+}
+
+# Integration with Step Functions
+resource "aws_api_gateway_integration" "trigger_workflow" {
+  rest_api_id             = aws_api_gateway_rest_api.quadcast_api.id
+  resource_id             = aws_api_gateway_resource.workflow.id
+  http_method             = aws_api_gateway_method.trigger_workflow.http_method
+  integration_http_method = "POST"
+  type                    = "AWS"
+  uri                     = "arn:aws:apigateway:eu-west-2:states:action/StartExecution"
+  credentials             = aws_iam_role.api_gateway_stepfunctions.arn
+
+  request_templates = {
+    "application/json" = jsonencode({
+      stateMachineArn = aws_sfn_state_machine.episode_transcription_workflow.arn
+      input           = "{}"
+    })
+  }
+}
+
+# Integration Response
+resource "aws_api_gateway_integration_response" "trigger_workflow" {
+  rest_api_id       = aws_api_gateway_rest_api.quadcast_api.id
+  resource_id       = aws_api_gateway_resource.workflow.id
+  http_method       = aws_api_gateway_method.trigger_workflow.http_method
+  status_code       = "200"
+  depends_on        = [aws_api_gateway_integration.trigger_workflow]
+}
+
+# Method Response
+resource "aws_api_gateway_method_response" "trigger_workflow" {
+  rest_api_id = aws_api_gateway_rest_api.quadcast_api.id
+  resource_id = aws_api_gateway_resource.workflow.id
+  http_method = aws_api_gateway_method.trigger_workflow.http_method
+  status_code = "200"
 }
 
 # Method Settings for detailed CloudWatch metrics and logging
