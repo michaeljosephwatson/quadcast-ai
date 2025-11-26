@@ -44,10 +44,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Initialize session state for search history
-if 'search_history' not in st.session_state:
-    st.session_state.search_history = []
-
 # Get podcasts for filtering
 conn = get_connection()
 all_podcasts = get_all_podcasts(conn)
@@ -87,7 +83,8 @@ with col3:
 with col4:
     sort_by = st.selectbox(
         "Sort by",
-        options=["Similarity (highest first)", "Date (newest first)", "Date (oldest first)", "Chunk order"],
+        options=["Similarity (highest first)", "Date (newest first)",
+                 "Date (oldest first)", "Chunk order"],
         key="sort_by"
     )
 
@@ -116,11 +113,6 @@ st.divider()
 
 # Perform search when query is entered
 if search_query:
-    # Add to search history
-    if search_query not in st.session_state.search_history:
-        st.session_state.search_history.insert(0, search_query)
-        st.session_state.search_history = st.session_state.search_history[:10]  # Keep last 10
-
     with st.spinner("Searching..."):
         try:
             results = search_episodes_by_embedding(
@@ -131,10 +123,12 @@ if search_query:
             )
 
             if results.empty:
-                st.info("No relevant results found. Try adjusting your search query or similarity threshold.")
+                st.info(
+                    "No relevant results found. Try adjusting your search query or similarity threshold.")
             else:
                 # Filter by selected podcasts
-                results = results[results['podcast_name'].isin(selected_podcasts)]
+                results = results[results['podcast_name'].isin(
+                    selected_podcasts)]
 
                 if results.empty:
                     st.info("No results found in the selected podcasts.")
@@ -146,21 +140,28 @@ if search_query:
                     display_results = results.copy()
                     if one_per_episode:
                         # Keep only the highest similarity result per episode
-                        display_results = results.loc[results.groupby('episode_id')['similarity'].idxmax()]
+                        display_results = results.loc[results.groupby(
+                            'episode_id')['similarity'].idxmax()]
 
                     # Apply sorting
                     if sort_by == "Similarity (highest first)":
-                        display_results = display_results.sort_values('similarity', ascending=False)
+                        display_results = display_results.sort_values(
+                            'similarity', ascending=False)
                     elif sort_by == "Date (newest first)":
-                        display_results = display_results.sort_values('published_at', ascending=False, na_position='last')
+                        display_results = display_results.sort_values(
+                            'published_at', ascending=False, na_position='last')
                     elif sort_by == "Date (oldest first)":
-                        display_results = display_results.sort_values('published_at', ascending=True, na_position='last')
+                        display_results = display_results.sort_values(
+                            'published_at', ascending=True, na_position='last')
                     elif sort_by == "Chunk order":
-                        display_results = display_results.sort_values(['episode_id', 'chunk_index'], ascending=True)
+                        display_results = display_results.sort_values(
+                            ['episode_id', 'chunk_index'], ascending=True)
 
                 # Filter results by episode
-                unique_episodes = display_results[['episode_id', 'episode_title', 'podcast_name']].drop_duplicates().sort_values('episode_title')
-                episode_options = [f"{row['podcast_name']} - {row['episode_title']}" for _, row in unique_episodes.iterrows()]
+                unique_episodes = display_results[[
+                    'episode_id', 'episode_title', 'podcast_name']].drop_duplicates().sort_values('episode_title')
+                episode_options = [
+                    f"{row['podcast_name']} - {row['episode_title']}" for _, row in unique_episodes.iterrows()]
 
                 st.markdown("### Filter by Episode")
                 selected_episodes = st.multiselect(
@@ -174,8 +175,10 @@ if search_query:
                 filtered_results = display_results.copy()
                 if selected_episodes:
                     # Extract episode titles from selected options
-                    selected_titles = [opt.split(" - ", 1)[1] for opt in selected_episodes]
-                    filtered_results = display_results[display_results['episode_title'].isin(selected_titles)]
+                    selected_titles = [opt.split(" - ", 1)[1]
+                                       for opt in selected_episodes]
+                    filtered_results = display_results[display_results['episode_title'].isin(
+                        selected_titles)]
 
                 st.divider()
                 results_text = f"**Showing {len(filtered_results)} of {len(display_results)} results"
@@ -190,13 +193,16 @@ if search_query:
                 def highlight_keywords(text, query):
                     """Highlight search query keywords in the text"""
                     # Split query into individual words and filter out common words
-                    keywords = [word for word in query.lower().split() if len(word) > 2]
+                    keywords = [word for word in query.lower().split()
+                                if len(word) > 2]
 
                     highlighted_text = text
                     for keyword in keywords:
                         # Use case-insensitive regex to find and highlight
-                        pattern = re.compile(f'({re.escape(keyword)})', re.IGNORECASE)
-                        highlighted_text = pattern.sub(r'<mark style="background-color: #FFFF00; padding: 2px 4px; border-radius: 3px;">\1</mark>', highlighted_text)
+                        pattern = re.compile(
+                            f'({re.escape(keyword)})', re.IGNORECASE)
+                        highlighted_text = pattern.sub(
+                            r'<mark style="background-color: #FFFF00; padding: 2px 4px; border-radius: 3px;">\1</mark>', highlighted_text)
 
                     return highlighted_text
 
@@ -205,9 +211,9 @@ if search_query:
                     similarity_pct = (row['similarity'] * 100)
 
                     # Color coding for similarity
-                    if similarity_pct >= 80:
+                    if similarity_pct >= 40:
                         color = "#10b981"  # Green
-                    elif similarity_pct >= 60:
+                    elif similarity_pct >= 20:
                         color = "#f59e0b"  # Amber
                     else:
                         color = "#ef4444"  # Red
@@ -257,7 +263,8 @@ if search_query:
 
                         # Chunk text with highlighted keywords
                         st.markdown("**Relevant excerpt:**")
-                        highlighted_chunk = highlight_keywords(row['chunk_text'], search_query)
+                        highlighted_chunk = highlight_keywords(
+                            row['chunk_text'], search_query)
                         st.markdown(
                             f"""
                             <div style="
@@ -283,7 +290,8 @@ if search_query:
 
                         with col1:
                             if pd.notna(row['published_at']):
-                                published_date = pd.to_datetime(row['published_at']).strftime('%B %d, %Y')
+                                published_date = pd.to_datetime(
+                                    row['published_at']).strftime('%B %d, %Y')
                                 st.caption(f"📅 {published_date}")
 
                         with col2:
