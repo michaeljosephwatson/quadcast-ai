@@ -123,9 +123,15 @@ with left_sidebar:
     podcast_names = podcasts_df.sort_values('uploaded_at', ascending=False)[
         'podcast_name'].unique().tolist()
 
+    # Check if we have a selected podcast from search page
+    default_podcast_idx = 0
+    if 'selected_podcast_name' in st.session_state and st.session_state.selected_podcast_name in podcast_names:
+        default_podcast_idx = podcast_names.index(st.session_state.selected_podcast_name)
+
     selected_podcast_name = st.selectbox(
         "📻 Choose a Podcast:",
         options=podcast_names,
+        index=default_podcast_idx,
         key="podcast_selector"
     )
 
@@ -176,9 +182,18 @@ with left_sidebar:
             episode_options.append(display_name)
             episode_map[display_name] = episode
 
+        # Check if we have a selected episode from search page
+        default_episode_idx = 0
+        if 'selected_episode_title' in st.session_state:
+            for idx, display_name in enumerate(episode_options):
+                if st.session_state.selected_episode_title in display_name:
+                    default_episode_idx = idx
+                    break
+
         selected_episode_display = st.selectbox(
             "🎧 Choose an Episode:",
             options=episode_options,
+            index=default_episode_idx,
             key="episode_selector"
         )
 
