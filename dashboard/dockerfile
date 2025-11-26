@@ -17,8 +17,16 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
-COPY . .
+# Copy application code (only necessary files)
+COPY 🏠_Overview.py .
+COPY pages pages
+COPY athena_queries.py .
+COPY chatbot.py .
+COPY rds_embedding_queries.py .
+COPY rds_queries.py .
+COPY search_queries.py .
+COPY visualisations.py .
+COPY api_calls.py .
 
 # Expose Streamlit port
 EXPOSE 8501
