@@ -14,15 +14,12 @@ with patch('boto3.session.Session.client') as mock_boto_client:
         from chatbot import (is_message_about_similar_eps, fetch_similar_episodes,
                              build_system_prompt, prepare_messages)
 
-from rds_embedding_queries import get_rds_connection
-
 
 @pytest.fixture
 def conn():
-    """Fixture to provide a database connection for tests."""
-    connection = get_rds_connection()
-    yield connection
-    connection.close()
+    """Mock database connection for tests."""
+    mock_conn = MagicMock()
+    yield mock_conn
 
 
 @pytest.fixture
