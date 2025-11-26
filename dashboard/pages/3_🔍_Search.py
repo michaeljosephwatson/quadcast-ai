@@ -290,7 +290,10 @@ if search_query:
                             pass
 
                         with col3:
-                            st.page_link("pages/1_📻_Podcasts.py", label="🔗 View in Podcasts")
+                            if st.button("🔗 View in Podcasts", key=f"view_podcast_{result_idx}"):
+                                st.session_state.selected_podcast_name = row['podcast_name']
+                                st.session_state.selected_episode_title = row['episode_title']
+                                st.navigation(st.Page("pages/1_📻_Podcasts.py")).run()
 
         except Exception as e:
             st.error(f"Error performing search: {str(e)}")
