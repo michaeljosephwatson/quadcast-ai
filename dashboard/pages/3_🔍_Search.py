@@ -293,7 +293,7 @@ if search_query:
                             if st.button("🔗 View in Podcasts", key=f"view_podcast_{result_idx}"):
                                 st.session_state.selected_podcast_name = row['podcast_name']
                                 st.session_state.selected_episode_title = row['episode_title']
-                                st.navigation(st.Page("pages/1_📻_Podcasts.py")).run()
+                                st.switch_page("pages/1_📻_Podcasts.py")
 
         except Exception as e:
             st.error(f"Error performing search: {str(e)}")
