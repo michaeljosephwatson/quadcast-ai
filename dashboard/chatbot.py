@@ -8,6 +8,8 @@ from rds_embedding_queries import (
     episode_has_embeddings,
     find_similar_episodes_by_episode_id
 )
+import logging
+logger = logging.getLogger(__name__)
 
 
 def get_openai_key() -> str:
@@ -41,7 +43,8 @@ def get_query_embedding(text: str) -> list:
     """Get embedding for user's question using OpenAI"""
     response = client.embeddings.create(
         model="text-embedding-3-small",
-        input=text
+        input=text,
+        dimensions=1536
     )
     return response.data[0].embedding
 
@@ -94,7 +97,9 @@ def fetch_similar_episodes(conn, episode_id: int, top_k: int = 5) -> str:
                 f"Similarity: {ep['similarity_score']:.1%}\n"
             )
         return context
-    except Exception:
+    except Exception as e:
+        logger.error(
+            f"Error fetching similar episodes for episode_id {episode_id}: {str(e)}")
         return ""
 
 
@@ -137,7 +142,7 @@ def build_system_prompt(episode_context: dict, current_episode_context: str,
     - REJECT questions unrelated to podcasts (math, coding, general knowledge, etc.) by saying: "I 
     can only help with questions about this podcast episode and related content."
     - If the context doesn't have the answer, say: "I don't see that information in this episode."
-    - Be conversational and cite chunk numbers when referencing specific parts
+    - Be conversational and engaging
     - Don't make up information
     - If someone asks for any personal data, respond with: "I am designed to respect user privacy 
     and do not have access to personal data."
