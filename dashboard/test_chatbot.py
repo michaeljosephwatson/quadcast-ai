@@ -1,6 +1,19 @@
 import pytest
-from chatbot import (is_message_about_similar_eps, fetch_similar_episodes,
-                     build_system_prompt, prepare_messages)
+from unittest.mock import patch, MagicMock
+
+# Mock AWS and OpenAI BEFORE importing chatbot
+with patch('boto3.session.Session.client') as mock_boto_client:
+    mock_secrets = MagicMock()
+    mock_secrets.get_secret_value.return_value = {
+        'SecretString': '{"OPENAI_API_KEY": "test-key-12345"}'
+    }
+    mock_boto_client.return_value = mock_secrets
+
+    with patch('openai.OpenAI'):
+        # Now safe to import chatbot
+        from chatbot import (is_message_about_similar_eps, fetch_similar_episodes,
+                             build_system_prompt, prepare_messages)
+
 from rds_embedding_queries import get_rds_connection
 
 
