@@ -57,7 +57,7 @@ def build_analysis_prompt(transcript: str, speaker_samples: Dict[str, str] = Non
     prompt = f"""Analyze this podcast transcript and extract:
 
 1. Topics: 2-4 broad, general topics (1-2 words each, e.g., "Technology", "Politics", "Health")
-2. Summary: A 3-sentence summary
+2. Summary: A 3-sentence summary, do not include anything about advertisements or sponsors
 3. Speakers: List of identifiable speaker names (ONLY if names are clearly stated)
 
 TRANSCRIPT (for topic/summary analysis):
