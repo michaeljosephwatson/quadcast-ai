@@ -290,7 +290,7 @@ if search_query:
                             pass
 
                         with col3:
-                            st.markdown(f"[🔗 View in Podcasts](1_📻_Podcasts)", unsafe_allow_html=False)
+                            st.page_link("pages/1_📻_Podcasts.py", label="🔗 View in Podcasts")
 
         except Exception as e:
             st.error(f"Error performing search: {str(e)}")
