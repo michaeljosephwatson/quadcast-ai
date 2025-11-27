@@ -54,14 +54,37 @@ def build_analysis_prompt(transcript: str, speaker_samples: Dict[str, str] = Non
     # Truncate transcript to avoid token limits (~10k chars = ~2500 tokens)
     truncated = transcript[:MAX_TRANSCRIPT_CHARS]
 
-    prompt = f"""Analyze this podcast transcript and extract:
+    prompt = f"""Analyze this podcast transcript and extract structured information.
 
-1. Topics: 2-4 broad, general topics (1-2 words each, e.g., "Technology", "Politics", "Health")
-2. Summary: A 3-sentence summary, do not include anything about advertisements or sponsors
-3. Speakers: List of identifiable speaker names (ONLY if names are clearly stated)
+1. Topics: Identify 2-4 broad, general topics (1-2 words each).
+   - Use general category names like "Technology", "Politics", "Health", "Paranormal", "Sports"
+   - Each topic must be UNIQUE - do not repeat the same topic with variations
+   - "Paranormal", "paranormal experiences", and "Paranormal Events" are the SAME topic
+   - Avoid plurals vs singular duplicates (e.g., "Pet" and "Pets" are the same)
+   - Case-insensitive matching: "Technology" and "technology" are duplicates
+   - If the episode focuses on one main theme, list it ONCE and find other secondary topics
 
-TRANSCRIPT (for topic/summary analysis):
+2. Summary: Write a 3-sentence summary of the episode's main content.
+   - Focus ONLY on substantive discussion content
+   - Exclude any mentions of advertisements, sponsors, or promotional content
+   - Capture the key insights or stories discussed
+
+3. Speakers: List speaker names ONLY if explicitly stated in the transcript.
+   - Include names that are clearly introduced (e.g., "I'm John Smith" or "Welcome, Sarah")
+   - Do NOT include generic labels like "Host" or "Guest"
+   - Leave empty if no names are clearly stated
+
+TRANSCRIPT:
 {truncated}
+
+Return JSON with this structure:
+{{
+  "topics": ["Technology", "Business"],
+  "summary": "summary text",
+  "speakers": ["{{"name": "John Smith"}}]
+}}
+
+CRITICAL: Return each topic exactly ONCE. No duplicates, no variations, no similar terms.
 """
 
     # Add speaker samples if provided
