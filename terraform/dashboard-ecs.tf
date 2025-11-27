@@ -269,6 +269,7 @@ resource "aws_ecs_service" "streamlit" {
   task_definition = aws_ecs_task_definition.streamlit.arn
   desired_count   = 1
   launch_type     = "FARGATE"
+  force_new_deployment = true
 
   network_configuration {
     subnets          = data.aws_subnets.public.ids
