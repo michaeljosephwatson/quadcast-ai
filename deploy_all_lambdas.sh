@@ -52,6 +52,43 @@ for LAMBDA_DIR in "${LAMBDA_DIRS[@]}"; do
   echo ""
 done
 
+# Deploy Dashboard
+echo "--------------------------------------"
+echo "Deploying: Dashboard (Streamlit on ECS)"
+echo "--------------------------------------"
+
+DASHBOARD_BASH_DIR="dashboard/bash_scripts"
+
+if [ -d "$DASHBOARD_BASH_DIR" ]; then
+  # Change to the dashboard bash_scripts directory
+  cd "$DASHBOARD_BASH_DIR"
+
+  # Build and push to ECR
+  if ./upload_image_to_ecr.sh; then
+    echo "✓ Dashboard image pushed to ECR successfully"
+
+    # Update ECS service
+    if ./update_ecs_service.sh; then
+      echo "✓ Dashboard ECS service updated successfully"
+      SUCCESSFUL+=("Dashboard")
+    else
+      echo "✗ Dashboard ECS service update failed"
+      FAILED+=("Dashboard")
+    fi
+  else
+    echo "✗ Dashboard ECR upload failed"
+    FAILED+=("Dashboard")
+  fi
+
+  # Return to project root
+  cd ../..
+else
+  echo "✗ Dashboard bash_scripts directory not found: $DASHBOARD_BASH_DIR"
+  FAILED+=("Dashboard")
+fi
+
+echo ""
+
 # Summary
 echo "======================================"
 echo "Deployment Summary"
@@ -61,7 +98,7 @@ echo "Failed (${#FAILED[@]}): ${FAILED[*]}"
 echo ""
 
 if [ ${#FAILED[@]} -eq 0 ]; then
-  echo "✓ All Lambda functions deployed successfully!"
+  echo "✓ All deployments (Lambdas + Dashboard) completed successfully!"
   exit 0
 else
   echo "✗ Some deployments failed"
