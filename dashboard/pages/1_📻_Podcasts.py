@@ -6,17 +6,89 @@ from rds_queries import get_rds_connection, get_all_podcasts, get_episodes_with_
 from api_calls import add_podcast, update_episodes
 from athena_queries import get_athena_connection, get_transcript_for_episode, get_summary_for_episode
 from chatbot import get_episode_response
+from theme import apply_theme
 
-# Page configuration
-st.set_page_config(
-    page_title="Podcasts - QuadCast",
-    page_icon="🎙️",
-    layout="wide"
-)
+st.set_page_config("Podcasts", "🎙️", "wide")
 
 # Add logo to sidebar using st.logo (appears at the very top)
 st.logo("assets/logo.png")
+apply_theme()
 
+# Fix selectbox colors in sidebar to match theme
+st.markdown("""
+    <style>
+    /* Target all selectboxes in sidebar */
+    [data-testid="stSidebar"] [data-baseweb="select"] > div {
+        background-color: #0466c8 !important;
+        color: #ffffff !important;
+    }
+    
+    /* Target the dropdown arrow icon */
+    [data-testid="stSidebar"] [data-baseweb="select"] svg {
+        fill: #ffffff !important;
+    }
+    
+    /* Target the dropdown menu popup */
+    [data-baseweb="popover"] {
+        background-color: #ffffff !important;
+    }
+    
+    /* Target dropdown options */
+    [data-baseweb="popover"] [role="option"] {
+        background-color: #ffffff !important;
+        color: #1a1a1a !important;
+    }
+    
+    /* Hover state for options */
+    [data-baseweb="popover"] [role="option"]:hover {
+        background-color: #0466c8 !important;
+        color: #ffffff !important;
+    }
+    
+    /* Selected option in dropdown */
+    [data-baseweb="popover"] [aria-selected="true"] {
+        background-color: #0466c8 !important;
+        color: #ffffff !important;
+    }
+    </style>
+""", unsafe_allow_html=True)  # Fix selectbox colors in sidebar to match theme
+st.markdown("""
+    <style>
+    /* Target all selectboxes in sidebar */
+    [data-testid="stSidebar"] [data-baseweb="select"] > div {
+        background-color: #0466c8 !important;
+        color: #ffffff !important;
+    }
+    
+    /* Target the dropdown arrow icon */
+    [data-testid="stSidebar"] [data-baseweb="select"] svg {
+        fill: #ffffff !important;
+    }
+    
+    /* Target the dropdown menu popup */
+    [data-baseweb="popover"] {
+        background-color: #ffffff !important;
+    }
+    
+    /* Target dropdown options */
+    [data-baseweb="popover"] [role="option"] {
+        background-color: #ffffff !important;
+        color: #1a1a1a !important;
+    }
+    
+    /* Hover state for options */
+    [data-baseweb="popover"] [role="option"]:hover {
+        background-color: #0466c8 !important;
+        color: #ffffff !important;
+    }
+    
+    /* Selected option in dropdown */
+    [data-baseweb="popover"] [aria-selected="true"] {
+        background-color: #0466c8 !important;
+        color: #ffffff !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
 # Cache the database connection
 
 
@@ -444,7 +516,7 @@ with right_sidebar:
 
     @st.fragment
     def chatbot_section():
-        st.subheader("💬 Chatbot")
+        st.subheader("💬 QuadBot")
 
         # If no episode selected or no transcript → stop
         if selected_episode is None:

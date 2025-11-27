@@ -11,16 +11,14 @@ from visualisations import (create_episodes_per_podcast_bar,
                             create_topics_by_podcast_stacked, create_published_episodes_over_time_line,
                             create_topics_frequency_bar, create_speakers_frequency_bar,
                             create_episode_transcript_length_line)
+from theme import apply_theme
 
-# Page configuration
-st.set_page_config(
-    page_title="Analytics - QuadCast",
-    page_icon="📊",
-    layout="wide"
-)
+st.set_page_config("Analytics", "📊", "wide")
 
 # Add logo to sidebar using st.logo (appears at the very top)
 st.logo("assets/logo.png")
+
+apply_theme()
 
 # Cache the database connection
 
@@ -38,9 +36,6 @@ st.markdown("View insights and statistics about your podcast collection")
 # Get connection
 conn = get_connection()
 
-# Sidebar
-st.sidebar.markdown("## 🎛️ Filters")
-st.sidebar.markdown("---")
 
 # Main content area
 st.markdown("### 📈 Overview")

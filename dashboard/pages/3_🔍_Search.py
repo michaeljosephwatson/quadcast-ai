@@ -4,16 +4,15 @@ import pandas as pd
 import re
 from rds_queries import get_rds_connection, get_all_podcasts
 from search_queries import search_episodes_by_embedding
+from theme import apply_theme
 
-# Page configuration
-st.set_page_config(
-    page_title="Search - QuadCast",
-    page_icon="🔍",
-    layout="wide"
-)
+st.set_page_config("Semantic Search", "🔍", "wide")
 
 # Add logo to sidebar using st.logo (appears at the very top)
 st.logo("assets/logo.png")
+
+
+apply_theme()
 
 
 @st.cache_resource
@@ -70,7 +69,7 @@ with col2:
         "Minimum similarity",
         min_value=0.0,
         max_value=1.0,
-        value=0.5,
+        value=0.2,
         step=0.05,
         key="similarity_threshold"
     )

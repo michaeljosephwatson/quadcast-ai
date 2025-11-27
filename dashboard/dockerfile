@@ -21,6 +21,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY 🏠_Overview.py .
 COPY pages pages
 COPY assets assets
+COPY .streamlit .streamlit
+COPY theme.py .
 COPY athena_queries.py .
 COPY chatbot.py .
 COPY rds_embedding_queries.py .

@@ -3,17 +3,16 @@ import base64
 import streamlit as st
 from rds_queries import (
     get_rds_connection, get_all_podcasts, get_all_episodes)
+from theme import apply_theme
 
-# Page configuration
-st.set_page_config(
-    page_title="QuadCast Homepage",
-    page_icon="🎙️",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+# Page configuration with theme
+
+st.set_page_config("QuadCast Homepage", "🎙️", "wide")
 
 # Add logo to sidebar using st.logo (appears at the very top)
 st.logo("assets/logo.png")
+apply_theme()
+
 
 # Cache the database connection
 
@@ -85,6 +84,8 @@ QuadCast helps you manage and analyze your favorite podcasts with AI-powered ins
 - 📊 **View Episode Data** - Access detailed information about each episode
 - 📝 **Read Transcripts** - Get full AI-generated transcripts of episodes
 - 💡 **Explore Insights** - Discover trends, summaries, and analytics across your podcast library
+- 🔍 **Semantic Search** - Search through episodes using intelligent semantic search to find exactly what you're looking for
+- 🤖 **Chat with QuadBot** - Get answers and insights from your podcast content using our interactive chatbot
 
 Navigate through the pages to explore your podcasts and gain valuable insights!
 """)
