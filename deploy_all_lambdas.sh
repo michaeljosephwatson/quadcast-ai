@@ -52,6 +52,40 @@ for LAMBDA_DIR in "${LAMBDA_DIRS[@]}"; do
   echo ""
 done
 
+# Deploy Dashboard
+echo "--------------------------------------"
+echo "Deploying: Dashboard (Streamlit on ECS)"
+echo "--------------------------------------"
+
+DASHBOARD_ECR_SCRIPT="dashboard/bash_scripts/upload_image_to_ecr.sh"
+DASHBOARD_ECS_SCRIPT="dashboard/bash_scripts/update_ecs_service.sh"
+
+if [ -f "$DASHBOARD_ECR_SCRIPT" ] && [ -f "$DASHBOARD_ECS_SCRIPT" ]; then
+  # Build and push to ECR
+  if bash "$DASHBOARD_ECR_SCRIPT"; then
+    echo "✓ Dashboard image pushed to ECR successfully"
+
+    # Update ECS service
+    if bash "$DASHBOARD_ECS_SCRIPT"; then
+      echo "✓ Dashboard ECS service updated successfully"
+      SUCCESSFUL+=("Dashboard")
+    else
+      echo "✗ Dashboard ECS service update failed"
+      FAILED+=("Dashboard")
+    fi
+  else
+    echo "✗ Dashboard ECR upload failed"
+    FAILED+=("Dashboard")
+  fi
+else
+  echo "✗ Dashboard scripts not found"
+  [ ! -f "$DASHBOARD_ECR_SCRIPT" ] && echo "  Missing: $DASHBOARD_ECR_SCRIPT"
+  [ ! -f "$DASHBOARD_ECS_SCRIPT" ] && echo "  Missing: $DASHBOARD_ECS_SCRIPT"
+  FAILED+=("Dashboard")
+fi
+
+echo ""
+
 # Summary
 echo "======================================"
 echo "Deployment Summary"
@@ -61,7 +95,7 @@ echo "Failed (${#FAILED[@]}): ${FAILED[*]}"
 echo ""
 
 if [ ${#FAILED[@]} -eq 0 ]; then
-  echo "✓ All Lambda functions deployed successfully!"
+  echo "✓ All deployments (Lambdas + Dashboard) completed successfully!"
   exit 0
 else
   echo "✗ Some deployments failed"
