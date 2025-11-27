@@ -57,16 +57,18 @@ echo "--------------------------------------"
 echo "Deploying: Dashboard (Streamlit on ECS)"
 echo "--------------------------------------"
 
-DASHBOARD_ECR_SCRIPT="dashboard/bash_scripts/upload_image_to_ecr.sh"
-DASHBOARD_ECS_SCRIPT="dashboard/bash_scripts/update_ecs_service.sh"
+DASHBOARD_BASH_DIR="dashboard/bash_scripts"
 
-if [ -f "$DASHBOARD_ECR_SCRIPT" ] && [ -f "$DASHBOARD_ECS_SCRIPT" ]; then
+if [ -d "$DASHBOARD_BASH_DIR" ]; then
+  # Change to the dashboard bash_scripts directory
+  cd "$DASHBOARD_BASH_DIR"
+
   # Build and push to ECR
-  if bash "$DASHBOARD_ECR_SCRIPT"; then
+  if ./upload_image_to_ecr.sh; then
     echo "✓ Dashboard image pushed to ECR successfully"
 
     # Update ECS service
-    if bash "$DASHBOARD_ECS_SCRIPT"; then
+    if ./update_ecs_service.sh; then
       echo "✓ Dashboard ECS service updated successfully"
       SUCCESSFUL+=("Dashboard")
     else
@@ -77,10 +79,11 @@ if [ -f "$DASHBOARD_ECR_SCRIPT" ] && [ -f "$DASHBOARD_ECS_SCRIPT" ]; then
     echo "✗ Dashboard ECR upload failed"
     FAILED+=("Dashboard")
   fi
+
+  # Return to project root
+  cd ../..
 else
-  echo "✗ Dashboard scripts not found"
-  [ ! -f "$DASHBOARD_ECR_SCRIPT" ] && echo "  Missing: $DASHBOARD_ECR_SCRIPT"
-  [ ! -f "$DASHBOARD_ECS_SCRIPT" ] && echo "  Missing: $DASHBOARD_ECS_SCRIPT"
+  echo "✗ Dashboard bash_scripts directory not found: $DASHBOARD_BASH_DIR"
   FAILED+=("Dashboard")
 fi
 
