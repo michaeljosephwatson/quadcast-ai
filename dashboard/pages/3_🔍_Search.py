@@ -12,6 +12,9 @@ st.set_page_config(
     layout="wide"
 )
 
+# Add logo to sidebar using st.logo (appears at the very top)
+st.logo("assets/logo.png")
+
 
 @st.cache_resource
 def get_connection():

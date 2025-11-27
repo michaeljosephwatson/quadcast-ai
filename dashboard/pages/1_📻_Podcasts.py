@@ -3,7 +3,7 @@ import time
 import streamlit as st
 import pandas as pd
 from rds_queries import get_rds_connection, get_all_podcasts, get_episodes_with_podcast_info
-from api_calls import add_podcast
+from api_calls import add_podcast, update_episodes
 from athena_queries import get_athena_connection, get_transcript_for_episode, get_summary_for_episode
 from chatbot import get_episode_response
 
@@ -13,6 +13,9 @@ st.set_page_config(
     page_icon="🎙️",
     layout="wide"
 )
+
+# Add logo to sidebar using st.logo (appears at the very top)
+st.logo("assets/logo.png")
 
 # Cache the database connection
 
@@ -106,6 +109,14 @@ with left_sidebar:
     if st.button("🎙️ Add New Podcast", use_container_width=True):
         add_podcast_modal()
 
+    # Refresh Episodes Button
+    if st.button("🔄 Refresh Episodes", use_container_width=True):
+        update_episodes()
+        st.success("✅ Episodes refreshed successfully!")
+        st.cache_data.clear()
+        time.sleep(2)
+        st.rerun()
+
     st.markdown("---")
 
 # Get all podcasts
@@ -126,7 +137,8 @@ with left_sidebar:
     # Check if we have a selected podcast from search page
     default_podcast_idx = 0
     if 'selected_podcast_name' in st.session_state and st.session_state.selected_podcast_name in podcast_names:
-        default_podcast_idx = podcast_names.index(st.session_state.selected_podcast_name)
+        default_podcast_idx = podcast_names.index(
+            st.session_state.selected_podcast_name)
 
     selected_podcast_name = st.selectbox(
         "📻 Choose a Podcast:",

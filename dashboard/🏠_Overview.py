@@ -1,4 +1,5 @@
 """QuadCast Dashboard Application Homepage"""
+import base64
 import streamlit as st
 from rds_queries import (
     get_rds_connection, get_all_podcasts, get_all_episodes)
@@ -10,6 +11,9 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# Add logo to sidebar using st.logo (appears at the very top)
+st.logo("assets/logo.png")
 
 # Cache the database connection
 
@@ -52,8 +56,20 @@ conn = get_connection()
 data = get_all_data(conn)
 metrics = calculate_metrics(data)
 
-# Header
-st.title("🎙️ QuadCast Dashboard")
+# Header with logo using HTML for better alignment
+with open("assets/logo.png", "rb") as f:
+    logo_data = base64.b64encode(f.read()).decode()
+
+st.markdown(
+    f"""
+    <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 0px;">
+        <img src="data:image/png;base64,{logo_data}" style="width: 70px; height: 70px;">
+        <h1 style="margin: 0; padding: 0;">QuadCast Dashboard</h1>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 st.markdown("### AI-Powered Podcast Analytics Platform")
 
 st.divider()

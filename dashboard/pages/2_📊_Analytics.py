@@ -19,6 +19,9 @@ st.set_page_config(
     layout="wide"
 )
 
+# Add logo to sidebar using st.logo (appears at the very top)
+st.logo("assets/logo.png")
+
 # Cache the database connection
 
 
@@ -116,7 +119,8 @@ with tab2:
         )
 
         # Get podcast ID for Athena queries
-        podcast_id = podcasts_df[podcasts_df['podcast_name'] == selected_podcast]['podcast_id'].iloc[0]
+        podcast_id = podcasts_df[podcasts_df['podcast_name']
+                                 == selected_podcast]['podcast_id'].iloc[0]
 
         st.divider()
 
@@ -163,10 +167,13 @@ with tab2:
         with col_freq1:
             st.markdown("##### 🏷️ Topic Frequency")
             try:
-                topics_freq = get_topics_frequency_for_podcast(conn, selected_podcast)
+                topics_freq = get_topics_frequency_for_podcast(
+                    conn, selected_podcast)
                 if not topics_freq.empty:
-                    topics_freq_chart = create_topics_frequency_bar(topics_freq)
-                    st.altair_chart(topics_freq_chart, use_container_width=True)
+                    topics_freq_chart = create_topics_frequency_bar(
+                        topics_freq)
+                    st.altair_chart(topics_freq_chart,
+                                    use_container_width=True)
                 else:
                     st.info("No topics available for this podcast")
             except Exception as e:
@@ -176,10 +183,13 @@ with tab2:
         with col_freq2:
             st.markdown("##### 🎤 Speaker Frequency")
             try:
-                speakers_freq = get_speakers_frequency_for_podcast(conn, selected_podcast)
+                speakers_freq = get_speakers_frequency_for_podcast(
+                    conn, selected_podcast)
                 if not speakers_freq.empty:
-                    speakers_freq_chart = create_speakers_frequency_bar(speakers_freq)
-                    st.altair_chart(speakers_freq_chart, use_container_width=True)
+                    speakers_freq_chart = create_speakers_frequency_bar(
+                        speakers_freq)
+                    st.altair_chart(speakers_freq_chart,
+                                    use_container_width=True)
                 else:
                     st.info("No speakers available for this podcast")
             except Exception as e:
@@ -191,13 +201,16 @@ with tab2:
         st.markdown("##### 📝 Transcript Length Over Time")
         try:
             athena_client = get_athena_connection()
-            word_counts = get_transcript_word_counts_for_podcast(athena_client, podcast_id=str(podcast_id))
+            word_counts = get_transcript_word_counts_for_podcast(
+                athena_client, podcast_id=str(podcast_id))
 
             # Get episode details for the line chart
-            episode_details = get_topics_per_episode_for_podcast(conn, selected_podcast)
+            episode_details = get_topics_per_episode_for_podcast(
+                conn, selected_podcast)
 
             if not episode_details.empty and word_counts:
-                transcript_chart = create_episode_transcript_length_line(episode_details, word_counts)
+                transcript_chart = create_episode_transcript_length_line(
+                    episode_details, word_counts)
                 st.altair_chart(transcript_chart, use_container_width=True)
             else:
                 st.info("No transcript data available for this podcast yet")
