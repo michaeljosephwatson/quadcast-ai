@@ -3,7 +3,7 @@ base="light"
 primaryColor="#0466c8"
 backgroundColor="#ebebeb"
 secondaryBackgroundColor="#ffffff"
-textColor="#1a1a1a"
+textColor="#314DB7"
 font="sans serif"
 
 [client]

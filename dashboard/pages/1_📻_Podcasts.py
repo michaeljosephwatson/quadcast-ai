@@ -1,4 +1,5 @@
 """QuadCast Dashboard - Podcasts Page"""
+import base64
 import time
 import streamlit as st
 import pandas as pd
@@ -8,50 +9,13 @@ from athena_queries import get_athena_connection, get_transcript_for_episode, ge
 from chatbot import get_episode_response
 from theme import apply_theme
 
-st.set_page_config("Podcasts", "🎙️", "wide")
+st.set_page_config("Podcasts", page_icon="assets/logo.png", layout="wide")
 
 # Add logo to sidebar using st.logo (appears at the very top)
 st.logo("assets/logo.png")
 apply_theme()
 
 # Fix selectbox colors in sidebar to match theme
-st.markdown("""
-    <style>
-    /* Target all selectboxes in sidebar */
-    [data-testid="stSidebar"] [data-baseweb="select"] > div {
-        background-color: #0466c8 !important;
-        color: #ffffff !important;
-    }
-    
-    /* Target the dropdown arrow icon */
-    [data-testid="stSidebar"] [data-baseweb="select"] svg {
-        fill: #ffffff !important;
-    }
-    
-    /* Target the dropdown menu popup */
-    [data-baseweb="popover"] {
-        background-color: #ffffff !important;
-    }
-    
-    /* Target dropdown options */
-    [data-baseweb="popover"] [role="option"] {
-        background-color: #ffffff !important;
-        color: #1a1a1a !important;
-    }
-    
-    /* Hover state for options */
-    [data-baseweb="popover"] [role="option"]:hover {
-        background-color: #0466c8 !important;
-        color: #ffffff !important;
-    }
-    
-    /* Selected option in dropdown */
-    [data-baseweb="popover"] [aria-selected="true"] {
-        background-color: #0466c8 !important;
-        color: #ffffff !important;
-    }
-    </style>
-""", unsafe_allow_html=True)  # Fix selectbox colors in sidebar to match theme
 st.markdown("""
     <style>
     /* Target all selectboxes in sidebar */
@@ -175,14 +139,14 @@ left_sidebar = st.sidebar
 main_col, right_sidebar = st.columns([3, 1])
 
 with left_sidebar:
-    st.markdown("## 🎯 Select Content")
+    st.markdown("## Select Content")
 
     # Add New Podcast Button
-    if st.button("🎙️ Add New Podcast", use_container_width=True):
+    if st.button("Add New Podcast", use_container_width=True):
         add_podcast_modal()
 
     # Refresh Episodes Button
-    if st.button("🔄 Refresh Episodes", use_container_width=True):
+    if st.button("Refresh Episodes", use_container_width=True):
         update_episodes()
         st.success("✅ Episodes refreshed successfully!")
         st.cache_data.clear()
@@ -213,7 +177,7 @@ with left_sidebar:
             st.session_state.selected_podcast_name)
 
     selected_podcast_name = st.selectbox(
-        "📻 Choose a Podcast:",
+        "Choose a Podcast:",
         options=podcast_names,
         index=default_podcast_idx,
         key="podcast_selector"
@@ -232,7 +196,7 @@ with left_sidebar:
     # Add filter for transcribed episodes in sidebar
     st.markdown("---")
     transcript_filter = st.radio(
-        "📝 Filter by Transcript:",
+        "Filter by Transcript:",
         options=["All Episodes", "With Transcript", "Without Transcript"],
         key="transcript_filter"
     )
@@ -275,7 +239,7 @@ with left_sidebar:
                     break
 
         selected_episode_display = st.selectbox(
-            "🎧 Choose an Episode:",
+            "Choose an Episode:",
             options=episode_options,
             index=default_episode_idx,
             key="episode_selector"
@@ -308,7 +272,19 @@ with left_sidebar:
 
 # Main content area
 with main_col:
-    st.title("🎙️ Podcasts")
+    # Header with logo using HTML for better alignment
+    with open("assets/logo.png", "rb") as f:
+        logo_data = base64.b64encode(f.read()).decode()
+
+    st.markdown(
+        f"""
+        <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 0px;">
+            <img src="data:image/png;base64,{logo_data}" style="width: 70px; height: 70px;">
+            <h1 style="margin: 0; padding: 0;">Podcasts</h1>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
     st.markdown("Browse and explore your podcast collection")
 
     st.divider()
@@ -318,7 +294,7 @@ with main_col:
                                    == selected_podcast_name].iloc[0]
 
     # Podcast Details Section
-    st.subheader(f"📻 {selected_podcast_name}")
+    st.subheader(f"{selected_podcast_name}")
 
     col1, col2 = st.columns(2)
 
@@ -334,7 +310,7 @@ with main_col:
 
     # Selected Episode Details
     if selected_episode is not None:
-        st.subheader("🎧 Episode Details")
+        st.subheader("Episode Details")
 
         episode_title = selected_episode['episode_title'] if pd.notna(
             selected_episode['episode_title']) else "Untitled Episode"
@@ -391,7 +367,7 @@ with main_col:
                     st.session_state.current_speakers = []
 
                 # Display Episode Summary heading
-                st.markdown("#### 📋 Episode Summary")
+                st.markdown("#### Episode Summary")
 
                 # Display summary as simple text
                 st.write(summary_data['summary'])
@@ -403,14 +379,14 @@ with main_col:
 
                 with col1:
                     if topics_list:
-                        st.markdown("**🏷️ Topics:**")
+                        st.markdown("**Topics:**")
                         # Create badges for topics with green color
                         for topic in topics_list:
                             st.badge(topic, color="green")
 
                 with col2:
                     if speakers_list:
-                        st.markdown("**🎤 Speakers:**")
+                        st.markdown("**Speakers:**")
                         # Create badges for speakers with blue color
                         for speaker in speakers_list:
                             st.badge(speaker, color="blue")
@@ -453,7 +429,7 @@ with main_col:
         # Transcript Section
         if selected_episode['transcribed']:
             st.markdown("---")
-            st.markdown("#### 📝 Transcript")
+            st.markdown("#### Transcript")
 
             try:
                 athena_client = get_athena_client()
@@ -482,13 +458,13 @@ with main_col:
                 st.markdown(
                     f"""
                     <div style="
-                        background-color: #1e1e1e;
+                        background-color: #5264a8ff;
                         padding: 25px;
                         border-radius: 10px;
                         max-height: 500px;
                         overflow-y: auto;
                         border-left: 4px solid #667eea;
-                        font-family: 'Georgia', serif;
+                        font-family: 'Georgia', sans serif;
                         line-height: 1.8;
                         color: #e0e0e0;
                     ">
@@ -599,7 +575,7 @@ with right_sidebar:
 
         # Clear chat button
         if st.session_state.chat_history:
-            if st.button("🗑️ Clear Chat", use_container_width=True):
+            if st.button("Clear Chat", use_container_width=True):
                 st.session_state.chat_history = []
                 st.rerun(scope="fragment")
 

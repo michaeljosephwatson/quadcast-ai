@@ -9,11 +9,11 @@ def apply_theme():
         <style>
         /* Sidebar navy blue */
         [data-testid="stSidebar"] {
-            background-color: #012a4a !important;
+            background-color: #5264a8ff !important;
         }
         
         [data-testid="stSidebar"] > div {
-            background-color: #012a4a !important;
+            background-color: #5264a8ff !important;
         }
         
         /* Sidebar text white */
@@ -23,7 +23,7 @@ def apply_theme():
         
         /* Sidebar buttons */
         [data-testid="stSidebar"] button {
-            background-color: #0466c8 !important;
+            background-color: #3CA5A3 !important;
             color: #ffffff !important;
             border: none !important;
             border-radius: 8px !important;
@@ -32,7 +32,7 @@ def apply_theme():
         }
         
         [data-testid="stSidebar"] button:hover {
-            background-color: #0353a4 !important;
+            background-color: #3CA5A3 !important;
         }
         
         /* Sidebar inputs - white background */

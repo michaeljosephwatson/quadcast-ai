@@ -1,4 +1,5 @@
 """QuadCast Dashboard - Vector Search Page"""
+import base64
 import streamlit as st
 import pandas as pd
 import re
@@ -6,7 +7,8 @@ from rds_queries import get_rds_connection, get_all_podcasts
 from search_queries import search_episodes_by_embedding
 from theme import apply_theme
 
-st.set_page_config("Semantic Search", "🔍", "wide")
+st.set_page_config("Semantic Search",
+                   page_icon="assets/logo.png", layout="wide")
 
 # Add logo to sidebar using st.logo (appears at the very top)
 st.logo("assets/logo.png")
@@ -21,13 +23,26 @@ def get_connection():
     return get_rds_connection()
 
 
-st.title("🔍 Semantic Search")
+# Header with logo using HTML for better alignment
+with open("assets/logo.png", "rb") as f:
+    logo_data = base64.b64encode(f.read()).decode()
+
+st.markdown(
+    f"""
+    <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 0px;">
+        <img src="data:image/png;base64,{logo_data}" style="width: 70px; height: 70px;">
+        <h1 style="margin: 0; padding: 0;">Semantic Search</h1>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 st.markdown("Search across podcast content using AI-powered semantic search")
 
 st.divider()
 
 # Search input - bigger and more prominent
-st.markdown("### 🔎 What would you like to find?")
+st.markdown("### What would you like to find?")
 search_query = st.text_input(
     "Search",
     placeholder="e.g., 'machine learning applications' or 'climate change solutions'",
@@ -52,7 +67,7 @@ all_podcasts = get_all_podcasts(conn)
 podcast_names = sorted(all_podcasts['podcast_name'].unique().tolist())
 
 # Search parameters
-st.markdown("### ⚙️ Search Settings")
+st.markdown("### Search Settings")
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
@@ -91,7 +106,7 @@ with col4:
     )
 
 # Podcast filter
-st.markdown("### 🎙️ Podcast Filter")
+st.markdown("### Podcast Filter")
 selected_podcasts = st.multiselect(
     "Select podcasts to search",
     options=podcast_names,
@@ -100,7 +115,7 @@ selected_podcasts = st.multiselect(
 )
 
 # Search tips
-with st.expander("💡 Search Tips", expanded=False):
+with st.expander("Search Tips", expanded=False):
     st.markdown("""
     **Tips for better search results:**
     - Use **specific keywords** rather than vague terms (e.g., "machine learning algorithms" vs "tech")
@@ -222,14 +237,14 @@ if search_query:
 
                     # Collapsible result
                     with st.expander(
-                        f"🎙️ {row['podcast_name']} - {row['episode_title'][:50]}... ({similarity_pct:.1f}%)",
+                        f"{row['podcast_name']} - {row['episode_title'][:50]}... ({similarity_pct:.1f}%)",
                         expanded=False
                     ):
                         # Header with podcast and episode info
                         col1, col2 = st.columns([3, 1])
 
                         with col1:
-                            st.markdown(f"### 🎙️ {row['podcast_name']}")
+                            st.markdown(f"### {row['podcast_name']}")
                             st.markdown(f"**Episode:** {row['episode_title']}")
 
                         with col2:
@@ -294,13 +309,13 @@ if search_query:
                             if pd.notna(row['published_at']):
                                 published_date = pd.to_datetime(
                                     row['published_at']).strftime('%B %d, %Y')
-                                st.caption(f"📅 {published_date}")
+                                st.caption(f"{published_date}")
 
                         with col2:
                             pass
 
                         with col3:
-                            if st.button("🔗 View in Podcasts", key=f"view_podcast_{result_idx}"):
+                            if st.button("View in Podcasts", key=f"view_podcast_{result_idx}"):
                                 st.session_state.selected_podcast_name = row['podcast_name']
                                 st.session_state.selected_episode_title = row['episode_title']
                                 st.switch_page("pages/1_📻_Podcasts.py")
