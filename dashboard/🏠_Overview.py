@@ -7,7 +7,8 @@ from theme import apply_theme
 
 # Page configuration with theme
 
-st.set_page_config("QuadCast Homepage", "🎙️", "wide")
+st.set_page_config("QuadCast Homepage",
+                   page_icon="assets/logo.png", layout="wide")
 
 # Add logo to sidebar using st.logo (appears at the very top)
 st.logo("assets/logo.png")
@@ -80,12 +81,12 @@ st.markdown("""
 QuadCast helps you manage and analyze your favorite podcasts with AI-powered insights.
 
 **What you can do:**
-- 🎙️ **Subscribe to Podcasts** - Add your favorite podcasts via RSS feed
-- 📊 **View Episode Data** - Access detailed information about each episode
-- 📝 **Read Transcripts** - Get full AI-generated transcripts of episodes
-- 💡 **Explore Insights** - Discover trends, summaries, and analytics across your podcast library
-- 🔍 **Semantic Search** - Search through episodes using intelligent semantic search to find exactly what you're looking for
-- 🤖 **Chat with QuadBot** - Get answers and insights from your podcast content using our interactive chatbot
+- **Subscribe to Podcasts** - Add your favorite podcasts via RSS feed
+- **View Episode Data** - Access detailed information about each episode
+- **Read Transcripts** - Get full AI-generated transcripts of episodes
+- **Explore Insights** - Discover trends, summaries, and analytics across your podcast library
+- **Semantic Search** - Search through episodes using intelligent semantic search to find exactly what you're looking for
+- **Chat with QuadBot** - Get answers and insights from your podcast content using our interactive chatbot
 
 Navigate through the pages to explore your podcasts and gain valuable insights!
 """)
@@ -93,7 +94,7 @@ Navigate through the pages to explore your podcasts and gain valuable insights!
 st.divider()
 
 # Metrics section
-st.subheader("📈 Platform Overview")
+st.subheader("Platform Overview")
 
 col1, col2, col3 = st.columns(3)
 
