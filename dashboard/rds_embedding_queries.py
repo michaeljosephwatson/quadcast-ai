@@ -19,24 +19,32 @@ def get_rds_connection() -> connection:
 
 
 def get_similar_episodes(conn: connection, query_embedding: list, top_k: int = 5) -> list:
-    """Returns the top K most similar episodes based on the provided embedding, used for search functionality"""
-    # Convert embedding to string format for pgvector
+    """Returns the top K most similar episodes based on the provided embedding"""
     embedding_str = '[' + ','.join(map(str, query_embedding)) + ']'
+
     query = """
-        SELECT DISTINCT ON (e.episode_id)
+        WITH ranked_chunks AS (
+            SELECT
+                ee.episode_id,
+                ee.chunk_text,
+                1 - (ee.transcript_embedding <=> %s::vector) AS similarity_score
+            FROM episode_embedding ee
+        )
+        SELECT
             e.episode_id,
             e.episode_title,
             e.published_at,
             p.podcast_id,
             p.podcast_name,
-            ee.chunk_text,
-            1 - (ee.transcript_embedding <=> %s::vector) AS similarity_score
-        FROM episode_embedding ee
-        JOIN episode e ON ee.episode_id = e.episode_id
+            MAX(rc.similarity_score) AS similarity_score
+        FROM ranked_chunks rc
+        JOIN episode e ON rc.episode_id = e.episode_id
         JOIN podcast p ON e.podcast_id = p.podcast_id
-        ORDER BY e.episode_id, similarity_score DESC
+        GROUP BY e.episode_id, p.podcast_id
+        ORDER BY similarity_score DESC
         LIMIT %s;
     """
+
     with conn.cursor(cursor_factory=RealDictCursor) as cursor:
         cursor.execute(query, (embedding_str, top_k))
         return cursor.fetchall()
@@ -82,26 +90,33 @@ def find_similar_chunks_in_episode(conn: connection, episode_id: int, query_embe
 
 
 def find_similar_episodes_by_episode_id(conn: connection, episode_id: int, top_k: int = 5) -> list:
-    """Find k episodes similar to a given episode, used for recommending similar episodes"""
+    """Find k episodes similar to a given episode"""
     query = """
         WITH target_embedding AS (
             SELECT transcript_embedding
             FROM episode_embedding
             WHERE episode_id = %s
             LIMIT 1
+        ),
+        ranked_chunks AS (
+            SELECT
+                ee.episode_id,
+                1 - (ee.transcript_embedding <=> (SELECT transcript_embedding FROM target_embedding)) AS similarity_score
+            FROM episode_embedding ee
+            WHERE ee.episode_id != %s
         )
-        SELECT DISTINCT ON (e.episode_id)
+        SELECT
             e.episode_id,
             e.episode_title,
             e.published_at,
             p.podcast_id,
             p.podcast_name,
-            1 - (ee.transcript_embedding <=> (SELECT transcript_embedding FROM target_embedding)) AS similarity_score
-        FROM episode_embedding ee
-        JOIN episode e ON ee.episode_id = e.episode_id
+            MAX(rc.similarity_score) AS similarity_score
+        FROM ranked_chunks rc
+        JOIN episode e ON rc.episode_id = e.episode_id
         JOIN podcast p ON e.podcast_id = p.podcast_id
-        WHERE e.episode_id != %s
-        ORDER BY e.episode_id, similarity_score DESC
+        GROUP BY e.episode_id, p.podcast_id
+        ORDER BY similarity_score DESC
         LIMIT %s;
     """
 
