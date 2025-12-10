@@ -124,7 +124,7 @@ resource "aws_sfn_state_machine" "episode_transcription_workflow" {
       TranscribeEpisodesInParallel = {
         Type         = "Map"
         ItemsPath    = "$.transcription.range"
-        MaxConcurrency = 10
+        MaxConcurrency = 20
         ResultPath   = "$.transcriptionResults"
         Iterator = {
           StartAt = "TranscribeEpisode"
@@ -171,7 +171,7 @@ resource "aws_sfn_state_machine" "episode_transcription_workflow" {
               SummarizeTranscribedEpisodes = {
                 Type         = "Map"
                 ItemsPath    = "$.transcriptionResults"
-                MaxConcurrency = 10
+                MaxConcurrency = 20
                 ResultPath   = "$.summarizationResults"
                 Iterator = {
                   StartAt = "ParseTranscriptionBodyForSummary"
@@ -245,7 +245,7 @@ resource "aws_sfn_state_machine" "episode_transcription_workflow" {
               VectorEmbedTranscribedEpisodes = {
                 Type         = "Map"
                 ItemsPath    = "$.transcriptionResults"
-                MaxConcurrency = 10
+                MaxConcurrency = 20
                 ResultPath   = "$.vectorEmbeddingResults"
                 Iterator = {
                   StartAt = "ParseTranscriptionBodyForVector"

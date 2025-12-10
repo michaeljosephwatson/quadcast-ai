@@ -134,8 +134,8 @@ def get_new_episodes_since(rss_url: str, since_date: datetime) -> list:
     episodes = get_episodes_from_rss(rss_url)
 
     if since_date is None:
-        # Return latest 5 episodes if no reference date
-        return episodes[:5]
+        # Return latest 20 episodes if no reference date
+        return episodes[:20]
 
     new_episodes = []
     for episode in episodes:
@@ -181,8 +181,8 @@ def extract_episodes_for_podcast(conn: connection, podcast: dict) -> list:
     latest_date = get_latest_episode_date(conn, podcast_id)
 
     if latest_date is None:
-        # No episodes yet: fetch latest 5
-        episodes = get_episodes_from_rss(rss_url)[:5]
+        # No episodes yet: fetch latest 20
+        episodes = get_episodes_from_rss(rss_url)[:20]
     else:
         # Podcast has episodes: fetch only new ones since latest
         episodes = get_new_episodes_since(rss_url, latest_date)
