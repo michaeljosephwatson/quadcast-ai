@@ -120,7 +120,7 @@ def get_new_episodes_since(rss_url: str, since_date: datetime) -> list:
     Args:
         rss_url: The URL of the RSS feed (.rss or .xml)
         since_date: Only return episodes published after this date.
-                    If None, returns all episodes (up to 5)
+                    If None, returns all episodes (up to 20)
 
     Returns:
         list: Episodes published after since_date, ordered newest first

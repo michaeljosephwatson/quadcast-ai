@@ -12,3 +12,4 @@ pandas
 pytest-mock
 urllib3<2
 python-dateutil
+tiktoken

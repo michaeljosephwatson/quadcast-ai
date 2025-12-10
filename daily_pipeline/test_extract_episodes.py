@@ -323,8 +323,8 @@ class TestGetNewEpisodesSince:
 
             assert result == []
 
-    def test_returns_latest_5_when_since_date_is_none(self):
-        """Test that latest 5 episodes are returned when since_date is None"""
+    def test_returns_latest_20_when_since_date_is_none(self):
+        """Test that latest 20 episodes are returned when since_date is None"""
 
         with patch('extract_episodes.feedparser.parse') as mock_parse:
             mock_feed = MagicMock()
@@ -338,7 +338,7 @@ class TestGetNewEpisodesSince:
             result = get_new_episodes_since(
                 "https://example.com/feed.rss", None)
 
-            assert len(result) == 5
+            assert len(result) == 20
             assert result[0]['title'] == 'Episode 0'
 
     def test_invalid_url_format(self):
@@ -382,8 +382,8 @@ class TestExtractEpisodesForPodcast:
     @patch('extract_episodes.get_new_episodes_since')
     @patch('extract_episodes.get_latest_episode_date')
     @patch('extract_episodes.get_episodes_from_rss')
-    def test_returns_latest_5_when_podcast_has_no_episodes(self, mock_get_episodes, mock_get_latest, mock_get_new):
-        """Test that latest 5 episodes are returned for new podcast"""
+    def test_returns_latest_20_when_podcast_has_no_episodes(self, mock_get_episodes, mock_get_latest, mock_get_new):
+        """Test that latest 20 episodes are returned for new podcast"""
 
         mock_conn = MagicMock()
         mock_get_latest.return_value = None  # No episodes yet
@@ -399,7 +399,7 @@ class TestExtractEpisodesForPodcast:
 
         result = extract_episodes_for_podcast(mock_conn, podcast)
 
-        assert len(result) == 5
+        assert len(result) == 20
         mock_get_latest.assert_called_once_with(mock_conn, 1)
         mock_get_episodes.assert_called_once_with(
             'https://example.com/feed.rss')
@@ -668,14 +668,14 @@ class TestExtractAllNewEpisodes:
 
         episodes = [
             {'title': f'Episode {i}', 'published': f'2024-01-{i:02d}'}
-            for i in range(1, 6)
+            for i in range(1, 21)
         ]
         mock_extract_episodes.return_value = episodes
 
         result = extract_all_new_episodes(mock_conn)
 
         assert len(result) == 1
-        assert len(result[0]['episodes']) == 5
+        assert len(result[0]['episodes']) == 20
         for i, ep in enumerate(result[0]['episodes'], 1):
             assert ep['title'] == f'Episode {i}'
 
